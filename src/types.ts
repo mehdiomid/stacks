@@ -12,6 +12,8 @@ export interface Topic {
   lastActivityAt: number;
   open: boolean;
   sort: TopicSort;
+  /** Created by "Load example topics". */
+  example?: boolean;
 }
 
 export interface Item {
@@ -33,6 +35,8 @@ export interface Item {
   snoozedUntil: number | null;
   /** "Not interested": kept in the list, never recommended. */
   dismissed: boolean;
+  /** Created by "Load example topics". */
+  example?: boolean;
 }
 
 export interface Setting {

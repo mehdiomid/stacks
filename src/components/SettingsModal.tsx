@@ -13,6 +13,7 @@ import {
   type FolderStatus,
 } from '../lib/backup';
 import { agoShort } from '../lib/time';
+import { deleteAllLists } from '../store';
 import { DEFAULT_AI, getAISettings, getKey, MODEL_OPTIONS, PROVIDERS, saveAISettings, setKey, type AISettings, type ProviderId } from '../settings';
 
 export function SettingsModal({ notice, onClose }: { notice?: string; onClose: () => void }) {
@@ -24,6 +25,7 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
   const [folder, setFolder] = useState<FolderStatus | null>(null);
   const [importMode, setImportMode] = useState<'merge' | 'replace'>('merge');
   const [loaded, setLoaded] = useState(false);
+  const [confirmWipe, setConfirmWipe] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const keyRef = useRef<HTMLInputElement>(null);
 
@@ -230,6 +232,34 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
               e.target.value = '';
             }}
           />
+        </div>
+
+        <h4>Start over</h4>
+        <p>Delete every topic and item to start with empty stacks. Your settings, API key and backup folder stay. Export first if you might want them back.</p>
+        <div className="row">
+          {confirmWipe ? (
+            <>
+              <span>Delete all your topics and items?</span>
+              <button
+                className="btn danger small"
+                onClick={() =>
+                  void deleteAllLists().then(() => {
+                    toast('All lists deleted. Your stacks are empty.');
+                    onClose();
+                  })
+                }
+              >
+                Delete everything
+              </button>
+              <button className="btn ghost small" onClick={() => setConfirmWipe(false)}>
+                Keep my lists
+              </button>
+            </>
+          ) : (
+            <button className="btn ghost small" onClick={() => setConfirmWipe(true)}>
+              Delete all my lists…
+            </button>
+          )}
         </div>
 
         <h4>Reminders</h4>

@@ -194,6 +194,8 @@ a.ititle:hover { color: var(--accent); }
 @media (max-width: 560px) { .item { grid-template-columns: auto 88px minmax(0, 1fr) auto; gap: 10px; } .thumb { width: 88px; font-size: 18px; } .bar { width: 60px; } }
 .done-toggle summary { font-size: 13px; color: var(--muted); cursor: pointer; margin-top: 6px; }
 
+.example-banner { display: flex; align-items: center; justify-content: space-between; gap: 10px 16px; flex-wrap: wrap; border: 1px dashed var(--mark); background: var(--mark-soft); border-radius: 12px; padding: 10px 14px; margin-bottom: 10px; font-size: 14px; }
+.example-banner p { margin: 0; flex: 1 1 260px; min-width: 0; }
 .empty { border: 1px dashed var(--line); border-radius: 14px; padding: 22px; text-align: center; background: var(--glass); }
 .empty h3 { font-family: var(--f-display); margin: 0 0 6px; font-size: 20px; }
 .empty p { color: var(--muted); margin: 0 auto 14px; max-width: 46ch; }

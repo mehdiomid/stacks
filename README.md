@@ -65,6 +65,7 @@ Stop it with `docker compose down`. Your data is unaffected because it lives in 
 | **Up next** | Always-visible recommendations with the reason for each pick. Done, Snooze 3 days, Not interested, Open. |
 | **Reminders** | Optional desktop notification, once a day at most, for your top pick while the app is open. |
 | **Progress** | A line under the title ("3 more and Machine Learning is halfway done") and a gold star for every finished item. |
+| **Examples and starting over** | **Load example topics** on the empty page fills in sample topics. While they're there, a banner offers **Remove examples**: it removes only the example items, and any example topic you added your own items to is kept as yours. **Settings → Start over → Delete all my lists** wipes every topic and item but keeps settings, API keys and the backup folder. |
 | **Collapsible input** | Collapse the box to a one-line bar so topics sit near the top. Press `/` anywhere to open it again. The choice is remembered. |
 | **Backups** | Automatic JSON backup to a folder you choose (Chrome, Edge, Brave), plus Export and Import. |
 | **Two AI providers** | Claude (Anthropic) or OpenAI, using your own key, with a per-browser daily token limit. |

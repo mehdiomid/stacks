@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { useApp } from '../app-context';
-import { createTopic, loadExamples, reorderTopics } from '../store';
+import { createTopic, hasExamples, loadExamples, removeExamples, reorderTopics } from '../store';
 import type { Item, Topic } from '../types';
 import { TopicCard } from './TopicCard';
 
@@ -112,11 +112,26 @@ export function TopicList({ topics, items }: { topics: Topic[]; items: Item[] })
           </button>
         </form>
       )}
+      {hasExamples(topics, items) && (
+        <div className="example-banner" role="note">
+          <p>
+            <b>You're looking at example topics.</b> When you're ready to build your own stacks, remove them. Anything you added yourself stays.
+          </p>
+          <button
+            className="btn small"
+            onClick={() =>
+              void removeExamples().then((r) => toast(`Removed ${r.items} example item${r.items === 1 ? '' : 's'}${r.topics ? ` and ${r.topics} topic${r.topics === 1 ? '' : 's'}` : ''}`))
+            }
+          >
+            Remove examples
+          </button>
+        </div>
+      )}
       {!topics.length ? (
         <div className="empty">
           <h3>Your stacks are empty</h3>
           <p>Paste links or notes in the box above and Stacks will sort them into topics. Or load a few example topics to look around first.</p>
-          <button className="btn ghost" onClick={() => void loadExamples().then(() => toast('Example topics added. Delete them any time.'))}>
+          <button className="btn ghost" onClick={() => void loadExamples().then(() => toast('Example topics added. Press “Remove examples” when you’re done looking.'))}>
             Load example topics
           </button>
         </div>
