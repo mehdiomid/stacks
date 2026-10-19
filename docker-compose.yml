@@ -1,0 +1,17 @@
+services:
+  stacks:
+    build: .
+    image: stacks:latest
+    container_name: stacks
+    ports:
+      # Change the left side to use another port on your machine, e.g. "3000:8080".
+      - "8080:8080"
+    environment:
+      # Link previews one visitor may request per minute.
+      PREVIEW_RATE_LIMIT: "60"
+      # Set to "true" only if you need previews of pages on your own network (e.g. a NAS wiki).
+      ALLOW_PRIVATE_PREVIEWS: "false"
+      # Set to "true" when running behind a reverse proxy (Caddy, nginx, Traefik).
+      TRUST_PROXY: "false"
+      LOG_LEVEL: "info"
+    restart: unless-stopped
