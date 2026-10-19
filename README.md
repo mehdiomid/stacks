@@ -108,7 +108,7 @@ It has no database and keeps no state between requests.
 
 Stacks takes these extra steps so the data is safe and portable:
 
-- **Persistent storage.** On start, Stacks calls `navigator.storage.persist()` so the browser doesn't evict its data when disk space runs low. The usage panel shows "this browser (protected)" when this was granted.
+- **Persistent storage.** On start, Stacks calls `navigator.storage.persist()` so the browser doesn't evict its data when disk space runs low. The **AI usage today** part of Settings shows "this browser (protected)" when this was granted.
 - **Backup folder.** In Chrome, Edge and Brave you can choose a real folder on disk, such as `~/Documents/Stacks` or an iCloud, Dropbox or Syncthing folder. Stacks writes `stacks-backup.json` a few seconds after every change, plus one dated snapshot per day (`stacks-2026-10-19.json`). After a browser restart, the browser asks you to **Reconnect folder** once. Safari and Firefox don't offer this API, so use Export there.
 - **Export and Import.** These move your lists between browsers or computers. Import can **add to** or **replace** your lists. API keys are never exported.
 
@@ -192,7 +192,7 @@ These are the cost-control layers we planned, as built:
    - A site you've filed under one topic at least three times is sorted **without the AI** ("same site as before"). General sites like YouTube or Medium are excluded from this rule.
    - Hard caps: 100 pieces or 20,000 characters per round. Anything beyond that stays in the box for the next round.
    - The model's reply length is capped.
-2. **Personal daily token limit** (default 200,000, set in Settings). Stacks estimates each call first and refuses it if it would go over the limit. The **AI usage today** meter shows the count. A dump of 50 links costs roughly 10,000 tokens.
+2. **Personal daily token limit** (default 200,000, set in Settings). Stacks estimates each call first and refuses it if it would go over the limit. The **AI usage today** meter at the end of Settings (the API key button at the top right) shows the count. A dump of 50 links costs roughly 10,000 tokens.
 3. **Provider spend limit.** Set a monthly limit in the Anthropic Console or the OpenAI dashboard. This is the hard backstop, and Settings reminds you to set it.
 4. **No silent fallback.** When there's no key, the key is rejected, or the account is out of credit, Stacks opens Settings and asks for a key. It never quietly sorts by keywords instead.
 
@@ -299,7 +299,7 @@ Each visitor uses their own API key and their own browser storage, so one deploy
 ## Design
 
 - **Concept.** A personal library under a night sky. The background is a slowly drifting constellation of connected points, standing for ideas linking up, over soft indigo and marigold glows. Every finished item lights a gold star. Panels are frosted glass so the sky shows through.
-- **Layout.** Two columns on desktop. On the left are the smart input box and the ranked topics; on the right, a sticky column with **Up next** and **AI usage**. On phones it becomes one column with Up next first, with a 16px side gutter and no sideways scrolling.
+- **Layout.** Two columns on desktop. On the left are the smart input box and the ranked topics; on the right, a sticky **Up next** column. Token usage lives at the end of Settings to keep the main page calm. On phones it becomes one column with Up next first, with a 16px side gutter and no sideways scrolling.
 - **Color tokens.** Defined in `src/styles.css`, with light and dark sets:
   - neutrals tinted toward the accent
   - an indigo accent (`--accent`) for actions

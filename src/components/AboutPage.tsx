@@ -106,7 +106,7 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
         <ul>
           <li>Each dump is sorted in one request, using a small, fast model by default (Claude Haiku 5.5 or gpt-5-mini). You can pick a bigger model in Settings.</li>
           <li>Links you already saved are never re-sorted, and sites you always file under one topic are sorted without the AI.</li>
-          <li>Your personal daily token limit, set in Settings, stops all AI calls for the day once it's reached. The meter on the right shows today's use.</li>
+          <li>Your personal daily token limit, set in Settings, stops all AI calls for the day once it's reached. Settings (the API key button at the top right) shows today's use at the bottom.</li>
           <li>For a hard cap on spending, also set a monthly limit in the Anthropic Console or the OpenAI dashboard.</li>
         </ul>
       </section>

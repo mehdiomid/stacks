@@ -14,6 +14,7 @@ import {
 } from '../lib/backup';
 import { agoShort } from '../lib/time';
 import { deleteAllLists } from '../store';
+import { UsageSummary } from './UsagePanel';
 import { DEFAULT_AI, getAISettings, getKey, MODEL_OPTIONS, PROVIDERS, saveAISettings, setKey, type AISettings, type ProviderId } from '../settings';
 
 export function SettingsModal({ notice, onClose }: { notice?: string; onClose: () => void }) {
@@ -267,6 +268,9 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
           <input type="checkbox" id="notify" checked={notify} onChange={(e) => void toggleNotify(e.target.checked)} />
           <label htmlFor="notify">Send me a desktop notification for my top “Up next” pick, at most once a day while Stacks is open</label>
         </div>
+
+        <h4>AI usage today</h4>
+        <UsageSummary limit={ai.dailyTokenLimit} />
 
         <div className="modal-foot">
           <button className="btn ghost" onClick={onClose}>

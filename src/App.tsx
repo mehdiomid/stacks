@@ -8,7 +8,6 @@ import { Header } from './components/Header';
 import { Composer } from './components/Composer';
 import { TopicList } from './components/TopicList';
 import { UpNext } from './components/UpNext';
-import { UsagePanel } from './components/UsagePanel';
 import { SettingsModal } from './components/SettingsModal';
 import { AboutPage } from './components/AboutPage';
 import { Sky } from './components/Sky';
@@ -91,7 +90,6 @@ function Home({ topics, items }: { topics: Topic[]; items: Item[] }) {
         </main>
         <aside className="side">
           <UpNext topics={topics} items={items} />
-          <UsagePanel />
         </aside>
       </div>
     </>
