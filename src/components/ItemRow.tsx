@@ -3,7 +3,8 @@ import { useApp } from '../app-context';
 import { refreshPreviews } from '../ingest';
 import { deleteItem, moveItem, restoreItem, setDone, snoozeItem, updateItem } from '../store';
 import { ago, formatDuration } from '../lib/time';
-import type { Item, Topic } from '../types';
+import { domainOf } from '../lib/url';
+import type { Item, ItemLink, Topic } from '../types';
 import { Thumb } from './Thumb';
 
 const LONG = 140;
@@ -19,6 +20,14 @@ export function ItemRow({ item, hue, topics }: { item: Item; hue: number; topics
   const snoozed = item.snoozedUntil && item.snoozedUntil > Date.now();
   const meta = [item.siteName, item.author, item.kind === 'video' ? formatDuration(item.duration) : '', `added ${ago(item.addedAt)}`].filter(Boolean);
   const isLong = item.description.length > LONG || item.description.includes('\n');
+  // Links are shown only when the item is expanded; a single-link item gets one "Open" row.
+  const linkRows: Pick<ItemLink, 'url' | 'label' | 'title' | 'siteName' | 'kind'>[] = item.links?.length
+    ? item.links
+    : item.url
+      ? [{ url: item.url, label: item.kind === 'video' ? 'Watch' : 'Open', title: '', siteName: item.siteName || domainOf(item.url), kind: item.kind === 'video' ? 'video' : 'link' }]
+      : [];
+  const hasMore = isLong || linkRows.length > 0;
+  const toggle = () => hasMore && setExpanded((x) => !x);
 
   async function saveEdit() {
     await updateItem(item.id, { title: title.trim() || item.title, description: description.trim() });
@@ -45,15 +54,9 @@ export function ItemRow({ item, hue, topics }: { item: Item; hue: number; topics
         }}
         aria-label={`Mark “${item.title}” done`}
       />
-      {item.url ? (
-        <a className="thumb-link" href={item.url} target="_blank" rel="noopener noreferrer" tabIndex={-1} aria-hidden="true">
-          <Thumb item={item} hue={hue} />
-        </a>
-      ) : (
-        <button className="thumb-link" onClick={() => setExpanded((x) => !x)} tabIndex={-1} aria-hidden="true">
-          <Thumb item={item} hue={hue} />
-        </button>
-      )}
+      <button className="thumb-link" onClick={toggle} tabIndex={-1} aria-hidden="true">
+        <Thumb item={item} hue={hue} />
+      </button>
       <div className="ibody">
         {editing ? (
           <form
@@ -76,28 +79,17 @@ export function ItemRow({ item, hue, topics }: { item: Item; hue: number; topics
           </form>
         ) : (
           <>
-            {item.url ? (
-              <a className="ititle" href={item.url} target="_blank" rel="noopener noreferrer">
-                {item.title} <span className="ext" aria-hidden="true">↗</span>
-              </a>
-            ) : (
-              <button className="ititle as-text" onClick={() => setExpanded((x) => !x)} aria-expanded={expanded}>
-                {item.title}
-              </button>
-            )}
+            <button className={`ititle as-text ${hasMore ? '' : 'static'}`} onClick={toggle} aria-expanded={hasMore ? expanded : undefined}>
+              {item.title}
+            </button>
             {item.description && (
-              <div className={`idesc ${expanded ? 'full' : ''} ${isLong ? 'clickable' : ''}`} onClick={() => isLong && setExpanded((x) => !x)}>
+              <div className={`idesc ${expanded ? 'full' : ''} ${hasMore ? 'clickable' : ''}`} onClick={toggle}>
                 {item.description}
               </div>
             )}
-            {isLong && (
-              <button className="linkish small-link" onClick={() => setExpanded((x) => !x)} aria-expanded={expanded}>
-                {expanded ? 'Show less' : 'Show more'}
-              </button>
-            )}
-            {item.links && item.links.length > 1 && (
+            {expanded && linkRows.length > 0 && (
               <ul className="ilinks" aria-label="Links">
-                {item.links.map((l) => (
+                {linkRows.map((l) => (
                   <li key={l.url}>
                     <a href={l.url} target="_blank" rel="noopener noreferrer">
                       <span className="lk" aria-hidden="true">
@@ -110,6 +102,11 @@ export function ItemRow({ item, hue, topics }: { item: Item; hue: number; topics
                   </li>
                 ))}
               </ul>
+            )}
+            {hasMore && (
+              <button className="linkish small-link" onClick={toggle} aria-expanded={expanded}>
+                {expanded ? 'Show less' : linkRows.length > 1 ? `Show more · ${linkRows.length} links` : 'Show more'}
+              </button>
             )}
           </>
         )}
