@@ -1,20 +1,42 @@
-import { useState } from 'react';
-import { deleteTopic, renameTopic, setTopicOpen, setTopicSort } from '../store';
+import { useState, type ReactNode } from 'react';
+import { createTopic, deleteTopic, renameTopic, setTopicOpen, setTopicParent, setTopicSort } from '../store';
 import { daysSince } from '../lib/time';
+import { MAX_DEPTH } from '../lib/tree';
 import type { Item, Topic, TopicSort } from '../types';
 import { ItemRow } from './ItemRow';
 import { useApp } from '../app-context';
 import { refreshPreviews } from '../ingest';
 
+/** A folder as a choice in a picker. */
+export interface FolderOption {
+  id: string;
+  /** Full path, like "Robotics › Papers". */
+  label: string;
+  depth: number;
+}
+
 interface Props {
   topic: Topic;
-  rank: number;
+  /** "2", or "2.1" for the first folder inside the second. */
+  rank: string;
+  depth: number;
+  path: string;
+  /** Items in this folder itself. */
   items: Item[];
-  allTopics: Topic[];
+  /** Items in this folder and every folder inside it. */
+  allItems: Item[];
+  subfolderCount: number;
+  folders: FolderOption[];
+  /** Folders this one may be moved into. */
+  moveTargets: FolderOption[];
+  isNested: boolean;
   dragging: boolean;
+  dragHint: string | null;
+  dropTarget: boolean;
   cardRef: (el: HTMLElement | null) => void;
   onHandlePointerDown: (e: React.PointerEvent) => void;
-  onHandleKey: (delta: number) => void;
+  onHandleKey: (key: string) => void;
+  subfolders: ReactNode;
 }
 
 const SORTS: Record<TopicSort, (a: Item, b: Item) => number> = {
@@ -23,10 +45,15 @@ const SORTS: Record<TopicSort, (a: Item, b: Item) => number> = {
   title: (a, b) => a.title.localeCompare(b.title),
 };
 
-export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, onHandlePointerDown, onHandleKey }: Props) {
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+export function TopicCard(p: Props) {
+  const { topic, rank, depth, items, allItems, subfolderCount, folders, moveTargets, isNested } = p;
   const [menu, setMenu] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const [name, setName] = useState(topic.name);
+  const [addingSub, setAddingSub] = useState(false);
+  const [subName, setSubName] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [refreshing, setRefreshing] = useState<number | null>(null);
   const { toast } = useApp();
@@ -38,10 +65,32 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
     toast(n ? `Updated ${n} preview${n === 1 ? '' : 's'}` : 'No better previews found');
   }
 
+  async function addSubfolder() {
+    const n = subName.trim();
+    setAddingSub(false);
+    setSubName('');
+    setMenu(false);
+    if (!n) return;
+    await createTopic(n, true, topic.id);
+    await setTopicOpen(topic.id, true);
+  }
+
+  async function moveInto(target: string) {
+    try {
+      await setTopicParent(topic.id, target || null);
+      toast(target ? `${topic.name} is now inside ${folders.find((f) => f.id === target)?.label}` : `${topic.name} is now a top-level topic`);
+      setMenu(false);
+    } catch (err) {
+      toast(err instanceof Error ? err.message : 'That move did not work.');
+    }
+  }
+
   const open = items.filter((i) => !i.doneAt).sort(SORTS[topic.sort]);
   const done = items.filter((i) => i.doneAt).sort((a, b) => (b.doneAt ?? 0) - (a.doneAt ?? 0));
-  const pct = items.length ? Math.round((done.length / items.length) * 100) : 0;
+  const allDone = allItems.filter((i) => i.doneAt).length;
+  const pct = allItems.length ? Math.round((allDone / allItems.length) * 100) : 0;
   const idle = daysSince(topic.lastActivityAt);
+  const topRank = rank.includes('.') ? '' : `r${rank}`;
 
   const saveName = async () => {
     if (name.trim() && name.trim() !== topic.name) await renameTopic(topic.id, name);
@@ -50,7 +99,11 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
   };
 
   return (
-    <section className={`topic ${topic.open ? 'open' : ''} ${dragging ? 'dragging' : ''}`} ref={cardRef} aria-label={topic.name}>
+    <section
+      className={`topic ${isNested ? 'nested' : ''} ${topic.open ? 'open' : ''} ${p.dragging ? 'dragging' : ''} ${p.dropTarget ? 'drop-target' : ''}`}
+      ref={p.cardRef}
+      aria-label={p.path}
+    >
       <div
         className="topic-head"
         onClick={(e) => {
@@ -61,19 +114,19 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
       >
         <button
           className="handle"
-          aria-label={`Reorder ${topic.name}: drag, or press the up and down arrow keys`}
-          title="Drag to reorder"
-          onPointerDown={onHandlePointerDown}
+          aria-label={`Move ${topic.name}: drag, or use the arrow keys. Up and down reorder, right puts it inside the topic above, left takes it out.`}
+          title="Drag up or down to reorder, right to put inside the topic above, left to take out"
+          onPointerDown={p.onHandlePointerDown}
           onKeyDown={(e) => {
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
               e.preventDefault();
-              onHandleKey(e.key === 'ArrowUp' ? -1 : 1);
+              p.onHandleKey(e.key);
             }
           }}
         >
           ⋮⋮
         </button>
-        <span className={`rank r${rank}`} title={`Priority ${rank}`}>
+        <span className={`rank ${topRank}`} title={`Priority ${rank}`}>
           {rank}
         </span>
         <div className="tname">
@@ -96,12 +149,14 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
           )}
           <div className="tmeta">
             <span>
-              {open.length} to go · {done.length}/{items.length} done
+              {allItems.length - allDone} to go · {allDone}/{allItems.length} done
             </span>
             <span className="bar" aria-hidden="true">
               <i style={{ width: `${pct}%` }} />
             </span>
-            {idle >= 14 && open.length > 0 && <span className="stale">untouched {idle} days</span>}
+            {subfolderCount > 0 && <span>{plural(subfolderCount, 'subfolder')}</span>}
+            {idle >= 14 && allItems.length > allDone && <span className="stale">untouched {idle} days</span>}
+            {p.dragHint && <span className="drag-hint">{p.dragHint}</span>}
           </div>
         </div>
         <button className="icon-btn" onClick={() => setMenu((m) => !m)} aria-label={`More for ${topic.name}`} aria-expanded={menu}>
@@ -115,17 +170,49 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
       {menu && (
         <div className="topic-menu">
           {confirmDelete ? (
-            <>
-              <span>
-                Delete {topic.name} and its {items.length} item{items.length === 1 ? '' : 's'}?
-              </span>
-              <button className="btn danger small" onClick={() => void deleteTopic(topic.id)}>
-                Delete
+            subfolderCount > 0 ? (
+              <>
+                <span>
+                  Delete {topic.name}? It has {plural(subfolderCount, 'subfolder')} and {plural(allItems.length, 'item')} in all.
+                </span>
+                <button className="btn danger small" onClick={() => void deleteTopic(topic.id, 'all')}>
+                  Delete everything
+                </button>
+                <button className="btn ghost small" onClick={() => void deleteTopic(topic.id, 'lift')}>
+                  {isNested
+                    ? 'Delete only this folder, move what’s in it up'
+                    : `Delete only this folder${items.length ? ` and its ${plural(items.length, 'item')}` : ''}, keep subfolders`}
+                </button>
+                <button className="btn ghost small" onClick={() => setConfirmDelete(false)}>
+                  Keep it
+                </button>
+              </>
+            ) : (
+              <>
+                <span>
+                  Delete {topic.name} and its {plural(items.length, 'item')}?
+                </span>
+                <button className="btn danger small" onClick={() => void deleteTopic(topic.id)}>
+                  Delete
+                </button>
+                <button className="btn ghost small" onClick={() => setConfirmDelete(false)}>
+                  Keep it
+                </button>
+              </>
+            )
+          ) : addingSub ? (
+            <form
+              className="row"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void addSubfolder();
+              }}
+            >
+              <input autoFocus value={subName} onChange={(e) => setSubName(e.target.value)} placeholder={`Folder inside ${topic.name}`} aria-label="Subfolder name" onKeyDown={(e) => e.key === 'Escape' && setAddingSub(false)} />
+              <button className="btn small" type="submit">
+                Add
               </button>
-              <button className="btn ghost small" onClick={() => setConfirmDelete(false)}>
-                Keep it
-              </button>
-            </>
+            </form>
           ) : (
             <>
               <button
@@ -137,6 +224,27 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
               >
                 Rename
               </button>
+              {depth < MAX_DEPTH && (
+                <button className="btn ghost small" onClick={() => setAddingSub(true)}>
+                  + Subfolder
+                </button>
+              )}
+              {(moveTargets.length > 0 || isNested) && (
+                <label className="row move-into">
+                  Move into
+                  <select value="" onChange={(e) => void moveInto(e.target.value === '__top' ? '' : e.target.value)} aria-label={`Move ${topic.name} into another topic`}>
+                    <option value="" disabled>
+                      Choose…
+                    </option>
+                    {isNested && <option value="__top">Top level</option>}
+                    {moveTargets.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
               {items.some((i) => i.url) && (
                 <button className="btn ghost small" onClick={() => void refreshAll()} disabled={refreshing !== null}>
                   {refreshing !== null ? `Refreshing ${refreshing}/${items.filter((i) => i.url).length}…` : 'Refresh previews'}
@@ -162,15 +270,19 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
               </select>
             </div>
           )}
-          {open.length ? open.map((it) => <ItemRow key={it.id} item={it} hue={topic.hue} topics={allTopics} />) : <p className="empty-topic">{items.length ? 'Everything here is done. Nice work.' : 'Nothing here yet.'}</p>}
+          {open.map((it) => (
+            <ItemRow key={it.id} item={it} hue={topic.hue} folders={folders} />
+          ))}
+          {!open.length && !subfolderCount && <p className="empty-topic">{items.length ? 'Everything here is done. Nice work.' : 'Nothing here yet.'}</p>}
           {done.length > 0 && (
             <details className="done-toggle">
               <summary>{done.length} done</summary>
               {done.map((it) => (
-                <ItemRow key={it.id} item={it} hue={topic.hue} topics={allTopics} />
+                <ItemRow key={it.id} item={it} hue={topic.hue} folders={folders} />
               ))}
             </details>
           )}
+          {subfolderCount > 0 && <div className="subtopics">{p.subfolders}</div>}
         </div>
       )}
     </section>

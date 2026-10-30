@@ -17,16 +17,17 @@ Your lists stay on your device. The server stores nothing, even when Stacks is h
 5. [AI: providers, keys and cost control](#ai-providers-keys-and-cost-control)
 6. [How "Up next" picks](#how-up-next-picks)
 7. [Smart input rules](#smart-input-rules)
-8. [Backups, export and import](#backups-export-and-import)
-9. [Configuration](#configuration)
-10. [Hosting on a server](#hosting-on-a-server)
-11. [Security and privacy](#security-and-privacy)
-12. [Design](#design)
-13. [Development](#development)
-14. [Project structure](#project-structure)
-15. [Decision log](#decision-log)
-16. [Roadmap](#roadmap)
-17. [Troubleshooting](#troubleshooting)
+8. [Folders, subfolders and `\` paths](#folders-subfolders-and--paths)
+9. [Backups, export and import](#backups-export-and-import)
+10. [Configuration](#configuration)
+11. [Hosting on a server](#hosting-on-a-server)
+12. [Security and privacy](#security-and-privacy)
+13. [Design](#design)
+14. [Development](#development)
+15. [Project structure](#project-structure)
+16. [Decision log](#decision-log)
+17. [Roadmap](#roadmap)
+18. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -62,8 +63,9 @@ Stop it with `docker compose down`. Your data is unaffected because it lives in 
 | **Short links** | `lnkd.in` links (LinkedIn's "you're leaving LinkedIn" page), pages that redirect with `<meta http-equiv="refresh">`, and ordinary redirects are followed to the real page, which is the link Stacks saves. Useless previews (a title like "LinkedIn" or "Just a moment…", a favicon as the image) are ignored in favor of your own text and the AI's title. |
 | **Fixing items** | Each item's ⋯ menu has **Edit** (title and notes) and **Refresh preview**. A topic's ⋯ menu has **Refresh previews** for all its links. Clicking an item's title, thumbnail or text (or **Show more**) expands it to show the full notes and its links; the links are only shown there. |
 | **Duplicates** | Links you already saved are recognized (tracking parameters and `youtu.be` short links are normalized) and left unchecked. |
-| **Ranked topics** | Drag the ⋮⋮ handle to reorder, on desktop or touch. Keyboard users can focus the handle and press ↑/↓. The rank badge shows priority. |
-| **Topic cards** | Expand and collapse, progress bar, "untouched N days" warning, sort by oldest, newest or title, rename, delete, and a "N done" fold. |
+| **Ranked topics** | Drag the ⋮⋮ handle up or down to reorder, on desktop or touch. Keyboard users can focus the handle and press ↑/↓. The rank badge shows priority ("2", or "2.1" for the first folder inside the second). |
+| **Folders and subfolders** | Topics can hold subfolders, up to 3 levels: Robotics › Papers › Grasping. Write `\robotics\papers` in the box to choose the folder yourself; it's created if it doesn't exist. Typing `\` lists your folders. Drag a topic right to put it inside the one above, left to take it out. See [Folders, subfolders and `\` paths](#folders-subfolders-and--paths). |
+| **Topic cards** | Expand and collapse, progress bar (counting subfolders too), "untouched N days" warning, sort by oldest, newest or title, rename, **+ Subfolder**, **Move into…**, delete, and a "N done" fold. |
 | **Up next** | Always-visible recommendations with the reason for each pick. Done, Snooze 3 days, Not interested, Open. |
 | **Reminders** | Optional desktop notification, once a day at most, for your top pick while the app is open. |
 | **Progress** | A line under the title ("3 more and Machine Learning is halfway done") and a gold star for every finished item. |
@@ -180,8 +182,8 @@ Claude requests run at `effort: "low"`, because sorting is simple. Sonnet 5.5 an
 
 | Request | What's sent |
 |---|---|
-| Grouping and sorting | Your topic names (in priority order), the text you pasted as numbered lines (each line cut at 400 characters, links replaced by `[L1]`-style references), and for each link: its address, site, page title, and the first 160 characters of its description. Full web pages are never sent. |
-| Instructions | Your instruction, the topic names with counts, and a numbered list of up to 400 items (title, topic, done or open, site). |
+| Grouping and sorting | Your topic names as full paths like "Robotics › Papers" (in priority order), the text you pasted as numbered lines (each line cut at 400 characters, links replaced by `[L1]`-style references), and for each link: its address, site, page title, and the first 160 characters of its description. Full web pages are never sent. |
+| Instructions | Your instruction, the topic paths with counts, and a numbered list of up to 400 items (title, topic, done or open, site). |
 
 ### Cost control
 
@@ -205,13 +207,15 @@ These are the cost-control layers we planned, as built:
 Every unfinished item that isn't snoozed or marked "Not interested" gets a score:
 
 ```
-score = 0.45 × topic priority   (top topic = 1, decreasing down the list)
+score = 0.45 × topic priority   (top topic = 1, decreasing down the list; see below for subfolders)
       + 0.35 × time waiting     (reaches full weight at 60 days)
       + 0.20 × topic neglect    (days since you finished anything in the topic; full at 30)
       + 0.05 × daily variation  (stable within a day, so the list doesn't shuffle on every click)
 ```
 
-The panel shows the top four picks, at most two from any one topic, so one big list can't crowd out the rest. Each pick carries a tag naming the factor that counted most: "Your top topic", "Waiting 52 days", or "Personal Finance untouched 41 days".
+Priority follows the folder tree as it reads on the page: a folder, then the folders inside it, then the next folder. So Robotics › Papers (1.1) ranks right after Robotics (1) and before Cooking (2). Finishing something in a subfolder also counts as activity for the folders around it.
+
+The panel shows the top four picks, at most two from any one topic (each subfolder counts as its own topic), so one big list can't crowd out the rest. Each pick carries a tag naming the factor that counted most: "Your top topic", "Waiting 52 days", or "Personal Finance untouched 41 days".
 
 - **Done** marks the item finished and refreshes the topic's activity.
 - **Snooze 3 days** hides it from Up next for three days.
@@ -246,6 +250,76 @@ Here's how text becomes items:
 - **A list of unrelated links or ideas** gives one item per line. A single link uses its page's title.
 - **Lines that only name a link** ("Video:", "Slides") become that link's label instead of a line of notes.
 - **Instruction mode** starts automatically for a single line with no link that begins like a command: move, mark, create, rename, delete, snooze, put, merge, prioritize, and similar. Click the label above the box (**Add items ⇄ / Instruction ⇄**) to switch modes if the guess is wrong.
+- **Folder paths** (`\robotics\papers`) are taken out of the text before anything else and decide the folder; see the next section.
+
+---
+
+## Folders, subfolders and `\` paths
+
+### Writing a path
+
+A path starts with `\`, and each further `\` goes one level deeper:
+
+| You write | Folder |
+|---|---|
+| `\robotics` | Robotics |
+| `\robotics\papers` | Robotics › Papers |
+| `\machine-learning\open_models` | Machine Learning › Open Models (hyphens and underscores stand for spaces) |
+| `\"Machine Learning"\papers` | Machine Learning › Papers (quotes allow spaces and keep the name exactly as written, e.g. `\"GPT-5 notes"`) |
+| `\a\b\c\d` | A › B › C (folders go 3 levels deep; the box warns that the extra level is dropped) |
+
+- A path must start the line or follow a space, so links and Windows paths (`C:\Users`) are never read as folders.
+- An all-lowercase name gets capitals (`robotics` → Robotics). A name with capitals is kept as typed (`\AI`, `\iOS`).
+- Names are matched ignoring case, spaces, hyphens and underscores, so `\open-models` finds an existing "Open Models".
+- Matching starts at the top level: `\robotics\papers` looks for Papers *inside* Robotics. A Papers folder somewhere else isn't used.
+- Any missing folder along the path is created when you click **Add**. The review tray shows it as "+ New: Robotics › Papers", tagged "your folder".
+- The path is removed from the saved text, so it never ends up in an item's notes.
+
+### What a path applies to
+
+| Where you write it | What goes there |
+|---|---|
+| On a line with a link or note: `https://… \robotics` | Just that item |
+| On a line by itself | Every line below it, until the next path line |
+| As the first line of the paste | Everything pasted (the same rule as above) |
+
+So one paste can fill several folders:
+
+```
+\robotics\papers
+https://arxiv.org/abs/…
+https://arxiv.org/abs/…
+\cooking
+https://pizza.example/…
+```
+
+- An item never spans two path sections. If the AI groups lines across a path line, the group is split there.
+- A path you write always wins over the AI's choice and the "same site as before" rule. An item whose links are all already saved is still flagged and left unchecked, so it isn't saved twice by accident.
+- No AI call is made when there's nothing to group: a single line with a path, or a list of bare links that each have a path, are already saved, or come from a site you always file in one place.
+- When a dump is too big for one round, the text left in the box gets its section's path written again at the top.
+
+### Picking a folder while you type
+
+Typing `\` in the box lists your folders (up to six), narrowing as you type: `\rob` shows Robotics and Robotics › Papers. ↑/↓ choose, **Tab** or **Enter** completes it as a path, **Esc** closes the list. Picking from the list avoids typos that would create a near-duplicate folder.
+
+Paths also work in instructions ("move all arxiv links to `\robotics\papers`") and in every topic name box: **+ New topic**, **+ New topic…** in the review tray, and **+ Subfolder**. In those boxes spaces are fine, so `Robotics › Papers` and `Robotics\Papers` work too.
+
+### Arranging folders
+
+- **Drag the ⋮⋮ handle**:
+  - up or down to reorder among folders with the same parent;
+  - **right** to put the folder inside the one above it;
+  - **left** to take it out of its parent (it lands right below the parent).
+  
+  While dragging, a tag on the card says what will happen ("→ into Robotics", "← out to top level"), and the target folder is outlined.
+- **Keyboard**: focus the handle; ↑/↓ reorder, → puts it inside the folder above, ← takes it out.
+- **Topic ⋯ menu**: **+ Subfolder**, and **Move into…**, which lists every folder it can go into, plus **Top level**. A folder moves with everything inside it. A move that would pass 3 levels, or put a folder inside itself, is refused.
+- **Display**: a folder shows its own items first, then its subfolders as smaller nested cards that open and close on their own. The header counts include everything inside. Subfolders take their top folder's color.
+- **Deleting** a folder that has subfolders offers two choices:
+  - **Delete everything**: the folder, its subfolders and all their items.
+  - **Delete only this folder**: its items and subfolders move up into its parent. At the top level its own items are deleted, since there's nowhere above to keep them, and its subfolders become top-level topics.
+- **Item ⋯ → Move to**, the review tray and Up next show full paths ("Robotics › Papers").
+- **Data**: each topic has an optional `parentId`, and its order is among its siblings. Older data simply has no parents, so nothing needs migrating. Export/Import keep the tree; **Merge** matches folders by name *and* place.
 
 ---
 
@@ -386,7 +460,7 @@ stacks/
    │  ├─ group.ts                   grouping prompt and schema: lines → items, titles, main link, topic
    │  ├─ interpret.ts               instruction prompt, schema, resolving refs to real items/topics
    │  └─ actions.ts                 describe and apply instruction actions
-   ├─ lib/                          parse, url, scoring, preview client, backup, usage, time, reminders
+   ├─ lib/                          parse (incl. \ paths), tree (folders), url, scoring, preview client, backup, usage, time, reminders
    └─ components/                   Header, Composer, ReviewTray, InstructionTray, TopicList, TopicCard,
                                     ItemRow, Thumb, UpNext, UsagePanel, SettingsModal, AboutPage, Sky, Spark
 ```
@@ -410,6 +484,10 @@ These are the choices made while planning Stacks, and why.
 | Review before saving | AI suggestions go to a review tray; instructions show a change list before applying | Bad guesses never pollute your lists. |
 | Topic ordering | Drag handle only (the up/down arrow buttons were removed) | Cleaner cards. Keyboard users still have arrow keys on the handle. |
 | Input box | Collapsible to one line, remembered, `/` to reopen | Topics are visible from the top. |
+| Choosing a folder | `\robotics\papers` in the text; hyphens/underscores or quotes for spaces | `/` would clash with links. Paths without spaces stay unambiguous inside a sentence; quotes cover exact names. |
+| Path scope | On a line: that item. On its own line: everything below until the next path | One paste can fill several folders. |
+| Folder depth | 3 levels at most | Deeper trees get hard to read and to rank. |
+| Nesting by drag | Sideways drag: right = into the folder above, left = out | Works with the existing up/down drag, on touch too, without hover timers. **Move into…** covers moves across the tree. |
 | Look | Constellation background, gold star per finished item, progress line | You asked for an inspiring background. Progress becomes visible. |
 
 ---

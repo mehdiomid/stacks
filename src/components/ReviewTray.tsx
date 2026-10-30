@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react';
-import { NEW, type Draft } from '../ingest';
+import { choiceForPath, NEW, newChoiceLabel, type Draft } from '../ingest';
+import { folderNamesFrom } from '../lib/parse';
+import { flattenTree, indexTree, PATH_SEP } from '../lib/tree';
 import type { Topic } from '../types';
 
 interface Props {
@@ -23,18 +25,18 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
   const update = (key: string, patch: Partial<Draft>) => setDrafts((ds) => ds.map((d) => (d.key === key ? { ...d, ...patch } : d)));
 
   const newChoices = useMemo(() => [...new Set(drafts.map((d) => d.choice).filter((c) => c.startsWith(NEW)))], [drafts]);
-  const inbox = topics.find((t) => t.name.toLowerCase() === 'inbox');
+  const tree = useMemo(() => indexTree(topics), [topics]);
+  const folders = useMemo(() => flattenTree(topics, tree), [topics, tree]);
+  const inbox = tree.children(null).find((t) => t.name.toLowerCase() === 'inbox');
   const included = drafts.filter((d) => d.include && d.choice);
   const groups = new Set(included.map((d) => d.choice)).size;
   const newCount = new Set(included.filter((d) => d.choice.startsWith(NEW)).map((d) => d.choice)).size;
   const dupCount = drafts.filter((d) => d.source === 'duplicate').length;
 
   const finishNaming = (key: string) => {
-    const name = newName.trim();
-    if (name) {
-      const existing = topics.find((t) => t.name.toLowerCase() === name.toLowerCase());
-      update(key, { choice: existing ? existing.id : NEW + name, include: true });
-    }
+    // A name, or a path like \robotics\papers or "Robotics › Papers"; existing folders are reused.
+    const names = folderNamesFrom(newName);
+    if (names.length) update(key, { choice: choiceForPath(names, tree), include: true });
     setNaming(null);
     setNewName('');
   };
@@ -62,6 +64,7 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
               {d.title}
               {d.source === 'duplicate' && <span className="tag dup">already in {d.duplicateOf}</span>}
               {d.source === 'history' && <span className="tag">same site as before</span>}
+              {d.source === 'path' && <span className="tag path">your folder</span>}
             </b>
             <small>
               {d.links
@@ -75,7 +78,7 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
               <input
                 type="text"
                 autoFocus
-                placeholder="New topic name"
+                placeholder="Name, or \robotics\papers"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 onBlur={() => finishNaming(d.key)}
@@ -93,14 +96,14 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
                 onChange={(e) => (e.target.value === NAME_IT ? setNaming(d.key) : update(d.key, { choice: e.target.value, include: true }))}
               >
                 {!d.choice && <option value="">Choose a topic…</option>}
-                {topics.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
+                {folders.map((f) => (
+                  <option key={f.topic.id} value={f.topic.id}>
+                    {f.path.join(PATH_SEP)}
                   </option>
                 ))}
                 {newChoices.map((c) => (
                   <option key={c} value={c}>
-                    + New: {c.slice(NEW.length)}
+                    + New: {newChoiceLabel(c)}
                   </option>
                 ))}
                 {!inbox && !newChoices.includes(`${NEW}Inbox`) && <option value={`${NEW}Inbox`}>Inbox (sort later)</option>}

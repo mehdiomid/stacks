@@ -1,15 +1,60 @@
+import { displayName, MAX_DEPTH, splitPathName } from './tree';
+
 export const LIMITS = { maxLinks: 100, maxLines: 300, maxChars: 20_000 };
 
 export interface ParsedLine {
   /** 1-based number, counting only non-empty lines. */
   n: number;
-  /** The line as typed, minus list bullets. */
+  /** The line as typed, minus list bullets and folder paths. */
   raw: string;
+  /** The line as typed, minus list bullets (folder paths kept). */
+  source: string;
   /** The line with its links taken out. */
   text: string;
   urls: string[];
   /** A blank line came before this one (a paragraph break). */
   blankBefore: boolean;
+  /** Folder written on this line itself (`https://… \robotics`): applies to its item only. */
+  folder?: string[];
+  /** Folder from the last path written on a line of its own above this one. */
+  section?: string[];
+}
+
+/*
+ * Folder paths: \robotics, \robotics\papers, \machine-learning, \"Machine Learning"\papers.
+ * A path starts at the beginning of a line or after a space, so URLs and Windows paths (C:\x) are left alone.
+ */
+const SEGMENT = String.raw`(?:"[^"\n\\]+"|“[^”\n\\]+”|[^\s\\"“”]+)`;
+const PATH_RE = new RegExp(String.raw`(?<=^|\s)(?:\\${SEGMENT})+`, 'g');
+const SEGMENT_RE = new RegExp(String.raw`\\(${SEGMENT})`, 'g');
+
+export interface FolderPath {
+  names: string[];
+  /** The path had more than MAX_DEPTH levels; the extra ones were dropped. */
+  clipped: boolean;
+}
+
+/** Reads one typed path (`\robotics\papers`) into folder names. */
+export function readPath(token: string): FolderPath {
+  const names: string[] = [];
+  for (const m of token.matchAll(SEGMENT_RE)) {
+    const seg = m[1];
+    const quoted = /^["“]/.test(seg);
+    const name = quoted ? displayName(seg.slice(1, -1), true) : displayName(seg.replace(/[.,;:!?)]+$/, ''));
+    if (name) names.push(name);
+  }
+  return { names: names.slice(0, MAX_DEPTH), clipped: names.length > MAX_DEPTH };
+}
+
+/** Takes folder paths out of a line. The last path on the line counts. */
+export function extractPaths(line: string): { rest: string; path: FolderPath | null } {
+  let path = null as FolderPath | null;
+  const rest = line.replace(PATH_RE, (tok) => {
+    const p = readPath(tok);
+    if (p.names.length) path = p;
+    return p.names.length ? ' ' : tok;
+  });
+  return { rest: path ? rest.replace(/\s+/g, ' ').trim() : line, path };
 }
 
 const URL_RE = /https?:\/\/[^\s<>"'`]+/g;
@@ -36,9 +81,17 @@ export function parseLines(input: string): ParsedLine[] {
   const text = input.replace(/\r\n?/g, '\n').replace(MD_LINK, (_m, label: string, url: string) => `${label}: ${url}`);
   const out: ParsedLine[] = [];
   let blank = false;
+  let section: string[] | undefined;
   for (const line of text.split('\n')) {
-    const raw = line.replace(BULLET, '').trim();
-    if (!raw) {
+    const source = line.replace(BULLET, '').trim();
+    if (!source) {
+      blank = out.length > 0;
+      continue;
+    }
+    const { rest: raw, path } = extractPaths(source);
+    if (path && !raw) {
+      // A path on a line of its own: everything below goes there, until the next one.
+      section = path.names;
       blank = out.length > 0;
       continue;
     }
@@ -46,10 +99,38 @@ export function parseLines(input: string): ParsedLine[] {
     let rest = raw;
     for (const u of urls) rest = rest.replace(u, ' ');
     rest = rest.replace(/\s+/g, ' ').replace(/^[\s\-–—:|•(),;]+|[\s\-–—:|•(),;]+$/g, '').trim();
-    out.push({ n: out.length + 1, raw, text: rest, urls, blankBefore: blank });
+    out.push({
+      n: out.length + 1, raw, source, text: rest, urls, blankBefore: blank,
+      ...(path ? { folder: path.names } : {}),
+      ...(section ? { section } : {}),
+    });
     blank = false;
   }
   return out;
+}
+
+/**
+ * Folder names from a name box, where spaces are fine: "Machine Learning", "Robotics › Papers",
+ * "Robotics\Papers" or a typed path like \robotics\papers.
+ */
+export function folderNamesFrom(input: string): string[] {
+  const t = input.trim();
+  const typed = extractPaths(t);
+  if (typed.path && !typed.rest) return typed.path.names;
+  return splitPathName(t).map((n) => displayName(n, true)).slice(0, MAX_DEPTH);
+}
+
+/** Every folder path written in the text, and whether any went deeper than allowed. */
+export function pathsIn(input: string): { paths: string[][]; clipped: boolean } {
+  const paths: string[][] = [];
+  let clipped = false;
+  for (const line of input.split('\n')) {
+    const { path } = extractPaths(line.replace(BULLET, '').trim());
+    if (!path) continue;
+    clipped ||= path.clipped;
+    if (!paths.some((p) => p.join('\\').toLowerCase() === path!.names.join('\\').toLowerCase())) paths.push(path.names);
+  }
+  return { paths, clipped };
 }
 
 /** Every distinct link, in the order it appears. */

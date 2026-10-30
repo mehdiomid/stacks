@@ -4,7 +4,9 @@ export type TopicSort = 'oldest' | 'newest' | 'title';
 export interface Topic {
   id: string;
   name: string;
-  /** Position in the list. Lower is more important. */
+  /** The folder this one is inside, or absent/null at the top level. */
+  parentId?: string | null;
+  /** Position among the folders with the same parent. Lower is more important. */
   order: number;
   hue: number;
   createdAt: number;

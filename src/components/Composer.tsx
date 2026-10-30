@@ -4,12 +4,25 @@ import { AIError } from '../ai/errors';
 import { interpret, type ResolvedAction } from '../ai/interpret';
 import { applyActions } from '../ai/actions';
 import { acceptDrafts, prepareDrafts, type Draft } from '../ingest';
-import { LIMITS, looksLikeInstruction, parseLines, uniqueUrls } from '../lib/parse';
+import { LIMITS, looksLikeInstruction, parseLines, pathsIn, uniqueUrls } from '../lib/parse';
+import { flattenTree, MAX_DEPTH, nameKey, PATH_SEP, typedPath } from '../lib/tree';
 import type { Item, Topic } from '../types';
 import { ReviewTray } from './ReviewTray';
 import { InstructionTray } from './InstructionTray';
 
 const COLLAPSE_KEY = 'stacks.composerCollapsed';
+/** The folder path being typed right before the caret: \rob, \robotics\pa, \"Machine Lea */
+const TYPING_PATH = /(?:^|\s)((?:\\(?:"[^"\n\\]*"?|“[^”\n\\]*”?|[^\s\\"“”]*))+)$/;
+const unquote = (s: string) => s.replace(/^["“]|["”]$/g, '');
+
+interface Suggest {
+  start: number;
+  end: number;
+  token: string;
+  options: { names: string[]; typed: string }[];
+  active: number;
+}
+
 const readCollapsed = () => {
   try {
     return localStorage.getItem(COLLAPSE_KEY) === '1';
@@ -27,13 +40,47 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
   const [review, setReview] = useState<{ drafts: Draft[]; model: string; aiCount: number; leftover: string } | null>(null);
   const [plan, setPlan] = useState<{ summary: string; actions: ResolvedAction[] } | null>(null);
   const [collapsed, setCollapsedState] = useState(readCollapsed);
+  const [suggest, setSuggest] = useState<Suggest | null>(null);
+  const closedFor = useRef<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const folderPaths = useMemo(() => flattenTree(topics).map((f) => f.path), [topics]);
+
+  /** Typing \ lists your folders; the list narrows as you type. */
+  function updateSuggest(value: string, caret: number) {
+    const m = TYPING_PATH.exec(value.slice(0, caret));
+    if (!m || m[1] === closedFor.current) return setSuggest(null);
+    const token = m[1];
+    const segs = token.split('\\').slice(1).map(unquote);
+    const done = segs.slice(0, -1).map(nameKey);
+    const partial = nameKey(segs[segs.length - 1] ?? '');
+    const options = folderPaths
+      .filter((p) => p.length > done.length && done.every((d, i) => nameKey(p[i]) === d) && nameKey(p[done.length]).startsWith(partial))
+      .slice(0, 6)
+      .map((names) => ({ names, typed: typedPath(names) }));
+    // Nothing to suggest once the path is typed out in full.
+    const exact = options.length === 1 && options[0].names.length === segs.length && nameKey(options[0].names[segs.length - 1]) === partial;
+    setSuggest(options.length && !exact ? { start: caret - token.length, end: caret, token, options, active: 0 } : null);
+  }
+
+  function pick(i: number) {
+    if (!suggest) return;
+    const { typed } = suggest.options[i];
+    const next = text.slice(0, suggest.start) + typed + text.slice(suggest.end);
+    closedFor.current = typed;
+    setText(next);
+    setSuggest(null);
+    const at = suggest.start + typed.length;
+    requestAnimationFrame(() => {
+      inputRef.current?.focus();
+      inputRef.current?.setSelectionRange(at, at);
+    });
+  }
 
   const isInstr = override ? override === 'instr' : looksLikeInstruction(text);
   const found = useMemo(() => {
     if (isInstr || !text.trim()) return null;
     const lines = parseLines(text);
-    return { lines: lines.length, links: uniqueUrls(lines).length };
+    return { lines: lines.length, links: uniqueUrls(lines).length, ...pathsIn(text) };
   }, [text, isInstr]);
 
   const setCollapsed = (c: boolean, focus = false) => {
@@ -119,8 +166,10 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
     : isInstr
       ? 'Read as an instruction. You see the changes before anything happens.'
       : found
-        ? `${found.links} link${found.links === 1 ? '' : 's'} and ${found.lines} line${found.lines === 1 ? '' : 's'}. Lines about the same thing become one item.${found.links > LIMITS.maxLinks ? ` The first ${LIMITS.maxLinks} links are sorted now.` : ''}`
-        : 'Paste anything. Related lines and links become one item.';
+        ? `${found.links} link${found.links === 1 ? '' : 's'} and ${found.lines} line${found.lines === 1 ? '' : 's'}. ${
+            found.paths.length ? `Going to ${found.paths.map((p) => p.join(PATH_SEP)).join(', ')}.` : 'Lines about the same thing become one item.'
+          }${found.clipped ? ` Folders go ${MAX_DEPTH} levels deep, so extra levels are dropped.` : ''}${found.links > LIMITS.maxLinks ? ` The first ${LIMITS.maxLinks} links are sorted now.` : ''}`
+        : 'Paste anything. Related lines and links become one item. Type \\ to pick a folder.';
 
   return (
     <>
@@ -152,15 +201,65 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
               onChange={(e) => {
                 setText(e.target.value);
                 if (!e.target.value.trim()) setOverride(null);
+                updateSuggest(e.target.value, e.target.selectionStart);
               }}
+              onSelect={(e) => {
+                const el = e.currentTarget;
+                if (el.selectionStart === el.selectionEnd) updateSuggest(el.value, el.selectionStart);
+                else setSuggest(null);
+              }}
+              onBlur={() => setSuggest(null)}
+              aria-controls={suggest ? 'path-suggest' : undefined}
+              aria-autocomplete="list"
               onKeyDown={(e) => {
+                if (suggest && !e.metaKey && !e.ctrlKey) {
+                  const n = suggest.options.length;
+                  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setSuggest({ ...suggest, active: (suggest.active + (e.key === 'ArrowDown' ? 1 : n - 1)) % n });
+                    return;
+                  }
+                  if (e.key === 'Tab' || e.key === 'Enter') {
+                    e.preventDefault();
+                    pick(suggest.active);
+                    return;
+                  }
+                  if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closedFor.current = suggest.token;
+                    setSuggest(null);
+                    return;
+                  }
+                }
                 if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
                   e.preventDefault();
                   void submit();
                 }
               }}
-              placeholder={'Paste a link, a note, or a whole list of links.\nOr type an instruction, like “move all pizza links to Cooking”.'}
+              placeholder={'Paste a link, a note, or a whole list of links. Add \\robotics\\papers to choose the folder.\nOr type an instruction, like “move all pizza links to Cooking”.'}
             />
+            {suggest && (
+              <ul className="path-suggest" id="path-suggest" role="listbox" aria-label="Your folders">
+                {suggest.options.map((o, i) => (
+                  <li
+                    key={o.typed}
+                    role="option"
+                    aria-selected={i === suggest.active}
+                    className={i === suggest.active ? 'active' : ''}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      pick(i);
+                    }}
+                  >
+                    <span>{o.names.join(PATH_SEP)}</span>
+                    <code>{o.typed}</code>
+                  </li>
+                ))}
+                <li className="path-suggest-help" aria-hidden="true">
+                  Tab or Enter to pick · Esc to close
+                </li>
+              </ul>
+            )}
             <div className="composer-bar">
               <div className="mode">{busy ? <span className="status">{busy}</span> : <span>{hint}</span>}</div>
               <button className="btn" onClick={() => void submit()} disabled={!text.trim() || !!busy} title="Ctrl/⌘ + Enter">

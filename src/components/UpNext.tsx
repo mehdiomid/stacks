@@ -3,12 +3,14 @@ import { useApp } from '../app-context';
 import { recommend } from '../lib/scoring';
 import { formatDuration } from '../lib/time';
 import { dismissItem, setDone, snoozeItem } from '../store';
+import { indexTree, pathLabel } from '../lib/tree';
 import type { Item, Topic } from '../types';
 import { Thumb } from './Thumb';
 
 export function UpNext({ topics, items }: { topics: Topic[]; items: Item[] }) {
   const { toast } = useApp();
   const recs = useMemo(() => recommend(topics, items), [topics, items]);
+  const tree = useMemo(() => indexTree(topics), [topics]);
   const open = items.filter((i) => !i.doneAt).length;
 
   return (
@@ -29,7 +31,7 @@ export function UpNext({ topics, items }: { topics: Topic[]; items: Item[] }) {
                 <b>{item.title}</b>
               )}
               <small>
-                {topic.name}
+                {pathLabel(topic, tree)}
                 {item.duration ? ` · ${formatDuration(item.duration)}` : ''}
               </small>
             </div>

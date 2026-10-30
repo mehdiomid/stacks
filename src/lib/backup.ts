@@ -1,5 +1,6 @@
 import { db, getSetting, setSetting } from '../db';
 import type { Item, Topic } from '../types';
+import { childNamed, flattenTree, indexTree } from './tree';
 import { todayKey } from './time';
 
 /* File System Access API (Chrome, Edge, Brave, Opera). Not in TypeScript's DOM types yet. */
@@ -43,7 +44,7 @@ function isBackup(v: unknown): v is BackupFile {
   return !!b && b.app === 'stacks' && Array.isArray(b.topics) && Array.isArray(b.items);
 }
 
-/** Merge adds what's missing (by id, and by link for items). Replace wipes topics and items first. */
+/** Merge adds what's missing (folders by name and place, items by id and link). Replace wipes topics and items first. */
 export async function importBackup(raw: unknown, mode: 'merge' | 'replace'): Promise<{ topics: number; items: number }> {
   if (!isBackup(raw)) throw new Error('This file is not a Stacks backup.');
   let added = { topics: 0, items: 0 };
@@ -56,16 +57,20 @@ export async function importBackup(raw: unknown, mode: 'merge' | 'replace'): Pro
       added = { topics: raw.topics.length, items: raw.items.length };
       return;
     }
-    const existingTopics = await db.topics.toArray();
-    const byName = new Map(existingTopics.map((t) => [t.name.toLowerCase(), t.id]));
-    const ids = new Set(existingTopics.map((t) => t.id));
-    let order = existingTopics.reduce((m, t) => Math.max(m, t.order), -1);
+    // Folders are matched by their place in the tree (same name inside the same parent), parents first.
+    const current = await db.topics.toArray();
+    const incoming = indexTree(raw.topics);
     const remap = new Map<string, string>();
-    for (const t of [...raw.topics].sort((a, b) => a.order - b.order)) {
-      const same = byName.get(t.name.toLowerCase());
-      if (same) remap.set(t.id, same);
-      else if (!ids.has(t.id)) {
-        await db.topics.add({ ...t, order: ++order });
+    for (const { topic: t } of flattenTree(raw.topics, incoming)) {
+      const rp = incoming.parentOf(t);
+      const parentId = rp ? remap.get(rp) ?? rp : null;
+      const tree = indexTree(current);
+      const same = childNamed(parentId, t.name, tree);
+      if (same) remap.set(t.id, same.id);
+      else if (!tree.byId.has(t.id)) {
+        const row: Topic = { ...t, parentId, order: tree.children(parentId).reduce((m, x) => Math.max(m, x.order), -1) + 1 };
+        await db.topics.add(row);
+        current.push(row);
         added.topics++;
       }
     }

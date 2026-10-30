@@ -50,11 +50,16 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
             any topic first. Links you already saved are spotted and left unchecked.
           </li>
           <li>
+            <b>Choose the folder yourself</b> by adding a path like <code>\robotics\papers</code>. On a line with a link it applies to that item; on a line of its own it applies to everything below it. Folders that
+            don't exist yet are created, up to 3 levels deep. Write <code>\machine-learning</code> or <code>\"Machine Learning"</code> for names with spaces. Typing <code>\</code> lists your folders.
+          </li>
+          <li>
             <b>Or type an instruction</b> in the same box, such as “move all pizza links to Cooking”, “mark the Karpathy video done”, “snooze finance for two weeks” or “make Rust my top priority”. Stacks shows the
             exact changes and waits for you to apply them. Click the label above the box to switch between adding items and giving an instruction.
           </li>
           <li>
-            <b>Put your topics in order.</b> Drag the ⋮⋮ handle; the top topic is the most important. With a keyboard, focus the handle and use the arrow keys.
+            <b>Put your topics in order.</b> Drag the ⋮⋮ handle up or down; the top topic is the most important, and a subfolder ranks right after its parent. Drag right to put a topic inside the one above it, left to
+            take it out. With a keyboard, focus the handle and use the arrow keys.
           </li>
           <li>
             <b>Check things off.</b> Every finished item lights a gold star in the background.

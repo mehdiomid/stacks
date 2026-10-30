@@ -2,6 +2,7 @@ import { db, newId } from './db';
 import { scheduleBackup } from './lib/backup';
 import { DAY } from './lib/time';
 import { normalizeUrl } from './lib/url';
+import { canNest, childNamed, descendantIds, indexTree, MAX_DEPTH, pathOf } from './lib/tree';
 import type { Item, ItemKind, ItemLink, Topic, TopicSort } from './types';
 
 /** All writes go through here so the folder backup runs after each change. */
@@ -14,16 +15,22 @@ async function changed<T>(p: Promise<T>): Promise<T> {
   return r;
 }
 
-export async function createTopic(name: string, open = true): Promise<string> {
+/** Creates a folder, or returns the one with the same name already in that place. */
+export async function createTopic(name: string, open = true, parentId: string | null = null): Promise<string> {
   const all = await db.topics.toArray();
-  const existing = all.find((t) => t.name.toLowerCase() === name.trim().toLowerCase());
+  const tree = indexTree(all);
+  const existing = childNamed(parentId, name.trim(), tree);
   if (existing) return existing.id;
+  const parent = parentId ? tree.byId.get(parentId) : undefined;
+  if (parent && pathOf(parent, tree).length >= MAX_DEPTH) throw new Error(`Folders go ${MAX_DEPTH} levels deep at most.`);
   const now = Date.now();
   const topic: Topic = {
     id: newId(),
     name: name.trim(),
-    order: all.reduce((m, t) => Math.max(m, t.order), -1) + 1,
-    hue: HUES[all.length % HUES.length],
+    ...(parent ? { parentId: parent.id } : {}),
+    order: tree.children(parent?.id ?? null).reduce((m, t) => Math.max(m, t.order), -1) + 1,
+    // Subfolders share their top folder's color.
+    hue: parent ? pathOf(parent, tree)[0].hue : HUES[tree.children(null).length % HUES.length],
     createdAt: now,
     lastActivityAt: now,
     open,
@@ -33,30 +40,86 @@ export async function createTopic(name: string, open = true): Promise<string> {
   return topic.id;
 }
 
+/** Finds or creates each folder along a path, like \robotics\papers. Returns the last one. */
+export async function ensureTopicPath(names: string[], open = true): Promise<string> {
+  let parentId: string | null = null;
+  for (const name of names.slice(0, MAX_DEPTH)) parentId = await createTopic(name, open, parentId);
+  if (!parentId) throw new Error('A folder needs a name.');
+  return parentId;
+}
+
 export const renameTopic = (id: string, name: string) => changed(db.topics.update(id, { name: name.trim() }));
 export const setTopicOpen = (id: string, open: boolean) => db.topics.update(id, { open });
 export const setTopicSort = (id: string, sort: TopicSort) => db.topics.update(id, { sort });
 
-export async function deleteTopic(id: string): Promise<void> {
+/**
+ * 'all' deletes the folder, its subfolders and every item in them.
+ * 'lift' deletes only the folder: its subfolders and items move up into its parent
+ * (at the top level there is nowhere for items to go, so they are deleted; subfolders become top-level).
+ */
+export async function deleteTopic(id: string, mode: 'all' | 'lift' = 'all'): Promise<void> {
   await changed(
     db.transaction('rw', db.topics, db.items, async () => {
-      await db.items.where('topicId').equals(id).delete();
+      const tree = indexTree(await db.topics.toArray());
+      const topic = tree.byId.get(id);
+      if (!topic) return;
+      if (mode === 'all') {
+        const ids = [id, ...descendantIds(id, tree)];
+        await db.items.where('topicId').anyOf(ids).delete();
+        await db.topics.bulkDelete(ids);
+        return;
+      }
+      const parentId = tree.parentOf(topic);
+      if (parentId) await db.items.where('topicId').equals(id).modify({ topicId: parentId });
+      else await db.items.where('topicId').equals(id).delete();
+      // The subfolders take the deleted folder's place among its siblings.
+      const siblings = tree.children(parentId).flatMap((t) => (t.id === id ? tree.children(id) : [t]));
+      await Promise.all(siblings.map((t, order) => db.topics.update(t.id, { order, parentId })));
       await db.topics.delete(id);
     }),
   );
 }
 
-/** Saves a new order. `ids` is the full list of topic ids, most important first. */
+/** Saves a new order for folders that share a parent. `ids` lists them, most important first. */
 export async function reorderTopics(ids: string[]): Promise<void> {
   await changed(db.transaction('rw', db.topics, async () => {
     await Promise.all(ids.map((id, order) => db.topics.update(id, { order })));
   }));
 }
 
+/** Moves a folder to a 0-based position among its siblings. */
 export async function moveTopicTo(id: string, position: number): Promise<void> {
-  const ids = (await db.topics.orderBy('order').toArray()).map((t) => t.id).filter((x) => x !== id);
+  const all = await db.topics.toArray();
+  const tree = indexTree(all);
+  const t = tree.byId.get(id);
+  if (!t) return;
+  const ids = tree.children(tree.parentOf(t)).map((x) => x.id).filter((x) => x !== id);
   ids.splice(Math.max(0, Math.min(ids.length, position)), 0, id);
   await reorderTopics(ids);
+}
+
+/**
+ * Puts a folder (with everything inside it) into another folder, or at the top level with null.
+ * `position` is its 0-based place among its new siblings; the end when left out.
+ */
+export async function setTopicParent(id: string, parentId: string | null, position?: number): Promise<void> {
+  await changed(db.transaction('rw', db.topics, async () => {
+    const all = await db.topics.toArray();
+    const tree = indexTree(all);
+    const t = tree.byId.get(id);
+    if (!t) return;
+    if (!canNest(id, parentId, tree)) throw new Error(`That would make folders more than ${MAX_DEPTH} levels deep.`);
+    const ids = tree.children(parentId).map((x) => x.id).filter((x) => x !== id);
+    ids.splice(position === undefined ? ids.length : Math.max(0, Math.min(ids.length, position)), 0, id);
+    const parent = parentId ? tree.byId.get(parentId)! : null;
+    const hue = parent ? pathOf(parent, tree)[0].hue : t.hue;
+    await Promise.all(ids.map((x, order) => db.topics.update(x, x === id ? { order, parentId, hue } : { order })));
+    for (const d of descendantIds(id, tree)) await db.topics.update(d, { hue });
+    // Close the gap it left among its old siblings.
+    const old = tree.children(tree.parentOf(t)).filter((x) => x.id !== id);
+    if (tree.parentOf(t) !== parentId) await Promise.all(old.map((x, order) => db.topics.update(x.id, { order })));
+    if (parent) await db.topics.update(parent.id, { open: true });
+  }));
 }
 
 export interface NewItem {
@@ -101,7 +164,11 @@ export async function setDone(id: string, done: boolean): Promise<void> {
     const it = await db.items.get(id);
     if (!it) return;
     await db.items.update(id, { doneAt: done ? Date.now() : null, snoozedUntil: null });
-    if (done) await db.topics.update(it.topicId, { lastActivityAt: Date.now() });
+    if (!done) return;
+    // Finishing something in a subfolder counts as activity in the folders around it too.
+    const tree = indexTree(await db.topics.toArray());
+    const t = tree.byId.get(it.topicId);
+    if (t) await Promise.all(pathOf(t, tree).map((x) => db.topics.update(x.id, { lastActivityAt: Date.now() })));
   }));
 }
 
@@ -169,7 +236,7 @@ export async function loadExamples(): Promise<void> {
 
 /**
  * Removes the example items, and example topics that have nothing of yours in them.
- * An example topic you added your own items to is kept and becomes yours.
+ * An example topic you added your own items or folders to is kept and becomes yours.
  */
 export async function removeExamples(): Promise<{ items: number; topics: number }> {
   let removed = { items: 0, topics: 0 };
@@ -180,7 +247,7 @@ export async function removeExamples(): Promise<{ items: number; topics: number 
     const left = items.filter((i) => !exampleIds.includes(i.id));
     for (const t of topics) {
       if (!t.example && !EXAMPLE_TOPICS.has(t.name)) continue;
-      if (left.some((i) => i.topicId === t.id)) await db.topics.update(t.id, { example: false });
+      if (left.some((i) => i.topicId === t.id) || topics.some((x) => x.parentId === t.id)) await db.topics.update(t.id, { example: false });
       else if (t.example || items.some((i) => i.topicId === t.id)) {
         await db.topics.delete(t.id);
         removed.topics++;
@@ -188,8 +255,9 @@ export async function removeExamples(): Promise<{ items: number; topics: number 
     }
     removed.items = exampleIds.length;
     // Close the gaps in priority numbers.
-    const rest = await db.topics.orderBy('order').toArray();
-    await Promise.all(rest.map((t, order) => db.topics.update(t.id, { order })));
+    const rest = indexTree(await db.topics.toArray());
+    const groups = [null, ...rest.byId.keys()].map((p) => rest.children(p));
+    await Promise.all(groups.flatMap((g) => g.map((t, order) => db.topics.update(t.id, { order }))));
   }));
   return removed;
 }

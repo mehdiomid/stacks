@@ -36,7 +36,7 @@ const schema = {
           lines: { type: 'array', items: { type: 'integer' }, description: 'Line numbers that make up this item.' },
           title: { type: 'string', description: 'Short, specific title for the item.' },
           mainLink: { anyOf: [{ type: 'string' }, { type: 'null' }], description: 'Ref like "L2" of the link that best represents the item, or null.' },
-          topic: { type: 'string', description: 'An existing topic name exactly as given, a new topic name, or "Inbox".' },
+          topic: { type: 'string', description: 'An existing topic exactly as listed (a full path for nested ones), a new topic, or "Inbox".' },
           isNew: { type: 'boolean', description: 'True when topic is not one of the existing topics.' },
         },
       },
@@ -58,7 +58,7 @@ The text comes as numbered lines. Links appear as [L1], [L2]…; what each link'
 2. Every line number goes in exactly one item.
 3. title: short and specific, at most 80 characters (e.g. "Open models lecture: state of the open ecosystem"). For an item that is a single link whose page title is clear, use that page title.
 4. mainLink: the link that best represents the item (the video for a talk, the article for a post), or null when the item has no links.
-5. topic: the existing topic that fits best, with its name exactly as written. Suggest a new topic only when nothing fits and the item is clearly about a distinct subject; new names are 1 to 3 words in Title Case, and related new items share the same name. Use "Inbox" when you can't tell.`;
+5. topic: the existing topic that fits best, written exactly as listed. Topics can be folders inside folders, listed as full paths like "Robotics › Papers"; prefer the most specific one that fits. Suggest a new topic only when nothing fits and the item is clearly about a distinct subject: a new top-level name, or a new folder inside an existing one written as a path ("Robotics › Grippers"), at most 3 levels deep. New names are 1 to 3 words in Title Case, and related new items share the same name. Use "Inbox" when you can't tell.`;
 
 const cut = (s: string, n: number) => (s.length > n ? `${s.slice(0, n)}…` : s);
 

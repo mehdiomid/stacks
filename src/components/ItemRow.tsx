@@ -4,12 +4,13 @@ import { refreshPreviews } from '../ingest';
 import { deleteItem, moveItem, restoreItem, setDone, snoozeItem, updateItem } from '../store';
 import { ago, formatDuration } from '../lib/time';
 import { domainOf } from '../lib/url';
-import type { Item, ItemLink, Topic } from '../types';
+import type { Item, ItemLink } from '../types';
 import { Thumb } from './Thumb';
+import type { FolderOption } from './TopicCard';
 
 const LONG = 140;
 
-export function ItemRow({ item, hue, topics }: { item: Item; hue: number; topics: Topic[] }) {
+export function ItemRow({ item, hue, folders }: { item: Item; hue: number; folders: FolderOption[] }) {
   const { toast } = useApp();
   const [tools, setTools] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -138,9 +139,9 @@ export function ItemRow({ item, hue, topics }: { item: Item; hue: number; topics
             <label className="row">
               Move to
               <select value={item.topicId} onChange={(e) => void moveItem(item.id, e.target.value).then(() => toast('Moved'))}>
-                {topics.map((t) => (
-                  <option key={t.id} value={t.id}>
-                    {t.name}
+                {folders.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.label}
                   </option>
                 ))}
               </select>

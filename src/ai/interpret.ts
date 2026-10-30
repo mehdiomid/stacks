@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { findByName, flattenTree, indexTree, MAX_DEPTH, pathOf, PATH_SEP, splitPathName } from '../lib/tree';
 import type { Item, Topic } from '../types';
 import { AIError } from './errors';
 import { callAI } from './call';
@@ -32,9 +33,9 @@ const schema = {
         properties: {
           type: { type: 'string', enum: [...ACTION_TYPES] },
           itemRefs: { type: 'array', items: { type: 'string' }, description: 'Item refs like "i12". Empty when not used.' },
-          topic: { ...nullable('string'), description: 'Topic name. For move_items, the destination.' },
+          topic: { ...nullable('string'), description: 'Topic as listed (full path for nested ones, like "Robotics › Papers"). For move_items and create_topic, may be a new path.' },
           newName: { ...nullable('string'), description: 'New topic name, for rename_topic.' },
-          position: { ...nullable('integer'), description: '1-based position for set_topic_position. 1 is most important.' },
+          position: { ...nullable('integer'), description: '1-based position among the topics in the same folder, for set_topic_position. 1 is most important.' },
           days: { ...nullable('integer'), description: 'Number of days, for snooze_items.' },
         },
       },
@@ -57,10 +58,10 @@ const Result = z.object({
 });
 
 export type ResolvedAction =
-  | { type: 'move_items'; itemIds: string[]; topicId: string | null; topicName: string }
+  | { type: 'move_items'; itemIds: string[]; topicId: string | null; topicName: string; path: string[] }
   | { type: 'mark_done' | 'mark_not_done' | 'delete_items'; itemIds: string[] }
   | { type: 'snooze_items'; itemIds: string[]; days: number }
-  | { type: 'create_topic'; name: string }
+  | { type: 'create_topic'; name: string; path: string[] }
   | { type: 'rename_topic'; topicId: string; newName: string }
   | { type: 'delete_topic'; topicId: string }
   | { type: 'set_topic_position'; topicId: string; position: number };
@@ -69,24 +70,28 @@ export const INTERPRET_SYSTEM = `You turn a person's instruction about their rea
 
 - Use only the action types in the schema. Leave unused fields null (or an empty list for itemRefs).
 - Refer to items only by their ref (like "i12") from the list you are given. Match items by meaning, not just exact words.
-- Refer to topics by their exact name. For move_items to a topic that doesn't exist yet, give the new name; it will be created.
-- set_topic_position uses 1 for the most important topic.
+- Refer to topics exactly as listed. Topics can be folders inside folders (at most 3 levels), listed as full paths like "Robotics › Papers".
+- The person may write a folder as a path with backslashes: \\robotics\\papers means "Robotics › Papers".
+- For move_items or create_topic to a topic that doesn't exist yet, give the new full path; missing folders will be created.
+- set_topic_position uses 1 for the most important topic within its folder.
 - If the instruction is unclear or not about these lists, return no actions and say why in summary.`;
 
 const MAX_ITEMS_IN_PROMPT = 400;
 
 export async function interpret(instruction: string, topics: Topic[], items: Item[]): Promise<{ summary: string; actions: ResolvedAction[]; tokens: number }> {
-  const topicName = new Map(topics.map((t) => [t.id, t.name]));
-  const rank = new Map(topics.map((t, i) => [t.id, i]));
+  const tree = indexTree(topics);
+  const flat = flattenTree(topics, tree);
+  const topicName = new Map(flat.map((f) => [f.topic.id, f.path.join(PATH_SEP)]));
+  const rank = new Map(flat.map((f, i) => [f.topic.id, i]));
   // Unfinished items first, then by topic priority, so the most relevant ones fit in the prompt.
   const listed = [...items]
     .sort((a, b) => Number(!!a.doneAt) - Number(!!b.doneAt) || (rank.get(a.topicId) ?? 99) - (rank.get(b.topicId) ?? 99) || a.addedAt - b.addedAt)
     .slice(0, MAX_ITEMS_IN_PROMPT);
   const refToId = new Map(listed.map((it, i) => [`i${i + 1}`, it.id]));
   const lines = listed.map((it, i) => `i${i + 1} | ${topicName.get(it.topicId) ?? '?'} | ${it.doneAt ? 'done' : 'open'} | ${it.title.slice(0, 90)}${it.siteName ? ` | ${it.siteName}` : ''}`);
-  const topicLines = topics.map((t, i) => {
-    const n = items.filter((x) => x.topicId === t.id);
-    return `${i + 1}. ${t.name} (${n.filter((x) => !x.doneAt).length} open, ${n.filter((x) => x.doneAt).length} done)`;
+  const topicLines = flat.map((f, i) => {
+    const n = items.filter((x) => x.topicId === f.topic.id);
+    return `${i + 1}. ${f.path.join(PATH_SEP)} (${n.filter((x) => !x.doneAt).length} open, ${n.filter((x) => x.doneAt).length} done)`;
   });
   const user = `Topics, most important first:\n${topicLines.join('\n') || '(none yet)'}\n\nItems:\n${lines.join('\n') || '(none yet)'}\n\nInstruction: ${instruction}`;
 
@@ -94,7 +99,8 @@ export async function interpret(instruction: string, topics: Topic[], items: Ite
   const parsed = Result.safeParse(json);
   if (!parsed.success) throw new AIError('bad-output', 'The AI reply was not in the expected format. Try again.');
 
-  const byName = (name: string | null) => (name ? topics.find((t) => t.name.toLowerCase() === name.trim().toLowerCase()) : undefined);
+  const byName = (name: string | null) => (name ? findByName(name, topics, tree) ?? undefined : undefined);
+  const newPath = (name: string) => splitPathName(name).slice(0, MAX_DEPTH);
   const ids = (refs: string[]) => [...new Set(refs.map((r) => refToId.get(r.trim())).filter((x): x is string => !!x))];
 
   const actions: ResolvedAction[] = [];
@@ -104,7 +110,8 @@ export async function interpret(instruction: string, topics: Topic[], items: Ite
         const itemIds = ids(a.itemRefs);
         if (!itemIds.length || !a.topic?.trim()) break;
         const t = byName(a.topic);
-        actions.push({ type: 'move_items', itemIds, topicId: t?.id ?? null, topicName: t?.name ?? a.topic.trim() });
+        const path = t ? pathOf(t, tree).map((x) => x.name) : newPath(a.topic);
+        if (path.length) actions.push({ type: 'move_items', itemIds, topicId: t?.id ?? null, topicName: path.join(PATH_SEP), path });
         break;
       }
       case 'mark_done':
@@ -120,7 +127,7 @@ export async function interpret(instruction: string, topics: Topic[], items: Ite
         break;
       }
       case 'create_topic':
-        if (a.topic?.trim() && !byName(a.topic)) actions.push({ type: 'create_topic', name: a.topic.trim() });
+        if (a.topic?.trim() && !byName(a.topic) && newPath(a.topic).length) actions.push({ type: 'create_topic', name: newPath(a.topic).join(PATH_SEP), path: newPath(a.topic) });
         break;
       case 'rename_topic': {
         const t = byName(a.topic);
@@ -134,7 +141,10 @@ export async function interpret(instruction: string, topics: Topic[], items: Ite
       }
       case 'set_topic_position': {
         const t = byName(a.topic);
-        if (t && a.position) actions.push({ type: 'set_topic_position', topicId: t.id, position: Math.max(1, Math.min(topics.length, a.position)) });
+        if (t && a.position) {
+          const siblings = tree.children(tree.parentOf(t)).length;
+          actions.push({ type: 'set_topic_position', topicId: t.id, position: Math.max(1, Math.min(siblings, a.position)) });
+        }
         break;
       }
     }

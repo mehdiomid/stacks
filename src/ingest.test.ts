@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { normalizeGroups } from './ai/group';
-import { buildDrafts, toLinkData, type LinkData } from './ingest';
+import { buildDrafts, choiceForName, toLinkData, type LinkData } from './ingest';
 import { parseLines, uniqueUrls } from './lib/parse';
 import type { Item, Preview, Topic } from './types';
 
@@ -91,5 +91,43 @@ describe('normalizeGroups', () => {
     );
     expect(g.map((x) => [x.title, x.lines])).toEqual([['One', [1, 2]], ['Two', [3]], ['', [4]]]);
     expect(g[2].topic).toBe('Inbox');
+  });
+});
+
+describe('folder paths you write', () => {
+  const t = (id: string, name: string, order: number, parentId: string | null = null): Topic => ({
+    id, name, order, parentId, hue: 0, createdAt: 0, lastActivityAt: 0, open: true, sort: 'oldest',
+  });
+  const topics = [t('rob', 'Robotics', 0), t('pap', 'Papers', 0, 'rob'), t('ml', 'Machine Learning', 1)];
+
+  it('puts items in an existing folder, or a new path under the existing part', () => {
+    const text = '\\robotics\\papers\nhttps://a.com/1\n\\robotics\\grippers\nhttps://b.com/2\nhttps://c.com/3 \\"Open Models"';
+    const lines = parseLines(text);
+    const links = linksFor(text, {});
+    const groups = normalizeGroups(lines.map((l) => ({ lines: [l.n], title: '', mainLink: null, topic: 'Machine Learning', isNew: false })), lines.map((l) => l.n));
+    const drafts = buildDrafts(lines, groups, links, topics, []);
+    expect(drafts.map((d) => [d.choice, d.source])).toEqual([
+      ['pap', 'path'],
+      ['new:Robotics\\Grippers', 'path'],
+      ['new:Open Models', 'path'],
+    ]);
+  });
+
+  it('splits an item the AI grouped across a path line', () => {
+    const text = 'Intro to a talk\nhttps://a.com/1\n\\cooking\nhttps://pizza.com/2';
+    const lines = parseLines(text);
+    const groups = normalizeGroups([{ lines: [1, 2, 3], title: 'Talk', mainLink: 'L1', topic: 'Inbox', isNew: false }], [1, 2, 3]);
+    const drafts = buildDrafts(lines, groups, linksFor(text, {}), topics, []);
+    expect(drafts.map((d) => [d.url, d.choice])).toEqual([
+      ['https://a.com/1', expect.not.stringContaining('ooking')],
+      ['https://pizza.com/2', 'new:Cooking'],
+    ]);
+  });
+
+  it('matches the AI topic by path or name, and makes new subfolders under existing folders', () => {
+    expect(choiceForName('Robotics › Papers', topics)).toBe('pap');
+    expect(choiceForName('machine-learning', topics)).toBe('ml');
+    expect(choiceForName('Robotics › grippers', topics)).toBe('new:Robotics\\Grippers');
+    expect(choiceForName('open models', topics)).toBe('new:Open Models');
   });
 });

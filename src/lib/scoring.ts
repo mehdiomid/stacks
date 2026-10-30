@@ -1,5 +1,6 @@
 import type { Item, Topic } from '../types';
 import { DAY } from './time';
+import { flattenTree } from './tree';
 
 export interface Recommendation {
   item: Item;
@@ -26,8 +27,12 @@ export const WEIGHTS = { priority: 0.45, waiting: 0.35, neglect: 0.2, jitter: 0.
  *       + how long since you finished anything in its topic (full weight at 30 days)
  *       + a little daily variation.
  * At most `perTopic` picks come from one topic, so one big list can't crowd out the rest.
+ * Priority follows the folder tree: a subfolder ranks right after its parent, in its own order
+ * among its siblings, and before the parent's next sibling.
  */
-export function recommend(topics: Topic[], items: Item[], now = Date.now(), limit = 4, perTopic = 2): Recommendation[] {
+export function recommend(allTopics: Topic[], items: Item[], now = Date.now(), limit = 4, perTopic = 2): Recommendation[] {
+  const flat = flattenTree(allTopics);
+  const topics = flat.map((f) => f.topic);
   const n = topics.length;
   if (!n) return [];
   const rank = new Map(topics.map((t, i) => [t.id, i]));
@@ -47,7 +52,7 @@ export function recommend(topics: Topic[], items: Item[], now = Date.now(), limi
         priority * WEIGHTS.priority + waiting * WEIGHTS.waiting + neglect * WEIGHTS.neglect + jitter(item.id, day) * WEIGHTS.jitter;
       // Explain with whichever factor stands out most (neglect is boosted so a forgotten topic gets named).
       const reasons: [number, string][] = [
-        [priority * WEIGHTS.priority, r === 0 ? 'Your top topic' : `Priority ${r + 1} topic`],
+        [priority * WEIGHTS.priority, r === 0 ? 'Your top topic' : `Priority ${flat[r].rank} topic`],
         [waiting * WEIGHTS.waiting, waitDays <= 1 ? 'Just added' : `Waiting ${waitDays} days`],
         [neglect * WEIGHTS.neglect * 1.75, `${topic.name} untouched ${idleDays} days`],
       ];
