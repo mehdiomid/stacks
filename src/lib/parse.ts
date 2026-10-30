@@ -1,10 +1,16 @@
-export interface Piece {
-  url: string | null;
-  /** Text around the link, or the whole note. */
-  text: string;
-}
+export const LIMITS = { maxLinks: 100, maxLines: 300, maxChars: 20_000 };
 
-export const LIMITS = { maxPieces: 100, maxChars: 20_000 };
+export interface ParsedLine {
+  /** 1-based number, counting only non-empty lines. */
+  n: number;
+  /** The line as typed, minus list bullets. */
+  raw: string;
+  /** The line with its links taken out. */
+  text: string;
+  urls: string[];
+  /** A blank line came before this one (a paragraph break). */
+  blankBefore: boolean;
+}
 
 const URL_RE = /https?:\/\/[^\s<>"'`]+/g;
 const HAS_URL = /https?:\/\//;
@@ -22,46 +28,37 @@ export function cleanUrl(u: string): string {
   return s;
 }
 
-function lineToPieces(line: string): Piece[] {
-  const urls = (line.match(URL_RE) ?? []).map(cleanUrl);
-  if (!urls.length) return [{ url: null, text: line }];
-  let rest = line;
-  for (const u of urls) rest = rest.replace(u, ' ');
-  rest = rest.replace(/\s+/g, ' ').replace(/^[\s\-–—:|•(),;]+|[\s\-–—:|•(),;]+$/g, '').trim();
-  return urls.map((url) => ({ url, text: rest }));
-}
-
 /**
- * Split a free-form dump into pieces.
- * - Every link becomes its own piece, with the text on its line as context.
- * - A paragraph without links stays together as one note.
- * - A list (bullets, or several short lines) becomes one piece per line.
+ * Numbered, non-empty lines with their links pulled out. Which lines belong together
+ * (a post and its links, a paragraph and its questions) is decided later, by the AI.
  */
-export function splitPieces(input: string): Piece[] {
-  const text = input.replace(/\r\n?/g, '\n').replace(MD_LINK, (_m, label: string, url: string) => `${url} ${label}`);
-  const out: Piece[] = [];
-  for (const block of text.split(/\n\s*\n/)) {
-    const raw = block.split('\n').filter((l) => l.trim());
-    if (!raw.length) continue;
-    const bulleted = raw.filter((l) => BULLET.test(l)).length;
-    const lines = raw.map((l) => l.replace(BULLET, '').trim()).filter(Boolean);
-    const hasUrl = lines.some((l) => HAS_URL.test(l));
-    const isList = bulleted * 2 >= lines.length || lines.every((l) => l.length <= 100);
-    if (!hasUrl && lines.length > 1 && !isList) {
-      out.push({ url: null, text: lines.join('\n') });
+export function parseLines(input: string): ParsedLine[] {
+  const text = input.replace(/\r\n?/g, '\n').replace(MD_LINK, (_m, label: string, url: string) => `${label}: ${url}`);
+  const out: ParsedLine[] = [];
+  let blank = false;
+  for (const line of text.split('\n')) {
+    const raw = line.replace(BULLET, '').trim();
+    if (!raw) {
+      blank = out.length > 0;
       continue;
     }
-    for (const line of lines) out.push(...lineToPieces(line));
+    const urls = (raw.match(URL_RE) ?? []).map(cleanUrl);
+    let rest = raw;
+    for (const u of urls) rest = rest.replace(u, ' ');
+    rest = rest.replace(/\s+/g, ' ').replace(/^[\s\-–—:|•(),;]+|[\s\-–—:|•(),;]+$/g, '').trim();
+    out.push({ n: out.length + 1, raw, text: rest, urls, blankBefore: blank });
+    blank = false;
   }
-  // The same link twice in one dump counts once.
-  const seen = new Set<string>();
-  return out.filter((p) => {
-    if (!p.url) return true;
-    if (seen.has(p.url)) return false;
-    seen.add(p.url);
-    return true;
-  });
+  return out;
 }
+
+/** Every distinct link, in the order it appears. */
+export function uniqueUrls(lines: ParsedLine[]): string[] {
+  return [...new Set(lines.flatMap((l) => l.urls))];
+}
+
+/** Text that only names a link ("Video:", "Slides", "Reading list") rather than saying something. */
+export const isLinkLabel = (l: ParsedLine) => l.urls.length === 1 && l.text.length <= 40 && !/[.?!]$/.test(l.text);
 
 const INSTRUCTION = /^(?:please\s+|can you\s+)?(move|mark|unmark|create|make|add (?:a )?(?:new )?topic|new topic|delete|remove|rename|snooze|put|merge|prioriti[sz]e|rank|archive|reopen|set|uncheck|check off)\b/i;
 

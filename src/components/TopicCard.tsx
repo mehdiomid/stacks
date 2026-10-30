@@ -3,6 +3,8 @@ import { deleteTopic, renameTopic, setTopicOpen, setTopicSort } from '../store';
 import { daysSince } from '../lib/time';
 import type { Item, Topic, TopicSort } from '../types';
 import { ItemRow } from './ItemRow';
+import { useApp } from '../app-context';
+import { refreshPreviews } from '../ingest';
 
 interface Props {
   topic: Topic;
@@ -26,6 +28,15 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
   const [renaming, setRenaming] = useState(false);
   const [name, setName] = useState(topic.name);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [refreshing, setRefreshing] = useState<number | null>(null);
+  const { toast } = useApp();
+
+  async function refreshAll() {
+    setRefreshing(0);
+    const n = await refreshPreviews(items, (done) => setRefreshing(done));
+    setRefreshing(null);
+    toast(n ? `Updated ${n} preview${n === 1 ? '' : 's'}` : 'No better previews found');
+  }
 
   const open = items.filter((i) => !i.doneAt).sort(SORTS[topic.sort]);
   const done = items.filter((i) => i.doneAt).sort((a, b) => (b.doneAt ?? 0) - (a.doneAt ?? 0));
@@ -40,7 +51,14 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
 
   return (
     <section className={`topic ${topic.open ? 'open' : ''} ${dragging ? 'dragging' : ''}`} ref={cardRef} aria-label={topic.name}>
-      <div className="topic-head">
+      <div
+        className="topic-head"
+        onClick={(e) => {
+          // The whole row opens and closes the topic; its own buttons and inputs keep their jobs.
+          if ((e.target as HTMLElement).closest('button, input, a, select')) return;
+          void setTopicOpen(topic.id, !topic.open);
+        }}
+      >
         <button
           className="handle"
           aria-label={`Reorder ${topic.name}: drag, or press the up and down arrow keys`}
@@ -119,6 +137,11 @@ export function TopicCard({ topic, rank, items, allTopics, dragging, cardRef, on
               >
                 Rename
               </button>
+              {items.some((i) => i.url) && (
+                <button className="btn ghost small" onClick={() => void refreshAll()} disabled={refreshing !== null}>
+                  {refreshing !== null ? `Refreshing ${refreshing}/${items.filter((i) => i.url).length}…` : 'Refresh previews'}
+                </button>
+              )}
               <button className="btn ghost small" onClick={() => setConfirmDelete(true)}>
                 Delete topic
               </button>

@@ -60,3 +60,22 @@ export function titleFromUrl(raw: string): string {
     return raw;
   }
 }
+
+const GENERIC_TITLES = new Set([
+  'linkedin', 'just a moment...', 'just a moment', 'attention required!', 'attention required! | cloudflare', 'access denied', 'forbidden',
+  '403 forbidden', '404 not found', 'page not found', 'not found', 'sign in', 'log in', 'login', 'redirecting', 'redirecting...',
+  'loading', 'loading...', 'youtube', 'x', 'twitter', 'facebook', 'instagram', 'medium', 'error', 'untitled',
+]);
+
+/** A preview title that says nothing about the page, like "LinkedIn" or "Just a moment...". */
+export function isGenericTitle(title: string, siteName = '', url: string | null = null): boolean {
+  const t = title.trim().toLowerCase();
+  if (!t) return true;
+  if (GENERIC_TITLES.has(t)) return true;
+  const site = siteName.trim().toLowerCase();
+  const domain = domainOf(url);
+  return t === site || t === domain || t === `www.${domain}`;
+}
+
+/** Site icons (favicons) look bad stretched into a thumbnail. */
+export const isIconImage = (src: string | null) => !!src && /\.ico(\?|$)|favicon/i.test(src);

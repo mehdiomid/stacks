@@ -41,11 +41,12 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
         <h3>How to use it</h3>
         <ol>
           <li>
-            <b>Paste anything into the box at the top.</b> One link, a note, or a whole list copied from a notebook. Every link becomes its own item; a paragraph without links stays together as one note. Up to{' '}
-            {LIMITS.maxPieces} pieces are sorted at once, and anything beyond that stays in the box for the next round.
+            <b>Paste anything into the box at the top.</b> One link, a note, a whole post, or a long list copied from a notebook. Lines that belong together become one item: a post with its video, slides and
+            reading list is saved as a single item with all its links, and your own words are kept as its notes. A list of unrelated links still gives one item per link. Up to {LIMITS.maxLinks} links are sorted
+            at once, and anything beyond that stays in the box for the next round.
           </li>
           <li>
-            <b>Check the suggestions.</b> Stacks fetches each link's title and image, then the AI picks a topic for every piece, or suggests a new topic. Nothing is saved until you press Add, and you can change
+            <b>Check the suggestions.</b> Stacks fetches each link's title and image, then the AI groups the lines into items, gives each a title and picks a topic, or suggests a new one. Nothing is saved until you press Add, and you can change
             any topic first. Links you already saved are spotted and left unchecked.
           </li>
           <li>
@@ -102,10 +103,10 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
           Sorting and instructions use Claude (Anthropic) or OpenAI, with your own API key. The key is kept in this browser, and your browser sends requests directly to the provider, so the Stacks server never sees
           it. A Claude or ChatGPT subscription does not include API access; you create an API key in the provider's console and pay per use.
         </p>
-        <p>What gets sent: a link's address, title, site and the first part of its description, or a note's text, plus your topic names. Full pages are never sent.</p>
+        <p>What gets sent: the text you pasted (links replaced by short references), each link's address, site, page title and the first part of its description, plus your topic names. Full pages are never sent.</p>
         <ul>
           <li>Each dump is sorted in one request, using a small, fast model by default (Claude Haiku 5.5 or gpt-5-mini). You can pick a bigger model in Settings.</li>
-          <li>Links you already saved are never re-sorted, and sites you always file under one topic are sorted without the AI.</li>
+          <li>Links you already saved are recognized, and a plain list of links from sites you always file under one topic is sorted without the AI.</li>
           <li>Your personal daily token limit, set in Settings, stops all AI calls for the day once it's reached. Settings (the API key button at the top right) shows today's use at the bottom.</li>
           <li>For a hard cap on spending, also set a monthly limit in the Anthropic Console or the OpenAI dashboard.</li>
         </ul>

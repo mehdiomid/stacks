@@ -1,3 +1,4 @@
+import './zod-setup';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fontsource/bricolage-grotesque/500.css';

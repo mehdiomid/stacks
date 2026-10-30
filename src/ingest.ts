@@ -1,10 +1,10 @@
-import { classify, type ClassifyInput } from './ai/classify';
+import { groupLines, type Group, type LinkInfo } from './ai/group';
 import { db } from './db';
-import { LIMITS, splitPieces, takeWithinLimit } from './lib/parse';
+import { isLinkLabel, LIMITS, parseLines, takeWithinLimit, uniqueUrls, type ParsedLine } from './lib/parse';
 import { fetchPreview, mapLimit } from './lib/preview';
-import { domainOf, isVideoUrl, normalizeUrl, titleFromUrl } from './lib/url';
-import { addItems, createTopic } from './store';
-import type { Item, ItemKind, Topic } from './types';
+import { domainOf, isGenericTitle, isIconImage, isVideoUrl, normalizeUrl, titleFromUrl } from './lib/url';
+import { addItems, createTopic, updateItem } from './store';
+import type { Item, ItemKind, ItemLink, Preview, Topic } from './types';
 
 /** A topic id, or NEW + a name for a topic that will be created. */
 export type TopicChoice = string;
@@ -20,7 +20,8 @@ export interface Draft {
   author: string;
   image: string | null;
   duration: number | null;
-  text: string;
+  /** Present when the item has two or more links. */
+  links?: ItemLink[];
   choice: TopicChoice;
   /** How the topic was picked: by the AI, from where you filed the same site before, or a duplicate. */
   source: 'ai' | 'history' | 'duplicate';
@@ -28,15 +29,34 @@ export interface Draft {
   include: boolean;
 }
 
+/** Everything known about one pasted link after its preview. */
+export interface LinkData {
+  ref: string;
+  /** As pasted. */
+  original: string;
+  /** Where it really goes (short links resolved). */
+  url: string;
+  normUrl: string | null;
+  /** Useful page title, or '' when the preview was generic ("LinkedIn") or failed. */
+  title: string;
+  description: string;
+  siteName: string;
+  author: string;
+  image: string | null;
+  kind: 'link' | 'video';
+  duration: number | null;
+}
+
 /** Sites that cover every subject, so "you always file this site under X" doesn't apply. */
 const GENERIC_DOMAINS = new Set([
   'youtube.com', 'youtu.be', 'vimeo.com', 'medium.com', 'substack.com', 'github.com', 'gist.github.com', 'twitter.com', 'x.com',
   'reddit.com', 'news.ycombinator.com', 'wikipedia.org', 'en.wikipedia.org', 'google.com', 'docs.google.com', 'drive.google.com',
-  'linkedin.com', 'facebook.com', 'instagram.com', 'tiktok.com', 'nytimes.com', 'theguardian.com', 'bbc.com', 'bbc.co.uk',
+  'linkedin.com', 'lnkd.in', 'facebook.com', 'instagram.com', 'tiktok.com', 'nytimes.com', 'theguardian.com', 'bbc.com', 'bbc.co.uk',
   'arxiv.org', 'dev.to', 'notion.so', 'notion.site', 'amazon.com', 'goodreads.com', 'spotify.com', 'open.spotify.com', 'podcasts.apple.com',
 ]);
 
 const titleCase = (s: string) => s.replace(/\s+/g, ' ').trim().replace(/\b\p{L}/gu, (c) => c.toUpperCase());
+const shorten = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1).trimEnd()}…` : s);
 
 /** Topic that every earlier item from this site went to (at least 3 of them), if any. */
 function historyTopic(domain: string, items: Item[], topics: Topic[]): string | null {
@@ -54,9 +74,97 @@ function choiceForName(name: string, topics: Topic[]): TopicChoice {
   return t ? t.id : NEW + titleCase(clean);
 }
 
+export function toLinkData(ref: string, original: string, pv: Preview | null): LinkData {
+  const url = pv?.resolvedUrl || original;
+  const good = !!pv?.title && !isGenericTitle(pv.title, pv.siteName, url);
+  return {
+    ref,
+    original,
+    url,
+    normUrl: normalizeUrl(url),
+    title: good ? pv!.title : '',
+    description: good ? pv!.description : '',
+    siteName: (good && pv?.siteName) || domainOf(url),
+    author: good ? pv?.author ?? '' : '',
+    image: good && !isIconImage(pv?.image ?? null) ? pv?.image ?? null : null,
+    kind: pv?.kind === 'video' || isVideoUrl(url) ? 'video' : 'link',
+    duration: pv?.duration ?? null,
+  };
+}
+
+/** Links already saved, by their comparable URL, including the extra links of multi-link items. */
+export function knownLinks(items: Item[]): Map<string, Item> {
+  const m = new Map<string, Item>();
+  for (const it of items) {
+    if (it.normUrl) m.set(it.normUrl, it);
+    for (const l of it.links ?? []) if (l.normUrl) m.set(l.normUrl, it);
+  }
+  return m;
+}
+
+/**
+ * Turns groups of lines into review drafts. Pure, so it can be tested.
+ * - Lines that only name a link ("Video: …", "Slides: …") become that link's label.
+ * - All other lines are kept, word for word, as the item's notes.
+ * - With two or more links, every link is listed on the item; the main one is its title link.
+ */
+export function buildDrafts(lines: ParsedLine[], groups: Group[], links: Map<string, LinkData>, topics: Topic[], items: Item[]): Draft[] {
+  const byN = new Map(lines.map((l) => [l.n, l]));
+  const known = knownLinks(items);
+  return groups.map((g, gi) => {
+    const gl = g.lines.map((n) => byN.get(n)).filter((l): l is ParsedLine => !!l);
+    const labelOf = new Map<string, string>();
+    const notes: string[] = [];
+    for (const l of gl) {
+      if (isLinkLabel(l)) labelOf.set(l.urls[0], l.text);
+      else if (l.text) notes.push(`${l.blankBefore && notes.length ? '\n' : ''}${l.text}`);
+    }
+    const ls = [...new Set(gl.flatMap((l) => l.urls))].map((u) => links.get(u)).filter((x): x is LinkData => !!x);
+    const main = ls.find((l) => l.ref === g.mainLink) ?? ls.find((l) => l.kind === 'video' && ls.length > 1) ?? ls[0] ?? null;
+    const single = ls.length === 1 ? ls[0] : null;
+    const label = single ? labelOf.get(single.original) ?? '' : '';
+
+    let title: string;
+    if (single && single.title && !notes.length) title = single.title;
+    else title = g.title || single?.title || label || shorten(notes.join(' ').trim(), 80) || (main ? titleFromUrl(main.url) : 'Note');
+
+    // For a single link, a short label you wrote ("intro to LLMs") is worth keeping as a note.
+    const noteText = [notes.join('\n').trim(), label && label !== title ? label : ''].filter(Boolean).join('\n');
+    const description = noteText || (single ? single.description : '');
+
+    const dups = ls.map((l) => (l.normUrl ? known.get(l.normUrl) : undefined));
+    const dup = ls.length > 0 && dups.every(Boolean) ? dups[0]! : undefined;
+    const hist = !dup && single && !notes.length ? historyTopic(domainOf(single.url), items, topics) : null;
+    const withImage = main?.image ? main : ls.find((l) => l.image);
+
+    return {
+      key: `g${gi}`,
+      url: main?.url ?? null,
+      kind: main ? main.kind : 'note',
+      title,
+      description,
+      siteName: main?.siteName ?? '',
+      author: main?.author ?? '',
+      image: withImage?.image ?? null,
+      duration: main?.duration ?? null,
+      ...(ls.length > 1
+        ? {
+            links: ls.map((l) => ({
+              url: l.url, normUrl: l.normUrl, label: labelOf.get(l.original) ?? '', title: l.title, siteName: l.siteName, image: l.image, kind: l.kind, duration: l.duration,
+            })),
+          }
+        : {}),
+      choice: dup ? dup.topicId : hist ?? choiceForName(g.topic, topics),
+      source: dup ? 'duplicate' : hist ? 'history' : 'ai',
+      duplicateOf: dup ? topics.find((t) => t.id === dup.topicId)?.name ?? 'another topic' : null,
+      include: !dup,
+    };
+  });
+}
+
 export interface Prepared {
   drafts: Draft[];
-  /** Text beyond the size limit, left in the box for a second round. */
+  /** Text beyond the size limits, left in the box for a second round. */
   leftover: string;
   aiCount: number;
   model: string;
@@ -64,80 +172,55 @@ export interface Prepared {
 
 export async function prepareDrafts(input: string, onStatus: (s: string) => void): Promise<Prepared> {
   const [now, later] = takeWithinLimit(input);
-  let pieces = splitPieces(now);
-  let leftover = later;
-  if (pieces.length > LIMITS.maxPieces) {
-    const extra = pieces.slice(LIMITS.maxPieces).map((p) => [p.url, p.text].filter(Boolean).join(' ')).join('\n');
-    leftover = [extra, leftover].filter(Boolean).join('\n');
-    pieces = pieces.slice(0, LIMITS.maxPieces);
+  const all = parseLines(now);
+  // Keep within the link and line caps; whole lines that don't fit stay in the box.
+  let lines = all;
+  let count = 0;
+  const seen = new Set<string>();
+  for (let i = 0; i < all.length; i++) {
+    for (const u of all[i].urls) if (!seen.has(u)) (seen.add(u), count++);
+    if (count > LIMITS.maxLinks || i >= LIMITS.maxLines) {
+      lines = all.slice(0, i);
+      break;
+    }
   }
-  const [topics, items] = await Promise.all([db.topics.orderBy('order').toArray(), db.items.toArray()]);
-  const known = new Map(items.filter((i) => i.normUrl).map((i) => [i.normUrl!, i]));
+  const leftover = [all.slice(lines.length).map((l) => l.raw).join('\n'), later].filter(Boolean).join('\n');
 
-  const withUrl = pieces.filter((p) => p.url).length;
-  if (withUrl) onStatus(`Fetching previews 0/${withUrl}…`);
+  const [topics, items] = await Promise.all([db.topics.orderBy('order').toArray(), db.items.toArray()]);
+  const urls = uniqueUrls(lines);
+  if (urls.length) onStatus(`Fetching previews 0/${urls.length}…`);
   let fetched = 0;
-  const previews = await mapLimit(pieces, 4, async (p) => {
-    if (!p.url) return null;
-    const r = await fetchPreview(p.url);
-    onStatus(`Fetching previews ${++fetched}/${withUrl}…`);
+  const previews = await mapLimit(urls, 4, async (u) => {
+    const r = await fetchPreview(u);
+    onStatus(`Fetching previews ${++fetched}/${urls.length}…`);
     return r;
   });
+  const refOf = new Map(urls.map((u, i) => [u, `L${i + 1}`]));
+  const links = new Map(urls.map((u, i) => [u, toLinkData(`L${i + 1}`, u, previews[i])]));
 
-  const drafts: Draft[] = pieces.map((p, i) => {
-    const pv = previews[i];
-    const key = `d${i}`;
-    if (!p.url) {
-      const firstLine = p.text.split('\n')[0];
-      return {
-        key, url: null, kind: 'note', title: firstLine.length > 90 ? `${firstLine.slice(0, 88)}…` : firstLine,
-        description: p.text.length > firstLine.length ? p.text : '', siteName: '', author: '', image: null, duration: null,
-        text: p.text, choice: '', source: 'ai', duplicateOf: null, include: true,
-      };
-    }
-    const norm = normalizeUrl(p.url);
-    const dup = norm ? known.get(norm) : undefined;
-    const domain = domainOf(p.url);
-    const hist = dup ? null : historyTopic(domain, items, topics);
-    return {
-      key,
-      url: p.url,
-      kind: pv?.kind === 'video' || isVideoUrl(p.url) ? 'video' : 'link',
-      title: pv?.title || p.text || titleFromUrl(p.url),
-      description: pv?.description || (pv?.title && p.text ? p.text : ''),
-      siteName: pv?.siteName || domain,
-      author: pv?.author ?? '',
-      image: pv?.image ?? null,
-      duration: pv?.duration ?? null,
-      text: p.text,
-      choice: dup ? dup.topicId : hist ?? '',
-      source: dup ? 'duplicate' : hist ? 'history' : 'ai',
-      duplicateOf: dup ? topics.find((t) => t.id === dup.topicId)?.name ?? 'another topic' : null,
-      include: !dup,
-    };
+  // A plain list of links you've all filed before needs no AI at all.
+  const known = knownLinks(items);
+  const plainList = lines.length > 0 && lines.every((l) => l.urls.length === 1 && !l.text);
+  const allSettled = plainList && lines.every((l) => {
+    const d = links.get(l.urls[0])!;
+    return (d.normUrl && known.has(d.normUrl)) || !!historyTopic(domainOf(d.url), items, topics);
   });
 
-  const needAI = drafts.map((d, index) => ({ d, index })).filter(({ d }) => d.source === 'ai');
+  let groups: Group[];
   let model = '';
-  if (needAI.length) {
-    onStatus(`Sorting ${needAI.length} item${needAI.length === 1 ? '' : 's'}…`);
-    const inputs: ClassifyInput[] = needAI.map(({ d, index }) => ({
-      index,
-      url: d.url,
-      site: d.siteName,
-      title: d.kind === 'note' ? '' : d.title,
-      description: d.description,
-      text: d.text,
-    }));
-    const res = await classify(topics.map((t) => t.name), inputs);
+  if (allSettled) {
+    groups = lines.map((l) => ({ lines: [l.n], title: '', mainLink: refOf.get(l.urls[0]) ?? null, topic: '', isNew: false }));
+  } else {
+    onStatus(`Sorting ${lines.length} line${lines.length === 1 ? '' : 's'} into items…`);
+    const info: LinkInfo[] = urls.map((u) => {
+      const d = links.get(u)!;
+      return { ref: d.ref, url: d.url, site: d.siteName, title: d.title, description: d.description };
+    });
+    const res = await groupLines(topics.map((t) => t.name), lines, info, refOf);
+    groups = res.groups;
     model = res.model;
-    for (const { d, index } of needAI) {
-      const r = res.results.get(index);
-      d.choice = choiceForName(r?.topic ?? 'Inbox', topics);
-      if (r?.title && (d.kind === 'note' || !previews[index]?.title)) d.title = r.title;
-    }
   }
-  return { drafts, leftover, aiCount: needAI.length, model };
+  return { drafts: buildDrafts(lines, groups, links, topics, items), leftover, aiCount: allSettled ? 0 : lines.length, model };
 }
 
 export async function acceptDrafts(drafts: Draft[]): Promise<number> {
@@ -157,9 +240,63 @@ export async function acceptDrafts(drafts: Draft[]): Promise<number> {
       author: d.author,
       image: d.image,
       duration: d.duration,
+      links: d.links,
     })),
   );
   const touched = new Set(chosen.map((d) => topicIds.get(d.choice) ?? d.choice));
   await Promise.all([...touched].map((id) => db.topics.update(id, { open: true })));
   return n;
+}
+
+const LINKEDIN_EXIT = /take you to a page that.{1,3}s not on LinkedIn/i;
+
+/**
+ * Fetch previews again for saved links (for example items that only say "LinkedIn").
+ * Only fills in what the new preview actually knows; your own titles and notes are kept.
+ */
+export async function refreshPreviews(list: Item[], onEach?: (done: number) => void): Promise<number> {
+  const withLinks = list.filter((i) => i.url || i.links?.length);
+  let improved = 0;
+  await mapLimit(
+    withLinks,
+    3,
+    async (it) => {
+      const patch: Partial<Item> = {};
+      if (it.links?.length) {
+        const fresh = await Promise.all(it.links.map(async (l) => toLinkData('', l.url, await fetchPreview(l.url))));
+        patch.links = it.links.map((l, i) => ({
+          ...l,
+          url: fresh[i].url,
+          normUrl: fresh[i].normUrl,
+          title: fresh[i].title || l.title,
+          siteName: fresh[i].siteName,
+          image: fresh[i].image ?? l.image,
+          kind: fresh[i].kind,
+          duration: fresh[i].duration ?? l.duration,
+        }));
+        const main = patch.links.find((l) => l.url === it.url || normalizeUrl(l.url) === it.normUrl) ?? patch.links[0];
+        Object.assign(patch, { url: main.url, normUrl: main.normUrl, siteName: main.siteName, image: it.image ?? patch.links.find((l) => l.image)?.image ?? null });
+      } else if (it.url) {
+        const d = toLinkData('', it.url, await fetchPreview(it.url));
+        const oldWeak = isGenericTitle(it.title, it.siteName, it.url) || LINKEDIN_EXIT.test(it.description);
+        if (!d.title && d.url === it.url) return;
+        Object.assign(patch, { url: d.url, normUrl: d.normUrl, siteName: d.siteName });
+        if (d.title) {
+          if (oldWeak || !it.title) patch.title = d.title;
+          if (oldWeak || !it.description) patch.description = d.description;
+          if (d.author) patch.author = d.author;
+          if (d.image) patch.image = d.image;
+          if (d.duration) patch.duration = d.duration;
+          if (d.kind === 'video') patch.kind = 'video';
+        } else if (oldWeak) {
+          Object.assign(patch, { title: titleFromUrl(d.url), description: '', image: null });
+        }
+      }
+      if (!Object.keys(patch).length) return;
+      await updateItem(it.id, patch);
+      improved++;
+    },
+    onEach,
+  );
+  return improved;
 }

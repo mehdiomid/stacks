@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { checkUrl, isPrivateAddress } from './net';
-import { decodeEntities, previewFromHtml } from './preview';
+import { decodeEntities, findOutboundLink, previewFromHtml } from './preview';
 
 describe('isPrivateAddress', () => {
   it('blocks loopback, private ranges and cloud metadata', () => {
@@ -42,5 +42,19 @@ describe('previewFromHtml', () => {
   });
   it('decodes numeric entities', () => {
     expect(decodeEntities('it&#39;s &#x2014; ok')).toBe("it's — ok");
+  });
+});
+
+describe('findOutboundLink', () => {
+  it('follows LinkedIn short-link exit pages', () => {
+    const html = `<title>LinkedIn</title><meta name="description" content="This link will take you to a page that’s not on LinkedIn">
+      <a href="https://www.linkedin.com/legal">Terms</a><a data-tracking-control-name="external_url_click" href="https://www.interconnects.ai/p/open-source-ai-reading-list">go</a>`;
+    expect(findOutboundLink(html, 'https://lnkd.in/abc')).toBe('https://www.interconnects.ai/p/open-source-ai-reading-list');
+  });
+  it('follows meta refresh with a url', () => {
+    expect(findOutboundLink('<meta http-equiv="refresh" content="0; url=https://example.com/real">', 'https://t.co/x')).toBe('https://example.com/real');
+  });
+  it('ignores ordinary pages', () => {
+    expect(findOutboundLink('<title>Hi</title><a href="https://other.com">x</a>', 'https://blog.com/post')).toBeNull();
   });
 });

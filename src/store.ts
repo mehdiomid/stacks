@@ -2,7 +2,7 @@ import { db, newId } from './db';
 import { scheduleBackup } from './lib/backup';
 import { DAY } from './lib/time';
 import { normalizeUrl } from './lib/url';
-import type { Item, ItemKind, Topic, TopicSort } from './types';
+import type { Item, ItemKind, ItemLink, Topic, TopicSort } from './types';
 
 /** All writes go through here so the folder backup runs after each change. */
 
@@ -69,6 +69,7 @@ export interface NewItem {
   author?: string;
   image?: string | null;
   duration?: number | null;
+  links?: ItemLink[];
 }
 
 export async function addItems(list: NewItem[]): Promise<number> {
@@ -85,6 +86,7 @@ export async function addItems(list: NewItem[]): Promise<number> {
     author: n.author ?? '',
     image: n.image ?? null,
     duration: n.duration ?? null,
+    ...(n.links?.length ? { links: n.links } : {}),
     addedAt: now + i, // keeps paste order stable
     doneAt: null,
     snoozedUntil: null,
@@ -108,6 +110,7 @@ export const dismissItem = (id: string) => changed(db.items.update(id, { dismiss
 export const restoreItem = (id: string) => changed(db.items.update(id, { dismissed: false, snoozedUntil: null }));
 export const moveItem = (id: string, topicId: string) => changed(db.items.update(id, { topicId }));
 export const deleteItem = (id: string) => changed(db.items.delete(id));
+export const updateItem = (id: string, patch: Partial<Item>) => changed(db.items.update(id, patch));
 
 /* ---- Example data for a first look ---- */
 

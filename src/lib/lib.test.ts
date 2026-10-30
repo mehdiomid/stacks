@@ -1,36 +1,27 @@
 import { describe, expect, it } from 'vitest';
-import { cleanUrl, looksLikeInstruction, splitPieces, takeWithinLimit } from './parse';
+import { cleanUrl, isLinkLabel, looksLikeInstruction, parseLines, takeWithinLimit } from './parse';
 import { recommend } from './scoring';
 import { DAY } from './time';
 import { isVideoUrl, normalizeUrl, titleFromUrl } from './url';
 import type { Item, Topic } from '../types';
 
-describe('splitPieces', () => {
-  it('makes one piece per link and keeps the text on its line', () => {
-    const p = splitPieces('https://a.com/x  intro to LLMs\n- https://b.com/y\nRust atomics book https://marabos.nl/atomics/');
-    expect(p).toEqual([
-      { url: 'https://a.com/x', text: 'intro to LLMs' },
-      { url: 'https://b.com/y', text: '' },
-      { url: 'https://marabos.nl/atomics/', text: 'Rust atomics book' },
+describe('parseLines', () => {
+  it('numbers non-empty lines, pulls links out and marks paragraph breaks', () => {
+    const p = parseLines('Intro paragraph.\n\nQuestion one?\n- Video: https://lnkd.in/a\n[Laws of UX](https://lawsofux.com/)');
+    expect(p.map((l) => [l.n, l.text, l.urls, l.blankBefore])).toEqual([
+      [1, 'Intro paragraph.', [], false],
+      [2, 'Question one?', [], true],
+      [3, 'Video', ['https://lnkd.in/a'], false],
+      [4, 'Laws of UX', ['https://lawsofux.com/'], false],
     ]);
   });
-
-  it('splits several links on one line', () => {
-    expect(splitPieces('https://a.com, https://b.com').map((x) => x.url)).toEqual(['https://a.com', 'https://b.com']);
+  it('splits several links on one line and strips trailing punctuation', () => {
+    expect(parseLines('see https://a.com, https://b.com.')[0].urls).toEqual(['https://a.com', 'https://b.com']);
   });
-
-  it('keeps a paragraph of prose as one note', () => {
-    const text = 'I want to learn about vector databases because our search at work is slow and someone mentioned pgvector.\nAlso look at how HNSW indexes work, and compare it with IVF for large collections.';
-    expect(splitPieces(text)).toEqual([{ url: null, text }]);
-  });
-
-  it('treats a bullet list as separate notes', () => {
-    expect(splitPieces('- sourdough recipe\n- tax-loss harvesting\n- Anki deck for kanji').length).toBe(3);
-  });
-
-  it('reads markdown links and drops duplicates', () => {
-    const p = splitPieces('[Laws of UX](https://lawsofux.com/)\nhttps://lawsofux.com/');
-    expect(p).toEqual([{ url: 'https://lawsofux.com/', text: 'Laws of UX' }]);
+  it('tells a link label from a sentence', () => {
+    const [label, sentence] = parseLines('Slides: https://x.com/s\nThis talk explains everything you need to know. https://x.com/t');
+    expect(isLinkLabel(label)).toBe(true);
+    expect(isLinkLabel(sentence)).toBe(false);
   });
 });
 

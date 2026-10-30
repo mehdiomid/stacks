@@ -47,7 +47,7 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
       <div className="sub">
         {newCount > 0 && `${newCount} new topic${newCount === 1 ? '' : 's'} suggested. `}
         {dupCount > 0 && `${dupCount} already saved (unchecked). `}
-        {aiCount > 0 && model ? `Sorted by ${model}. ` : ''}
+        {aiCount > 0 && model ? `Grouped and sorted by ${model}. ` : ''}
         Change any topic, then add.{leftover && ' More text is waiting in the box for the next round.'}
       </div>
 
@@ -63,7 +63,12 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
               {d.source === 'duplicate' && <span className="tag dup">already in {d.duplicateOf}</span>}
               {d.source === 'history' && <span className="tag">same site as before</span>}
             </b>
-            <small>{d.url ?? 'note'}</small>
+            <small>
+              {d.links
+                ? `${d.links.length} links: ${d.links.map((l) => l.label || l.title || l.siteName).join(' · ')}`
+                : d.url ?? 'note'}
+            </small>
+            {d.description && <small className="snippet">{d.description.length > 140 ? `${d.description.slice(0, 139)}…` : d.description}</small>}
           </div>
           <div className="pick">
             {naming === d.key ? (

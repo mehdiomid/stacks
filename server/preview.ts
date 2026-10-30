@@ -10,6 +10,8 @@ export interface Preview {
   /** Seconds, when the page or oEmbed says. */
   duration: number | null;
   kind: 'link' | 'video';
+  /** Where a short link or "you are leaving this site" page really points, when that differs from url. */
+  resolvedUrl?: string;
 }
 
 const ENTITIES: Record<string, string> = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', '#39': "'" };
@@ -112,7 +114,31 @@ export function previewFromHtml(html: string, pageUrl: string): Preview {
   };
 }
 
-export async function getPreview(raw: string): Promise<Preview> {
+const OWN_HOSTS = /(^|\.)(linkedin\.com|licdn\.com|lnkd\.in)$/i;
+
+/**
+ * Pages that only send you elsewhere: a <meta http-equiv="refresh"> with a url, or LinkedIn's
+ * "This link will take you to a page that's not on LinkedIn" page (lnkd.in short links).
+ */
+export function findOutboundLink(html: string, pageUrl: string): string | null {
+  const head = html.slice(0, 400_000);
+  const refresh = /<meta[^>]+http-equiv\s*=\s*["']?refresh["']?[^>]*>/i.exec(head)?.[0];
+  const target = refresh && /content\s*=\s*["'][^"']*?url\s*=\s*['"]?([^"'>\s]+)/i.exec(refresh)?.[1];
+  if (target) {
+    const abs = absolute(target, pageUrl);
+    if (abs && abs !== pageUrl) return abs;
+  }
+  const isLinkedInExit = hostOf(pageUrl) === 'lnkd.in' || /take you to a page that.{1,3}s not on LinkedIn/i.test(head);
+  if (isLinkedInExit) {
+    for (const m of head.matchAll(/href\s*=\s*"(https?:\/\/[^"]+)"/gi)) {
+      const abs = absolute(m[1], pageUrl);
+      if (abs && !OWN_HOSTS.test(new URL(abs).hostname)) return abs;
+    }
+  }
+  return null;
+}
+
+export async function getPreview(raw: string, depth = 0): Promise<Preview> {
   let u: URL;
   try {
     u = new URL(raw);
@@ -133,6 +159,17 @@ export async function getPreview(raw: string): Promise<Preview> {
     const file = decodeURIComponent(new URL(res.finalUrl).pathname.split('/').pop() ?? '') || hostOf(res.finalUrl);
     return { url: raw, title: file, description: res.contentType.split(';')[0], siteName: hostOf(res.finalUrl), author: '', image: null, duration: null, kind: 'link' };
   }
+  const outbound = depth === 0 ? findOutboundLink(res.body, res.finalUrl) : null;
+  if (outbound) {
+    try {
+      const inner = await getPreview(outbound, 1);
+      return { ...inner, url: raw, resolvedUrl: inner.resolvedUrl ?? outbound };
+    } catch {
+      // Fall back to what the short-link page itself says, but still point at the real destination.
+      return { ...previewFromHtml(res.body, res.finalUrl), url: raw, title: '', description: '', image: null, siteName: hostOf(outbound), resolvedUrl: outbound };
+    }
+  }
   const p = previewFromHtml(res.body, res.finalUrl);
-  return { ...p, url: raw };
+  const moved = res.finalUrl !== raw && new URL(res.finalUrl).hostname !== u.hostname;
+  return { ...p, url: raw, ...(moved ? { resolvedUrl: res.finalUrl } : {}) };
 }

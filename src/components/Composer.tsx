@@ -4,7 +4,7 @@ import { AIError } from '../ai/errors';
 import { interpret, type ResolvedAction } from '../ai/interpret';
 import { applyActions } from '../ai/actions';
 import { acceptDrafts, prepareDrafts, type Draft } from '../ingest';
-import { LIMITS, looksLikeInstruction, splitPieces } from '../lib/parse';
+import { LIMITS, looksLikeInstruction, parseLines, uniqueUrls } from '../lib/parse';
 import type { Item, Topic } from '../types';
 import { ReviewTray } from './ReviewTray';
 import { InstructionTray } from './InstructionTray';
@@ -30,7 +30,11 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const isInstr = override ? override === 'instr' : looksLikeInstruction(text);
-  const pieceCount = useMemo(() => (isInstr || !text.trim() ? 0 : splitPieces(text).length), [text, isInstr]);
+  const found = useMemo(() => {
+    if (isInstr || !text.trim()) return null;
+    const lines = parseLines(text);
+    return { lines: lines.length, links: uniqueUrls(lines).length };
+  }, [text, isInstr]);
 
   const setCollapsed = (c: boolean, focus = false) => {
     setCollapsedState(c);
@@ -114,9 +118,9 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
     ? null
     : isInstr
       ? 'Read as an instruction. You see the changes before anything happens.'
-      : pieceCount
-        ? `${pieceCount} piece${pieceCount === 1 ? '' : 's'} found${pieceCount > LIMITS.maxPieces ? `; the first ${LIMITS.maxPieces} are sorted now` : ''}`
-        : 'Paste anything. Each piece goes to the right topic.';
+      : found
+        ? `${found.links} link${found.links === 1 ? '' : 's'} and ${found.lines} line${found.lines === 1 ? '' : 's'}. Lines about the same thing become one item.${found.links > LIMITS.maxLinks ? ` The first ${LIMITS.maxLinks} links are sorted now.` : ''}`
+        : 'Paste anything. Related lines and links become one item.';
 
   return (
     <>

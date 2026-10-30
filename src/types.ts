@@ -16,6 +16,20 @@ export interface Topic {
   example?: boolean;
 }
 
+/** One of several links that belong to the same item (e.g. a lecture's video, slides and reading list). */
+export interface ItemLink {
+  url: string;
+  normUrl: string | null;
+  /** What your text called it: "Video", "Slides", "Reading list". */
+  label: string;
+  /** The page's own title, when the preview had a useful one. */
+  title: string;
+  siteName: string;
+  image: string | null;
+  kind: 'link' | 'video';
+  duration: number | null;
+}
+
 export interface Item {
   id: string;
   topicId: string;
@@ -37,6 +51,8 @@ export interface Item {
   dismissed: boolean;
   /** Created by "Load example topics". */
   example?: boolean;
+  /** All links of a multi-link item, the main one included. Absent for single-link items. */
+  links?: ItemLink[];
 }
 
 export interface Setting {
@@ -58,4 +74,6 @@ export interface Preview {
   image: string | null;
   duration: number | null;
   kind: 'link' | 'video';
+  /** The real destination when the link was a short link or redirect page. */
+  resolvedUrl?: string;
 }

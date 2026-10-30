@@ -21,7 +21,13 @@ export function UpNext({ topics, items }: { topics: Topic[]; items: Item[] }) {
           <div className="rec-top">
             <Thumb item={item} hue={topic.hue} />
             <div style={{ minWidth: 0 }}>
-              <b>{item.title}</b>
+              {item.url ? (
+                <a className="rec-title" href={item.url} target="_blank" rel="noopener noreferrer">
+                  <b>{item.title}</b>
+                </a>
+              ) : (
+                <b>{item.title}</b>
+              )}
               <small>
                 {topic.name}
                 {item.duration ? ` · ${formatDuration(item.duration)}` : ''}

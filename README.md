@@ -55,10 +55,12 @@ Stop it with `docker compose down`. Your data is unaffected because it lives in 
 
 | Area | What it does |
 |---|---|
-| **Smart input** | One box for everything. Paste a link, a note, or a big mixed dump. Every link becomes an item; prose stays together as a note. |
-| **AI sorting** | Each piece goes to the best existing topic, or the AI suggests a new one. You review everything in a tray, change any topic, then add. |
+| **Smart input** | One box for everything. Paste a link, a note, a whole post, or a big mixed dump. Lines that belong together become one item: a post with its video, slides and reading list is one item with all its links, and your words are kept as its notes. |
+| **AI grouping and sorting** | The AI groups the lines into items, titles them, and files each in the best existing topic or suggests a new one. You review everything in a tray, change any topic, then add. |
 | **Instructions** | Type into the same box: "move all pizza links to Cooking", "mark the Karpathy video done", "snooze finance for two weeks", "make Rust my top priority". Stacks lists the exact changes and waits for you to apply them. |
 | **Rich previews** | Title, description, site, author, thumbnail, and duration for videos (YouTube and Vimeo via oEmbed, other sites via Open Graph tags). |
+| **Short links** | `lnkd.in` links (LinkedIn's "you're leaving LinkedIn" page), pages that redirect with `<meta http-equiv="refresh">`, and ordinary redirects are followed to the real page, which is the link Stacks saves. Useless previews (a title like "LinkedIn" or "Just a moment…", a favicon as the image) are ignored in favor of your own text and the AI's title. |
+| **Fixing items** | Each item's ⋯ menu has **Edit** (title and notes) and **Refresh preview**. A topic's ⋯ menu has **Refresh previews** for all its links. Clicking a thumbnail opens the link; clicking a long description or a note shows the full text. |
 | **Duplicates** | Links you already saved are recognized (tracking parameters and `youtu.be` short links are normalized) and left unchecked. |
 | **Ranked topics** | Drag the ⋮⋮ handle to reorder, on desktop or touch. Keyboard users can focus the handle and press ↑/↓. The rank badge shows priority. |
 | **Topic cards** | Expand and collapse, progress bar, "untouched N days" warning, sort by oldest, newest or title, rename, delete, and a "N done" fold. |
@@ -157,7 +159,7 @@ callAI()  ──►  adapter: Claude (src/ai/anthropic.ts)
 
 The rest of the app only needs two jobs:
 
-- **Sort these items into these topics** (`src/ai/classify.ts`).
+- **Group this text into items and file them in topics** (`src/ai/group.ts`).
 - **Turn this instruction into actions** (`src/ai/interpret.ts`).
 
 Both ask for **structured JSON output** that follows a schema:
@@ -178,7 +180,7 @@ Claude requests run at `effort: "low"`, because sorting is simple. Sonnet 5.5 an
 
 | Request | What's sent |
 |---|---|
-| Sorting | Your topic names (in priority order). For each piece: the URL, site name, title, the first 200 characters of the description, and up to 300 characters of the text you wrote next to it (or the note itself). Full web pages are never sent. |
+| Grouping and sorting | Your topic names (in priority order), the text you pasted as numbered lines (each line cut at 400 characters, links replaced by `[L1]`-style references), and for each link: its address, site, page title, and the first 160 characters of its description. Full web pages are never sent. |
 | Instructions | Your instruction, the topic names with counts, and a numbered list of up to 400 items (title, topic, done or open, site). |
 
 ### Cost control
@@ -189,8 +191,8 @@ These are the cost-control layers we planned, as built:
    - Each dump is sorted in **one** request.
    - Descriptions are trimmed.
    - Links you've already saved are never sent again (duplicate detection).
-   - A site you've filed under one topic at least three times is sorted **without the AI** ("same site as before"). General sites like YouTube or Medium are excluded from this rule.
-   - Hard caps: 100 pieces or 20,000 characters per round. Anything beyond that stays in the box for the next round.
+   - A plain list of bare links, all of which are already saved or come from sites you've filed under one topic at least three times, is sorted **without the AI** ("same site as before"). General sites like YouTube, Medium or LinkedIn are excluded from that rule.
+   - Hard caps: 100 links, 300 lines or 20,000 characters per round. Anything beyond that stays in the box for the next round.
    - The model's reply length is capped.
 2. **Personal daily token limit** (default 200,000, set in Settings). Stacks estimates each call first and refuses it if it would go over the limit. The **AI usage today** meter at the end of Settings (the API key button at the top right) shows the count. A dump of 50 links costs roughly 10,000 tokens.
 3. **Provider spend limit.** Set a monthly limit in the Anthropic Console or the OpenAI dashboard. This is the hard backstop, and Settings reminds you to set it.
@@ -223,13 +225,26 @@ The code is in `src/lib/scoring.ts`, and the weights are in `WEIGHTS`.
 
 ## Smart input rules
 
-The rules live in `src/lib/parse.ts`:
+Pasted text is split in two steps.
 
-- **Every link becomes its own item.** Text on the same line is kept as context (`https://… intro to LLMs`). Several links on one line are split.
-- **Markdown links** `[title](url)` keep their title.
-- **A paragraph without links** (long lines, separated from others by a blank line) stays together as **one note**.
-- **Lists** (bullets, numbers, checkboxes, or several short lines) become **one item per line**.
-- **Trailing punctuation** is removed from links, except a closing parenthesis that belongs to the link (Wikipedia style).
+**1. Parsing** (`src/lib/parse.ts`) numbers the non-empty lines and pulls out their links. It also:
+- turns Markdown links `[title](url)` into `title: url`;
+- removes trailing punctuation from links, except a closing parenthesis that belongs to the link (Wikipedia style);
+- notes paragraph breaks.
+
+**2. Grouping** is done by the AI (`src/ai/group.ts`). It gets the numbered lines, with links replaced by references `[L1]`, `[L2]` and their page titles listed below. It returns which lines form one item, plus a title, a main link and a topic for each item. It returns only line numbers, never rewritten text, so:
+- your exact words are kept;
+- the reply stays small;
+- every line ends up in exactly one item (a line the AI leaves out becomes its own item in Inbox).
+
+Here's how text becomes items:
+
+- **A post with its links becomes one item.** For example, a lecture announcement with its questions and "Video: … / Slides: … / Reading list: …" lines.
+  - Its title comes from the AI.
+  - Your text is kept as its notes, with paragraph breaks.
+  - All its links are listed under it, with your labels ("Video", "Slides") and each page's own title. The main link (the video, for a talk) is the title link.
+- **A list of unrelated links or ideas** gives one item per line. A single link uses its page's title.
+- **Lines that only name a link** ("Video:", "Slides") become that link's label instead of a line of notes.
 - **Instruction mode** starts automatically for a single line with no link that begins like a command: move, mark, create, rename, delete, snooze, put, merge, prioritize, and similar. Click the label above the box (**Add items ⇄ / Instruction ⇄**) to switch modes if the guess is wrong.
 
 ---
@@ -363,12 +378,12 @@ stacks/
    ├─ App.tsx, main.tsx, styles.css
    ├─ db.ts                         Dexie (IndexedDB) schema and settings helpers
    ├─ store.ts                      every write: topics, items, ordering, examples (triggers backup)
-   ├─ ingest.ts                     dump → pieces → previews → duplicates/site history → AI → review drafts
+   ├─ ingest.ts                     text → numbered lines → previews (short links resolved) → AI grouping → review drafts
    ├─ settings.ts                   provider, models, daily limit, API key storage
    ├─ ai/
    │  ├─ call.ts                    key and budget checks, lazy-loaded adapters, usage tracking
    │  ├─ anthropic.ts, openai.ts    provider adapters (structured JSON output, error mapping)
-   │  ├─ classify.ts                sorting prompt and schema
+   │  ├─ group.ts                   grouping prompt and schema: lines → items, titles, main link, topic
    │  ├─ interpret.ts               instruction prompt, schema, resolving refs to real items/topics
    │  └─ actions.ts                 describe and apply instruction actions
    ├─ lib/                          parse, url, scoring, preview client, backup, usage, time, reminders
