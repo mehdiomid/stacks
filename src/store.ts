@@ -179,6 +179,33 @@ export const moveItem = (id: string, topicId: string) => changed(db.items.update
 export const deleteItem = (id: string) => changed(db.items.delete(id));
 export const updateItem = (id: string, patch: Partial<Item>) => changed(db.items.update(id, patch));
 
+const linkOf = (x: { url: string; normUrl?: string | null; title: string; siteName?: string; image?: string | null; kind: ItemKind; duration?: number | null }, label = ''): ItemLink => ({
+  url: x.url, normUrl: x.normUrl ?? normalizeUrl(x.url), label, title: x.title, siteName: x.siteName ?? '', image: x.image ?? null, kind: x.kind === 'video' ? 'video' : 'link', duration: x.duration ?? null,
+});
+
+/**
+ * Adds a new paste to an item you already have (the next lecture of a saved course): its links
+ * are appended, skipping ones already there, your notes go below the old ones, and the item is
+ * marked not done again so it comes back in Up next. Its title and folder stay.
+ */
+export async function mergeIntoItem(id: string, add: Omit<NewItem, 'topicId'> & { notes: string }): Promise<Item> {
+  const it = await db.items.get(id);
+  if (!it) throw new Error('The item to add to was deleted. Uncheck “add to” to save this as a new item.');
+  const old = it.links?.length ? it.links : it.url ? [linkOf({ ...it, url: it.url })] : [];
+  const incoming = add.links?.length ? add.links : add.url ? [linkOf({ ...add, url: add.url })] : [];
+  const seen = new Set(old.map((l) => l.normUrl ?? l.url));
+  const links = [...old, ...incoming.filter((l) => !seen.has(l.normUrl ?? l.url))];
+  const patch: Partial<Item> = {
+    description: [it.description.trim(), add.notes.trim()].filter(Boolean).join('\n\n'),
+    doneAt: null,
+    ...(links.length > 1 ? { links } : {}),
+  };
+  if (!it.url && links[0]) Object.assign(patch, { url: links[0].url, normUrl: links[0].normUrl, kind: links[0].kind, siteName: links[0].siteName });
+  if (!it.image) patch.image = add.image ?? links.find((l) => l.image)?.image ?? null;
+  await changed(db.items.update(id, patch));
+  return { ...it, ...patch };
+}
+
 /* ---- Example data for a first look ---- */
 
 type ExampleItem = Omit<NewItem, 'topicId'> & { ageDays: number; done?: boolean };

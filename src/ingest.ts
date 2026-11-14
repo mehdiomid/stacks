@@ -1,9 +1,10 @@
 import { groupLines, type Group, type LinkInfo } from './ai/group';
+import { placeItem, type PlaceFolder } from './ai/place';
 import { db } from './db';
 import { isLinkLabel, LIMITS, parseLines, takeWithinLimit, uniqueUrls, type ParsedLine } from './lib/parse';
 import { fetchPreview, mapLimit } from './lib/preview';
 import { domainOf, isGenericTitle, isIconImage, isVideoUrl, normalizeUrl, titleFromUrl } from './lib/url';
-import { addItems, ensureTopicPath, updateItem } from './store';
+import { addItems, ensureTopicPath, mergeIntoItem, updateItem } from './store';
 import { findByName, flattenTree, indexTree, MAX_DEPTH, nameKey, PATH_SEP, pathOf, resolvePath, splitPathName, typedPath, type TreeIndex } from './lib/tree';
 import type { Item, ItemKind, ItemLink, Preview, Topic } from './types';
 
@@ -33,6 +34,14 @@ export interface Draft {
   source: 'path' | 'ai' | 'history' | 'duplicate';
   duplicateOf: string | null;
   include: boolean;
+  /** Your own words from the paste (not a page description), used when adding to an existing item. */
+  notes: string;
+  /** One-item mode: other folders the AI thought could fit. */
+  alternatives?: TopicChoice[];
+  /** One-item mode: an existing item the AI thinks this continues (the next lecture of a saved course). */
+  joinTo?: { id: string; title: string; topicId: string };
+  /** Add to joinTo instead of saving a new item. */
+  join?: boolean;
 }
 
 /** Everything known about one pasted link after its preview. */
@@ -90,6 +99,37 @@ export function choiceForName(name: string, topics: Topic[], tree = indexTree(to
   return newChoice([titleCase(parts[0] ?? 'Inbox')]);
 }
 
+const INBOX = 'Inbox';
+const isInbox = (names: string[]) => names.length === 1 && nameKey(names[0]) === nameKey(INBOX);
+
+/** Folder names a choice stands for: an existing folder's path, or the path to create. */
+function choiceNames(choice: TopicChoice, tree: TreeIndex): string[] {
+  if (choice.startsWith(NEW)) return newChoiceNames(choice);
+  const t = tree.byId.get(choice);
+  return t ? pathOf(t, tree).map((x) => x.name) : [];
+}
+
+/** Sorting files things at least 2 levels deep (Robotics › Robot Learning). A 1-level answer goes to Inbox for you to choose. */
+export function atLeastTwoLevels(choice: TopicChoice, topics: Topic[], tree = indexTree(topics)): TopicChoice {
+  const names = choiceNames(choice, tree);
+  return names.length >= 2 || isInbox(names) ? choice : choiceForName(INBOX, topics, tree);
+}
+
+/**
+ * A 1-level folder you wrote (\robotics): the AI's subfolder inside it. When the AI named
+ * somewhere else, its last name becomes the subfolder; with no usable answer, the folder itself.
+ */
+export function choiceInside(folder: string, aiTopic: string, topics: Topic[], tree = indexTree(topics)): TopicChoice {
+  const names = choiceNames(choiceForName(aiTopic, topics, tree), tree);
+  if (names.length >= 2 && nameKey(names[0]) === nameKey(folder)) return choiceForPath(names, tree);
+  const leaf = names[names.length - 1];
+  if (leaf && nameKey(leaf) !== nameKey(folder) && !isInbox([leaf])) return choiceForPath([folder, leaf], tree);
+  return choiceForPath([folder], tree);
+}
+
+/** A folder path that needs no AI: one you wrote with 2 or more levels. */
+const fixedFolder = (l: ParsedLine) => ((l.folder ?? l.section)?.length ?? 0) >= 2;
+
 const sectionKey = (l: ParsedLine | undefined) => (l?.section ?? []).map(nameKey).join('\\');
 
 /**
@@ -140,14 +180,22 @@ export function knownLinks(items: Item[]): Map<string, Item> {
  * - All other lines are kept, word for word, as the item's notes.
  * - With two or more links, every link is listed on the item; the main one is its title link.
  */
-export function buildDrafts(lines: ParsedLine[], groups: Group[], links: Map<string, LinkData>, topics: Topic[], items: Item[]): Draft[] {
+export function buildDrafts(
+  lines: ParsedLine[],
+  groups: Group[],
+  links: Map<string, LinkData>,
+  topics: Topic[],
+  items: Item[],
+  /** One item from the whole paste: the first folder written anywhere applies to it. */
+  opts: { single?: boolean } = {},
+): Draft[] {
   const byN = new Map(lines.map((l) => [l.n, l]));
   const known = knownLinks(items);
   const tree = indexTree(topics);
-  return splitBySection(groups, lines).map((g, gi) => {
+  return (opts.single ? groups : splitBySection(groups, lines)).map((g, gi) => {
     const gl = g.lines.map((n) => byN.get(n)).filter((l): l is ParsedLine => !!l);
     // A path you wrote on one of the item's lines, else the section it's in.
-    const folder = gl.find((l) => l.folder)?.folder ?? gl[0]?.section;
+    const folder = gl.find((l) => l.folder)?.folder ?? (opts.single ? gl.find((l) => l.section)?.section : gl[0]?.section);
     const labelOf = new Map<string, string>();
     const notes: string[] = [];
     for (const l of gl) {
@@ -190,10 +238,17 @@ export function buildDrafts(lines: ParsedLine[], groups: Group[], links: Map<str
           }
         : {}),
       // A path you wrote wins. A duplicate still starts unchecked, so it isn't saved twice by accident.
-      choice: folder ? choiceForPath(folder, tree) : dup ? dup.topicId : hist ?? choiceForName(g.topic, topics, tree),
+      choice: folder
+        ? folder.length >= 2
+          ? choiceForPath(folder, tree)
+          : choiceInside(folder[0], g.topic, topics, tree)
+        : dup
+          ? dup.topicId
+          : hist ?? atLeastTwoLevels(choiceForName(g.topic, topics, tree), topics, tree),
       source: folder ? 'path' : dup ? 'duplicate' : hist ? 'history' : 'ai',
       duplicateOf: dup ? topics.find((t) => t.id === dup.topicId)?.name ?? 'another topic' : null,
       include: !dup,
+      notes: noteText,
     };
   });
 }
@@ -204,6 +259,97 @@ export interface Prepared {
   leftover: string;
   aiCount: number;
   model: string;
+}
+
+/** Previews for each link, with L1, L2… refs. */
+async function fetchLinks(urls: string[], onStatus: (s: string) => void) {
+  if (urls.length) onStatus(`Fetching previews 0/${urls.length}…`);
+  let fetched = 0;
+  const previews = await mapLimit(urls, 4, async (u) => {
+    const r = await fetchPreview(u);
+    onStatus(`Fetching previews ${++fetched}/${urls.length}…`);
+    return r;
+  });
+  const refOf = new Map(urls.map((u, i) => [u, `L${i + 1}`]));
+  const links = new Map(urls.map((u, i) => [u, toLinkData(`L${i + 1}`, u, previews[i])]));
+  const info: LinkInfo[] = urls.map((u) => {
+    const d = links.get(u)!;
+    return { ref: d.ref, url: d.url, site: d.siteName, title: d.title, description: d.description };
+  });
+  return { refOf, links, info };
+}
+
+/** How many of the latest items per folder the AI sees, and how many folders at most. */
+export const RECENT_PER_FOLDER = 5;
+const MAX_FOLDERS_SENT = 80;
+
+/** Folders in priority order, each with its latest items as i1, i2… refs. */
+export function foldersForAI(topics: Topic[], items: Item[], tree = indexTree(topics)): { folders: PlaceFolder[]; itemOf: Map<string, Item> } {
+  const byTopic = new Map<string, Item[]>();
+  for (const it of [...items].sort((a, b) => b.addedAt - a.addedAt)) {
+    const list = byTopic.get(it.topicId) ?? [];
+    if (list.length < RECENT_PER_FOLDER) byTopic.set(it.topicId, [...list, it]);
+  }
+  const itemOf = new Map<string, Item>();
+  const folders = flattenTree(topics, tree)
+    .slice(0, MAX_FOLDERS_SENT)
+    .map((f) => ({
+      path: f.path.join(PATH_SEP),
+      recent: (byTopic.get(f.topic.id) ?? []).map((it) => {
+        const ref = `i${itemOf.size + 1}`;
+        itemOf.set(ref, it);
+        return { ref, title: it.title };
+      }),
+    }));
+  return { folders, itemOf };
+}
+
+/** Too much for one item: the box says to tick "Several things". */
+export class TooLongForOne extends Error {}
+
+/**
+ * The default mode: the whole paste is ONE item, and the only question is where it goes.
+ * A folder path with 2 or more levels settles that without the AI.
+ */
+export async function prepareOne(input: string, onStatus: (s: string) => void): Promise<Prepared> {
+  const lines = parseLines(input);
+  const urls = uniqueUrls(lines);
+  if (!lines.length) return { drafts: [], leftover: '', aiCount: 0, model: '' };
+  if (input.length > LIMITS.maxChars || urls.length > LIMITS.maxLinks || lines.length > LIMITS.maxLines) {
+    throw new TooLongForOne(`That's more than one item can hold (${LIMITS.maxLinks} links or ${LIMITS.maxLines} lines). Tick “Several things” to split it.`);
+  }
+  const [topics, items] = await Promise.all([db.topics.toArray(), db.items.toArray()]);
+  const tree = indexTree(topics);
+  const { refOf, links, info } = await fetchLinks(urls, onStatus);
+  const all = lines.map((l) => l.n);
+  const folder = lines.find((l) => l.folder)?.folder ?? lines.find((l) => l.section)?.section;
+  const first = lines[0];
+  const heading = lines.length > 1 && !first.urls.length && first.text.length <= 80 && !/[.?!:]$/.test(first.text) ? first.text : '';
+
+  if (folder && folder.length >= 2) {
+    const drafts = buildDrafts(lines, [{ lines: all, title: heading, mainLink: null, topic: '', isNew: false }], links, topics, items, { single: true });
+    return { drafts, leftover: '', aiCount: 0, model: '' };
+  }
+
+  onStatus('Finding the right folder…');
+  const { folders, itemOf } = foldersForAI(topics, items, tree);
+  const { placement: p, model } = await placeItem(folders, lines, info, refOf);
+  const [d] = buildDrafts(lines, [{ lines: all, title: p.title || heading, mainLink: p.mainLink, topic: p.topic, isNew: false }], links, topics, items, { single: true });
+
+  // Other folders, held to the same rules as the main pick.
+  const place = (name: string) => (folder ? choiceInside(folder[0], name, topics, tree) : atLeastTwoLevels(choiceForName(name, topics, tree), topics, tree));
+  const inbox = choiceForName(INBOX, topics, tree);
+  d.alternatives = [...new Set(p.alternatives.map(place))].filter((c) => c !== d.choice && c !== inbox);
+
+  // Adding to an existing item: only one the AI was shown, and inside the folder you wrote, if any.
+  const target = p.joinItem ? itemOf.get(p.joinItem) : undefined;
+  const targetPath = target && tree.byId.get(target.topicId) ? pathOf(tree.byId.get(target.topicId)!, tree).map((t) => nameKey(t.name)) : [];
+  const fitsFolder = !folder || folder.every((n, i) => targetPath[i] === nameKey(n));
+  if (target && d.source !== 'duplicate' && fitsFolder) {
+    d.joinTo = { id: target.id, title: target.title, topicId: target.topicId };
+    d.join = true;
+  }
+  return { drafts: [d], leftover: '', aiCount: lines.length, model };
 }
 
 export async function prepareDrafts(input: string, onStatus: (s: string) => void): Promise<Prepared> {
@@ -228,25 +374,18 @@ export async function prepareDrafts(input: string, onStatus: (s: string) => void
 
   const [topics, items] = await Promise.all([db.topics.toArray(), db.items.toArray()]);
   const urls = uniqueUrls(lines);
-  if (urls.length) onStatus(`Fetching previews 0/${urls.length}…`);
-  let fetched = 0;
-  const previews = await mapLimit(urls, 4, async (u) => {
-    const r = await fetchPreview(u);
-    onStatus(`Fetching previews ${++fetched}/${urls.length}…`);
-    return r;
-  });
-  const refOf = new Map(urls.map((u, i) => [u, `L${i + 1}`]));
-  const links = new Map(urls.map((u, i) => [u, toLinkData(`L${i + 1}`, u, previews[i])]));
+  const { refOf, links, info } = await fetchLinks(urls, onStatus);
 
-  // No AI is needed for a single line with a folder path, or a plain list of links that each
-  // have a folder path, are already saved, or come from a site you always file in one place.
+  // No AI is needed for a single line with a full folder path, or a plain list of links that each
+  // have one, are already saved, or come from a site you always file in one place. A 1-level
+  // path (\robotics) still asks the AI, which picks the subfolder inside it.
   const known = knownLinks(items);
   const plainList = lines.length > 0 && lines.every((l) => l.urls.length === 1 && !l.text);
   const allSettled =
-    (lines.length === 1 && !!(lines[0].folder ?? lines[0].section)) ||
+    (lines.length === 1 && fixedFolder(lines[0])) ||
     (plainList && lines.every((l) => {
       const d = links.get(l.urls[0])!;
-      return !!(l.folder ?? l.section) || (d.normUrl && known.has(d.normUrl)) || !!historyTopic(domainOf(d.url), items, topics);
+      return fixedFolder(l) || (d.normUrl && known.has(d.normUrl)) || !!historyTopic(domainOf(d.url), items, topics);
     }));
 
   let groups: Group[];
@@ -255,10 +394,6 @@ export async function prepareDrafts(input: string, onStatus: (s: string) => void
     groups = lines.map((l) => ({ lines: [l.n], title: '', mainLink: refOf.get(l.urls[0]) ?? null, topic: '', isNew: false }));
   } else {
     onStatus(`Sorting ${lines.length} line${lines.length === 1 ? '' : 's'} into items…`);
-    const info: LinkInfo[] = urls.map((u) => {
-      const d = links.get(u)!;
-      return { ref: d.ref, url: d.url, site: d.siteName, title: d.title, description: d.description };
-    });
     const res = await groupLines(flattenTree(topics).map((f) => f.path.join(PATH_SEP)), lines, info, refOf);
     groups = res.groups;
     model = res.model;
@@ -267,7 +402,9 @@ export async function prepareDrafts(input: string, onStatus: (s: string) => void
 }
 
 export async function acceptDrafts(drafts: Draft[]): Promise<number> {
-  const chosen = drafts.filter((d) => d.include && d.choice);
+  const joins = drafts.filter((d) => d.include && d.join && d.joinTo);
+  for (const d of joins) await mergeIntoItem(d.joinTo!.id, { ...d, links: d.links });
+  const chosen = drafts.filter((d) => d.include && d.choice && !(d.join && d.joinTo));
   const topicIds = new Map<string, string>();
   for (const d of chosen) {
     if (d.choice.startsWith(NEW) && !topicIds.has(d.choice)) topicIds.set(d.choice, await ensureTopicPath(newChoiceNames(d.choice)));
@@ -287,11 +424,11 @@ export async function acceptDrafts(drafts: Draft[]): Promise<number> {
     })),
   );
   // Open each folder that got something, and the folders around it, so you can see where it went.
-  const touched = new Set(chosen.map((d) => topicIds.get(d.choice) ?? d.choice));
+  const touched = new Set([...chosen.map((d) => topicIds.get(d.choice) ?? d.choice), ...joins.map((d) => d.joinTo!.topicId)]);
   const tree = indexTree(await db.topics.toArray());
   const toOpen = new Set([...touched].flatMap((id) => (tree.byId.get(id) ? pathOf(tree.byId.get(id)!, tree).map((t) => t.id) : [])));
   await Promise.all([...toOpen].map((id) => db.topics.update(id, { open: true })));
-  return n;
+  return n + joins.length;
 }
 
 const LINKEDIN_EXIT = /take you to a page that.{1,3}s not on LinkedIn/i;

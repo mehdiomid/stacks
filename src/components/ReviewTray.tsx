@@ -21,6 +21,7 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
   const [drafts, setDrafts] = useState(initial);
   const [naming, setNaming] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
+  const single = drafts.length === 1;
 
   const update = (key: string, patch: Partial<Draft>) => setDrafts((ds) => ds.map((d) => (d.key === key ? { ...d, ...patch } : d)));
 
@@ -28,9 +29,11 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
   const tree = useMemo(() => indexTree(topics), [topics]);
   const folders = useMemo(() => flattenTree(topics, tree), [topics, tree]);
   const inbox = tree.children(null).find((t) => t.name.toLowerCase() === 'inbox');
-  const included = drafts.filter((d) => d.include && d.choice);
-  const groups = new Set(included.map((d) => d.choice)).size;
-  const newCount = new Set(included.filter((d) => d.choice.startsWith(NEW)).map((d) => d.choice)).size;
+  const included = drafts.filter((d) => d.include && (d.choice || (d.join && d.joinTo)));
+  const groups = new Set(included.map((d) => (d.join && d.joinTo ? d.joinTo.topicId : d.choice))).size;
+  const newCount = new Set(included.filter((d) => !d.join && d.choice.startsWith(NEW)).map((d) => d.choice)).size;
+  const labelOf = (choice: string) => (choice.startsWith(NEW) ? `+ New: ${newChoiceLabel(choice)}` : folders.find((f) => f.topic.id === choice)?.path.join(PATH_SEP) ?? '');
+  const joining = (d: Draft) => !!(d.join && d.joinTo);
   const dupCount = drafts.filter((d) => d.source === 'duplicate').length;
 
   const finishNaming = (key: string) => {
@@ -44,13 +47,17 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
   return (
     <div className="tray" role="region" aria-label="Review sorted items">
       <h3>
-        {included.length} item{included.length === 1 ? '' : 's'} → {groups} topic{groups === 1 ? '' : 's'}
+        {single
+          ? joining(drafts[0])
+            ? 'Add to an item you already have'
+            : 'One item → where should it go?'
+          : `${included.length} item${included.length === 1 ? '' : 's'} → ${groups} topic${groups === 1 ? '' : 's'}`}
       </h3>
       <div className="sub">
         {newCount > 0 && `${newCount} new topic${newCount === 1 ? '' : 's'} suggested. `}
         {dupCount > 0 && `${dupCount} already saved (unchecked). `}
-        {aiCount > 0 && model ? `Grouped and sorted by ${model}. ` : ''}
-        Change any topic, then add.{leftover && ' More text is waiting in the box for the next round.'}
+        {aiCount > 0 && model ? `${single ? 'Placed' : 'Grouped and sorted'} by ${model}. ` : ''}
+        {single ? 'Check the title and folder, then add.' : 'Change any topic, then add.'}{leftover && ' More text is waiting in the box for the next round.'}
       </div>
 
       {drafts.map((d) => (
@@ -61,7 +68,11 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
           </span>
           <div className="t">
             <b>
-              {d.title}
+              {single ? (
+                <input className="title-edit" value={d.title} onChange={(e) => update(d.key, { title: e.target.value })} aria-label="Title" />
+              ) : (
+                d.title
+              )}
               {d.source === 'duplicate' && <span className="tag dup">already in {d.duplicateOf}</span>}
               {d.source === 'history' && <span className="tag">same site as before</span>}
               {d.source === 'path' && <span className="tag path">your folder</span>}
@@ -72,9 +83,30 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
                 : d.url ?? 'note'}
             </small>
             {d.description && <small className="snippet">{d.description.length > 140 ? `${d.description.slice(0, 139)}…` : d.description}</small>}
+            {d.joinTo && (
+              <label className="join">
+                <input type="checkbox" checked={!!d.join} onChange={(e) => update(d.key, { join: e.target.checked })} />
+                <span>
+                  Add to <b>“{d.joinTo.title}”</b>
+                  {folders.find((f) => f.topic.id === d.joinTo!.topicId) && <> in {folders.find((f) => f.topic.id === d.joinTo!.topicId)!.path.join(PATH_SEP)}</>}: its links and notes are added there, and it's marked not done again.
+                </span>
+              </label>
+            )}
+            {!joining(d) && !!d.alternatives?.length && (
+              <div className="alt-picks">
+                <span>Or:</span>
+                {d.alternatives.map((c) => (
+                  <button key={c} type="button" className={`chip ${d.choice === c ? 'on' : ''}`} onClick={() => update(d.key, { choice: c, include: true })}>
+                    {labelOf(c)}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <div className="pick">
-            {naming === d.key ? (
+            {joining(d) ? (
+              <span className="join-note">Stays in its folder</span>
+            ) : naming === d.key ? (
               <input
                 type="text"
                 autoFocus
@@ -101,7 +133,7 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
                     {f.path.join(PATH_SEP)}
                   </option>
                 ))}
-                {newChoices.map((c) => (
+                {[...new Set([...newChoices, ...(d.alternatives ?? []).filter((c) => c.startsWith(NEW))])].map((c) => (
                   <option key={c} value={c}>
                     + New: {newChoiceLabel(c)}
                   </option>
@@ -119,7 +151,7 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
           Cancel
         </button>
         <button className="btn" onClick={() => onAccept(drafts)} disabled={!included.length}>
-          Add {included.length} item{included.length === 1 ? '' : 's'}
+          {single ? (joining(drafts[0]) ? 'Add to item' : 'Add item') : `Add ${included.length} item${included.length === 1 ? '' : 's'}`}
         </button>
       </div>
     </div>

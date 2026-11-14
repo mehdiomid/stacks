@@ -27,6 +27,16 @@ export interface ParsedLine {
 const SEGMENT = String.raw`(?:"[^"\n\\]+"|“[^”\n\\]+”|[^\s\\"“”]+)`;
 const PATH_RE = new RegExp(String.raw`(?<=^|\s)(?:\\${SEGMENT})+`, 'g');
 const SEGMENT_RE = new RegExp(String.raw`\\(${SEGMENT})`, 'g');
+/*
+ * Forward slashes work too (/robotics/papers), but only when nothing else on the line could be
+ * ordinary text: on a line of its own, after a link, or after words like "put the following under".
+ */
+const SLASH_SEGMENT = String.raw`(?:"[^"\n/]+"|“[^”\n/]+”|[^\s/\\"“”]+)`;
+const SLASH_PATH_RE = new RegExp(String.raw`(?<=^|\s)(?:/${SLASH_SEGMENT})+`, 'g');
+const SLASH_SEGMENT_RE = new RegExp(String.raw`/(${SLASH_SEGMENT})`, 'g');
+
+/** Words that only say where the lines go: "Put the following under", "Save these in:", "Folder:". */
+const LEAD_IN = /^(?:(?:please\s+)?(?:put|save|add|file|move|place|store|keep|send|sort)\b[^.?!]*?\s)?(?:under|in|into|inside|to|folder|topic)\s*:?$/i;
 
 export interface FolderPath {
   names: string[];
@@ -37,7 +47,7 @@ export interface FolderPath {
 /** Reads one typed path (`\robotics\papers`) into folder names. */
 export function readPath(token: string): FolderPath {
   const names: string[] = [];
-  for (const m of token.matchAll(SEGMENT_RE)) {
+  for (const m of token.matchAll(token.startsWith('/') ? SLASH_SEGMENT_RE : SEGMENT_RE)) {
     const seg = m[1];
     const quoted = /^["“]/.test(seg);
     const name = quoted ? displayName(seg.slice(1, -1), true) : displayName(seg.replace(/[.,;:!?)]+$/, ''));
@@ -48,18 +58,29 @@ export function readPath(token: string): FolderPath {
 
 /** Takes folder paths out of a line. The last path on the line counts. */
 export function extractPaths(line: string): { rest: string; path: FolderPath | null } {
-  let path = null as FolderPath | null;
-  const rest = line.replace(PATH_RE, (tok) => {
-    const p = readPath(tok);
-    if (p.names.length) path = p;
-    return p.names.length ? ' ' : tok;
-  });
-  return { rest: path ? rest.replace(/\s+/g, ' ').trim() : line, path };
+  const take = (re: RegExp) => {
+    let path = null as FolderPath | null;
+    const rest = line.replace(re, (tok) => {
+      const p = readPath(tok);
+      if (p.names.length) path = p;
+      return p.names.length ? ' ' : tok;
+    });
+    return { rest: path ? rest.replace(/\s+/g, ' ').trim() : line, path };
+  };
+  const back = take(PATH_RE);
+  if (back.path) return back;
+  const slash = take(SLASH_PATH_RE);
+  return slash.path && onlySaysWhere(slash.rest) ? slash : { rest: line, path: null };
 }
+
+/** What is left of a line once its links are out: nothing, or only lead-in words. */
+const wordsOf = (s: string) => s.replace(URL_RE, ' ').replace(/\s+/g, ' ').trim();
+const onlySaysWhere = (rest: string) => !wordsOf(rest) || LEAD_IN.test(wordsOf(rest));
 
 const URL_RE = /https?:\/\/[^\s<>"'`]+/g;
 const HAS_URL = /https?:\/\//;
-const BULLET = /^\s*(?:[-*•▪◦·>]|\d+[.)]|\[[ xX]\])\s+/;
+/** List markers: -, *, •, 1. 1) and 2- or 3 – (but not a year like "2024 - recap"). */
+const BULLET = /^\s*(?:[-*•▪◦·>]|\d+[.)]|\d{1,3}\s?[-–]|\[[ xX]\])\s+/;
 const MD_LINK = /\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g;
 
 /** Drop trailing punctuation, but keep a closing paren that belongs to the URL (Wikipedia style). */
@@ -88,13 +109,17 @@ export function parseLines(input: string): ParsedLine[] {
       blank = out.length > 0;
       continue;
     }
-    const { rest: raw, path } = extractPaths(source);
-    if (path && !raw) {
+    const found = extractPaths(source);
+    const { path } = found;
+    let raw = found.rest;
+    if (path && onlySaysWhere(raw) && !HAS_URL.test(raw)) {
       // A path on a line of its own: everything below goes there, until the next one.
       section = path.names;
       blank = out.length > 0;
       continue;
     }
+    // "Put this under \robotics https://…": the lead-in words are not part of the note.
+    if (path && wordsOf(raw) && onlySaysWhere(raw)) raw = (raw.match(URL_RE) ?? []).join(' ');
     const urls = (raw.match(URL_RE) ?? []).map(cleanUrl);
     let rest = raw;
     for (const u of urls) rest = rest.replace(u, ' ');

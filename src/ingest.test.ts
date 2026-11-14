@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { normalizeGroups } from './ai/group';
-import { buildDrafts, choiceForName, toLinkData, type LinkData } from './ingest';
+import { joinHeadings, normalizeGroups } from './ai/group';
+import { atLeastTwoLevels, buildDrafts, choiceForName, choiceInside, foldersForAI, toLinkData, type LinkData } from './ingest';
+import { buildPlacePrompt, PLACE_SYSTEM } from './ai/place';
+import { indexTree } from './lib/tree';
 import { parseLines, uniqueUrls } from './lib/parse';
 import type { Item, Preview, Topic } from './types';
 
@@ -32,7 +34,7 @@ describe('buildDrafts', () => {
       'https://lnkd.in/ejEKx9Cu': null,
       'https://lnkd.in/gfyZ7pKf': pv('https://www.interconnects.ai/p/open-source-ai-reading-list', 'Open-Source AI & Open Models Reading List'),
     });
-    const groups = normalizeGroups([{ lines: lines.map((l) => l.n), title: 'Open models lecture: state of the ecosystem', mainLink: 'L1', topic: 'Open Models', isNew: true }], lines.map((l) => l.n));
+    const groups = normalizeGroups([{ lines: lines.map((l) => l.n), title: 'Open models lecture: state of the ecosystem', mainLink: 'L1', topic: 'AI › Open Models', isNew: true }], lines.map((l) => l.n));
     const drafts = buildDrafts(lines, groups, links, [], []);
 
     expect(drafts).toHaveLength(1);
@@ -40,7 +42,7 @@ describe('buildDrafts', () => {
     expect(d.title).toBe('Open models lecture: state of the ecosystem');
     expect(d.url).toBe('https://www.youtube.com/watch?v=abc');
     expect(d.kind).toBe('video');
-    expect(d.choice).toBe('new:Open Models');
+    expect(d.choice).toBe('new:AI\\Open Models');
     expect(d.links?.map((l) => l.label)).toEqual(['Video', 'Slides', 'Reading list']);
     expect(d.links?.[2].title).toBe('Open-Source AI & Open Models Reading List');
     expect(d.links?.[1].url).toBe('https://lnkd.in/ejEKx9Cu');
@@ -104,23 +106,24 @@ describe('folder paths you write', () => {
     const text = '\\robotics\\papers\nhttps://a.com/1\n\\robotics\\grippers\nhttps://b.com/2\nhttps://c.com/3 \\"Open Models"';
     const lines = parseLines(text);
     const links = linksFor(text, {});
-    const groups = normalizeGroups(lines.map((l) => ({ lines: [l.n], title: '', mainLink: null, topic: 'Machine Learning', isNew: false })), lines.map((l) => l.n));
+    const groups = normalizeGroups(lines.map((l) => ({ lines: [l.n], title: '', mainLink: null, topic: 'Open Models › Papers', isNew: true })), lines.map((l) => l.n));
     const drafts = buildDrafts(lines, groups, links, topics, []);
     expect(drafts.map((d) => [d.choice, d.source])).toEqual([
       ['pap', 'path'],
       ['new:Robotics\\Grippers', 'path'],
-      ['new:Open Models', 'path'],
+      // One level written: the AI's subfolder inside it.
+      ['new:Open Models\\Papers', 'path'],
     ]);
   });
 
   it('splits an item the AI grouped across a path line', () => {
     const text = 'Intro to a talk\nhttps://a.com/1\n\\cooking\nhttps://pizza.com/2';
     const lines = parseLines(text);
-    const groups = normalizeGroups([{ lines: [1, 2, 3], title: 'Talk', mainLink: 'L1', topic: 'Inbox', isNew: false }], [1, 2, 3]);
+    const groups = normalizeGroups([{ lines: [1, 2, 3], title: 'Talk', mainLink: 'L1', topic: 'Pizza', isNew: true }], [1, 2, 3]);
     const drafts = buildDrafts(lines, groups, linksFor(text, {}), topics, []);
     expect(drafts.map((d) => [d.url, d.choice])).toEqual([
-      ['https://a.com/1', expect.not.stringContaining('ooking')],
-      ['https://pizza.com/2', 'new:Cooking'],
+      ['https://a.com/1', 'new:Inbox'],
+      ['https://pizza.com/2', 'new:Cooking\\Pizza'],
     ]);
   });
 
@@ -129,5 +132,90 @@ describe('folder paths you write', () => {
     expect(choiceForName('machine-learning', topics)).toBe('ml');
     expect(choiceForName('Robotics › grippers', topics)).toBe('new:Robotics\\Grippers');
     expect(choiceForName('open models', topics)).toBe('new:Open Models');
+  });
+
+  it('files sorted items at least 2 levels deep', () => {
+    const tree = indexTree(topics);
+    expect(atLeastTwoLevels(choiceForName('Robotics › Papers', topics), topics, tree)).toBe('pap');
+    expect(atLeastTwoLevels(choiceForName('Robotics', topics), topics, tree)).toBe('new:Inbox');
+    expect(atLeastTwoLevels(choiceForName('Cooking', topics), topics, tree)).toBe('new:Inbox');
+    expect(atLeastTwoLevels(choiceForName('Inbox', topics), topics, tree)).toBe('new:Inbox');
+    // \robotics written: the AI picks the subfolder; a stray answer becomes one inside Robotics.
+    expect(choiceInside('Robotics', 'Robotics › Papers', topics, tree)).toBe('pap');
+    expect(choiceInside('Robotics', 'Papers', topics, tree)).toBe('pap');
+    expect(choiceInside('Robotics', 'Machine Learning', topics, tree)).toBe('new:Robotics\\Machine Learning');
+    expect(choiceInside('Robotics', 'Inbox', topics, tree)).toBe('rob');
+  });
+});
+
+describe('a course pasted with a heading and numbered lectures', () => {
+  const topics: Topic[] = [{ id: 'rob', name: 'Robotics', order: 0, parentId: null, hue: 0, createdAt: 0, lastActivityAt: 0, open: true, sort: 'oldest' }];
+  const COURSE = `Vizuara robotics from scratch
+
+Lecture 3 - Deep Generative Modeling | Variational AutoEncoders | Modern Robot Learning from Scratch
+2- https://www.youtube.com/watch?v=BCkiHJHn990
+
+3- Lecture 4 - The Transformer Architecture for Robotics | Modern Robot Learning from Scratch
+
+https://www.youtube.com/watch?v=8otn0N8Lwkw`;
+
+  it('reads "2-" and "3-" as numbering, not text', () => {
+    const lines = parseLines(COURSE);
+    expect(lines[2].raw).toBe('https://www.youtube.com/watch?v=BCkiHJHn990');
+    expect(lines[3].raw).toMatch(/^Lecture 4/);
+    expect(parseLines('2024 - a good year')[0].raw).toBe('2024 - a good year');
+  });
+
+  it('never leaves the heading alone, and keeps the AI from splitting a course in three', () => {
+    const lines = parseLines(COURSE);
+    const g = (ls: number[], topic = 'Robotics › Robot Learning') => ({ lines: ls, title: '', mainLink: null, topic, isNew: true });
+    expect(joinHeadings([g([1]), g([2, 3]), g([4, 5])], lines).map((x) => x.lines)).toEqual([[1, 2, 3], [4, 5]]);
+    // A list of short notes is not a heading for the next note.
+    const notes = parseLines('Buy milk\nCall mom');
+    expect(joinHeadings([g([1]), g([2])], notes)).toHaveLength(2);
+
+    const links = linksFor(COURSE, {});
+    const [d, ...rest] = buildDrafts(lines, [{ lines: [1, 2, 3, 4, 5], title: 'Vizuara: Modern Robot Learning from Scratch', mainLink: 'L1', topic: 'Robotics › Robot Learning', isNew: true }], links, topics, []);
+    expect(rest).toHaveLength(0);
+    expect(d.links?.map((l) => l.url)).toEqual(['https://www.youtube.com/watch?v=BCkiHJHn990', 'https://www.youtube.com/watch?v=8otn0N8Lwkw']);
+    expect(d.choice).toBe('new:Robotics\\Robot Learning');
+    expect(d.description).not.toMatch(/^2\b|\n2\n/);
+  });
+});
+
+describe('one item from the whole paste (the default)', () => {
+  const t = (id: string, name: string, order: number, parentId: string | null = null): Topic => ({
+    id, name, order, parentId, hue: 0, createdAt: 0, lastActivityAt: 0, open: true, sort: 'oldest',
+  });
+  const topics = [t('rob', 'Robotics', 0), t('rl', 'Robot Learning', 0, 'rob'), t('ck', 'Cooking', 1)];
+
+  it('keeps everything together, even across a path line, and uses the first folder written', () => {
+    const text = 'Vizuara robotics from scratch\nhttps://a.com/1\n\\robotics\\robot-learning\nLecture 4\nhttps://a.com/2\n\\cooking\\pizza';
+    const lines = parseLines(text);
+    const drafts = buildDrafts(lines, [{ lines: lines.map((l) => l.n), title: 'Vizuara course', mainLink: null, topic: '', isNew: false }], linksFor(text, {}), topics, [], { single: true });
+    expect(drafts).toHaveLength(1);
+    expect(drafts[0].links).toHaveLength(2);
+    expect([drafts[0].choice, drafts[0].source]).toEqual(['rl', 'path']);
+    expect(drafts[0].notes).toContain('Vizuara robotics from scratch');
+  });
+
+  it('shows the AI each folder with its latest items, newest first', () => {
+    const item = (id: string, topicId: string, title: string, addedAt: number) => ({ id, topicId, title, addedAt }) as Item;
+    const items = [item('a', 'rl', 'Old robot paper', 1), item('b', 'rl', 'Vizuara: Robot Learning from Scratch', 9), item('c', 'ck', 'Pizza dough', 5)];
+    const { folders, itemOf } = foldersForAI(topics, items);
+    expect(folders.map((f) => [f.path, f.recent.map((r) => r.title)])).toEqual([
+      ['Robotics', []],
+      ['Robotics › Robot Learning', ['Vizuara: Robot Learning from Scratch', 'Old robot paper']],
+      ['Cooking', ['Pizza dough']],
+    ]);
+    expect(itemOf.get('i1')?.id).toBe('b');
+    const prompt = buildPlacePrompt(folders, parseLines('Lecture 5 https://a.com/5'), [], new Map([['https://a.com/5', 'L1']]));
+    expect(prompt).toContain('"Robotics › Robot Learning"\n  i1 | Vizuara: Robot Learning from Scratch');
+    expect(prompt).toContain('1| Lecture 5 [L1]');
+  });
+
+  it('tells the AI to join only the same named course or series, never just the same kind', () => {
+    expect(PLACE_SYSTEM).toMatch(/same named course or series/);
+    expect(PLACE_SYSTEM).toMatch(/Never join because both are courses/);
   });
 });

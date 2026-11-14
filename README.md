@@ -43,8 +43,8 @@ docker compose up -d --build
 Open **http://localhost:8080**.
 
 1. Click **Add API key** (top right) and paste a Claude or OpenAI API key (see [AI](#ai-providers-keys-and-cost-control)).
-2. Paste links or notes into the box and press **Sort it** (or `Ctrl`/`⌘` + `Enter`).
-3. Check the suggested topics, then press **Add**.
+2. Paste links or notes into the box and press **Add** (or `Ctrl`/`⌘` + `Enter`). Everything you paste becomes one item; tick **Several things** to split a paste into separate items.
+3. Check the title and folder, then press **Add item**.
 
 To try the app without a key, click **Load example topics** on the empty page.
 
@@ -56,7 +56,7 @@ Stop it with `docker compose down`. Your data is unaffected because it lives in 
 
 | Area | What it does |
 |---|---|
-| **Smart input** | One box for everything. Paste a link, a note, a whole post, or a big mixed dump. Lines that belong together become one item: a post with its video, slides and reading list is one item with all its links, and your words are kept as its notes. |
+| **Smart input** | One box for everything. By default the whole paste is **one item**: a post with its video, slides and reading list, or a course with its lectures, keeps all its links, and your words are kept as its notes. The AI only finds where it goes, offers two other folders as quick picks, and can add it to an item you already have when it continues it (the next lecture of a saved course). Tick **Several things** to split a big mixed dump into separate items. |
 | **AI grouping and sorting** | The AI groups the lines into items, titles them, and files each in the best existing topic or suggests a new one. You review everything in a tray, change any topic, then add. |
 | **Instructions** | Type into the same box: "move all pizza links to Cooking", "mark the Karpathy video done", "snooze finance for two weeks", "make Rust my top priority". Stacks lists the exact changes and waits for you to apply them. |
 | **Rich previews** | Title, description, site, author, thumbnail, and duration for videos (YouTube and Vimeo via oEmbed, other sites via Open Graph tags). |
@@ -161,7 +161,8 @@ callAI()  ──►  adapter: Claude (src/ai/anthropic.ts)
 
 The rest of the app only needs two jobs:
 
-- **Group this text into items and file them in topics** (`src/ai/group.ts`).
+- **Title this item and find its folder** (`src/ai/place.ts`), for the default one-item mode.
+- **Group this text into items and file them in topics** (`src/ai/group.ts`), for "Several things".
 - **Turn this instruction into actions** (`src/ai/interpret.ts`).
 
 Both ask for **structured JSON output** that follows a schema:
@@ -182,7 +183,8 @@ Claude requests run at `effort: "low"`, because sorting is simple. Sonnet 5.5 an
 
 | Request | What's sent |
 |---|---|
-| Grouping and sorting | Your topic names as full paths like "Robotics › Papers" (in priority order), the text you pasted as numbered lines (each line cut at 400 characters, links replaced by `[L1]`-style references), and for each link: its address, site, page title, and the first 160 characters of its description. Full web pages are never sent. |
+| Placing one item (default) | Your folders as full paths in priority order, each with the titles of its latest 5 items (cut at 80 characters, at most 80 folders), plus your text and links as below. |
+| Grouping and sorting ("Several things") | Your topic names as full paths like "Robotics › Papers" (in priority order), the text you pasted as numbered lines (each line cut at 400 characters, links replaced by `[L1]`-style references), and for each link: its address, site, page title, and the first 160 characters of its description. Full web pages are never sent. |
 | Instructions | Your instruction, the topic paths with counts, and a numbered list of up to 400 items (title, topic, done or open, site). |
 
 ### Cost control
@@ -229,12 +231,34 @@ The code is in `src/lib/scoring.ts`, and the weights are in `WEIGHTS`.
 
 ## Smart input rules
 
+### One item (the default)
+
+Most pastes are one thing, so by default **everything in the box becomes one item**: all its links are listed, your words are kept as its notes, and the main link (the video for a talk) is the title link. Nothing is split, so nothing can break apart by mistake.
+
+The AI (`src/ai/place.ts`) only answers three questions. It sees your folders with the titles of their latest 5 items, which helps it put a new lecture next to the course it belongs to.
+
+- **Title and folder.** A short title, and a folder at least 2 levels deep, with the same rules as below. The review tray has one row: edit the title, change the folder, then press **Add item**.
+- **Two other folders.** Shown as quick picks under the row ("Or: Robotics › Papers"), so a wrong guess is one click to fix.
+- **Does this continue an item you already have?** For example, Lecture 5 of a course you saved. The tray then shows "Add to “Vizuara: Modern Robot Learning from Scratch”", ticked. Adding appends the new links (skipping ones already there) and your notes to that item, keeps its title and folder, and marks it not done again so it comes back in Up next. Untick it to save a new item instead. The AI is told to join only when both titles name the **same course, series, talk or project**; being a course, a lecture or about the same field is never enough, and when in doubt it doesn't join. It can only join an item it was shown (the latest 5 per folder), and with a folder you wrote, only one inside that folder.
+
+Folder paths work as before, except that one item goes in one place:
+- A path with 2 or more levels anywhere in the paste (`\robotics\papers`) is the item's folder, and the AI isn't called. The title is your first line when it reads as a heading, otherwise the page title.
+- A 1-level path (`\robotics`) asks the AI for the subfolder inside it.
+- With two different folders written, the first is used and the hint suggests ticking **Several things**.
+
+A paste over the size limits (100 links, 300 lines, 20,000 characters) is too big for one item; the box asks you to tick **Several things**.
+
+### Several things
+
+Tick **Several things** under the box when a paste holds separate things. The button then reads **Sort it**, and the paste goes through the steps below; it can still end up as one item. The box is unticked again after each add, because splitting is the rare case.
+
 Pasted text is split in two steps.
 
 **1. Parsing** (`src/lib/parse.ts`) numbers the non-empty lines and pulls out their links. It also:
 - turns Markdown links `[title](url)` into `title: url`;
 - removes trailing punctuation from links, except a closing parenthesis that belongs to the link (Wikipedia style);
-- notes paragraph breaks.
+- notes paragraph breaks;
+- strips list numbering, including `2-` and `3 –` (a year like "2024 - recap" is kept).
 
 **2. Grouping** is done by the AI (`src/ai/group.ts`). It gets the numbered lines, with links replaced by references `[L1]`, `[L2]` and their page titles listed below. It returns which lines form one item, plus a title, a main link and a topic for each item. It returns only line numbers, never rewritten text, so:
 - your exact words are kept;
@@ -247,6 +271,8 @@ Here's how text becomes items:
   - Its title comes from the AI.
   - Your text is kept as its notes, with paragraph breaks.
   - All its links are listed under it, with your labels ("Video", "Slides") and each page's own title. The main link (the video, for a talk) is the title link.
+- **A course or series becomes one item.** A heading line ("Vizuara robotics from scratch") followed by numbered lectures and their links is one item listing every lecture link. The AI only splits when the subject changes; blank lines and numbering don't count. As a safety net in code, a heading line (short, no link, not a sentence) that the AI left on its own joins the item right below it.
+- **Items are filed at least 2 levels deep**, like Robotics › Robot Learning: an area, then the subject. The AI picks an existing subfolder or proposes a new one. If it answers a single level anyway, the item goes to Inbox (the only 1-level choice) for you to pick in the review tray. A 1-level path you write (`\robotics`) means "somewhere in Robotics": the AI chooses the subfolder inside it. Manual moves and "+ New topic" can still use any level.
 - **A list of unrelated links or ideas** gives one item per line. A single link uses its page's title.
 - **Lines that only name a link** ("Video:", "Slides") become that link's label instead of a line of notes.
 - **Instruction mode** starts automatically for a single line with no link that begins like a command: move, mark, create, rename, delete, snooze, put, merge, prioritize, and similar. Click the label above the box (**Add items ⇄ / Instruction ⇄**) to switch modes if the guess is wrong.
@@ -274,6 +300,7 @@ A path starts with `\`, and each further `\` goes one level deeper:
 - Matching starts at the top level: `\robotics\papers` looks for Papers *inside* Robotics. A Papers folder somewhere else isn't used.
 - Any missing folder along the path is created when you click **Add**. The review tray shows it as "+ New: Robotics › Papers", tagged "your folder".
 - The path is removed from the saved text, so it never ends up in an item's notes.
+- Forward slashes work too (`/robotics/papers`), but only where they can't be ordinary text: on a line by itself, after a link, or after words like "put the following under". Elsewhere `/etc/hosts` or `AI/ML` stays text.
 
 ### What a path applies to
 
@@ -281,6 +308,7 @@ A path starts with `\`, and each further `\` goes one level deeper:
 |---|---|
 | On a line with a link or note: `https://… \robotics` | Just that item |
 | On a line by itself | Every line below it, until the next path line |
+| After words that only say where things go: `Put the following under \robotics\papers`, `Save these in \cooking:`, `Folder: \reading` | The same as a line by itself. The words are dropped, not saved as a note |
 | As the first line of the paste | Everything pasted (the same rule as above) |
 
 So one paste can fill several folders:
@@ -458,6 +486,7 @@ stacks/
    │  ├─ call.ts                    key and budget checks, lazy-loaded adapters, usage tracking
    │  ├─ anthropic.ts, openai.ts    provider adapters (structured JSON output, error mapping)
    │  ├─ group.ts                   grouping prompt and schema: lines → items, titles, main link, topic
+   │  ├─ place.ts                   one-item prompt and schema: title, folder, 2 other folders, item to add to
    │  ├─ interpret.ts               instruction prompt, schema, resolving refs to real items/topics
    │  └─ actions.ts                 describe and apply instruction actions
    ├─ lib/                          parse (incl. \ paths), tree (folders), url, scoring, preview client, backup, usage, time, reminders
@@ -486,6 +515,10 @@ These are the choices made while planning Stacks, and why.
 | Input box | Collapsible to one line, remembered, `/` to reopen | Topics are visible from the top. |
 | Choosing a folder | `\robotics\papers` in the text; hyphens/underscores or quotes for spaces | `/` would clash with links. Paths without spaces stay unambiguous inside a sentence; quotes cover exact names. |
 | Path scope | On a line: that item. On its own line: everything below until the next path | One paste can fill several folders. |
+| Minimum depth | Sorting files at 2 levels or more; a 1-level `\x` asks the AI for the subfolder | You asked for every item to have an area and a subject. Inbox stays the one 1-level exception. |
+| Courses | A course with several lectures is one item with all the lecture links | Matches "one item per post"; lectures stay together. |
+| Default mode | The whole paste is one item; "Several things" turns on splitting and is cleared after each add | Most pastes are one thing. The AI only has to find the place, which is cheaper and can't split by mistake. |
+| Adding to an item | The AI may suggest an existing item the paste continues, from the latest 5 per folder; shown ticked in the tray | A new lecture belongs with its course. The AI must match the course or series name, not just the kind of item or the field. |
 | Folder depth | 3 levels at most | Deeper trees get hard to read and to rank. |
 | Nesting by drag | Sideways drag: right = into the folder above, left = out | Works with the existing up/down drag, on touch too, without hover timers. **Move into…** covers moves across the tree. |
 | Look | Constellation background, gold star per finished item, progress line | You asked for an inspiring background. Progress becomes visible. |

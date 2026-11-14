@@ -3,7 +3,7 @@ import { useApp } from '../app-context';
 import { AIError } from '../ai/errors';
 import { interpret, type ResolvedAction } from '../ai/interpret';
 import { applyActions } from '../ai/actions';
-import { acceptDrafts, prepareDrafts, type Draft } from '../ingest';
+import { acceptDrafts, prepareDrafts, prepareOne, type Draft } from '../ingest';
 import { LIMITS, looksLikeInstruction, parseLines, pathsIn, uniqueUrls } from '../lib/parse';
 import { flattenTree, MAX_DEPTH, nameKey, PATH_SEP, typedPath } from '../lib/tree';
 import type { Item, Topic } from '../types';
@@ -41,6 +41,8 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
   const [plan, setPlan] = useState<{ summary: string; actions: ResolvedAction[] } | null>(null);
   const [collapsed, setCollapsedState] = useState(readCollapsed);
   const [suggest, setSuggest] = useState<Suggest | null>(null);
+  /** "Several things": split the paste into items. Off by default, and cleared after each add. */
+  const [split, setSplit] = useState(false);
   const closedFor = useRef<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const folderPaths = useMemo(() => flattenTree(topics).map((f) => f.path), [topics]);
@@ -123,8 +125,8 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
         const r = await interpret(value, topics, items);
         setPlan(r);
       } else {
-        setBusy('Splitting into pieces…');
-        const r = await prepareDrafts(text, setBusy);
+        setBusy(split ? 'Splitting into pieces…' : 'Reading…');
+        const r = await (split ? prepareDrafts : prepareOne)(text, setBusy);
         if (!r.drafts.length) setError('Nothing to add was found in that text.');
         else setReview(r);
       }
@@ -142,7 +144,15 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
       setText(review.leftover);
       setOverride(null);
       setReview(null);
-      toast(review.leftover ? `Added ${n} items. The rest is still in the box; press Sort it again.` : `Added ${n} item${n === 1 ? '' : 's'}`);
+      if (!review.leftover) setSplit(false);
+      const joined = drafts.find((d) => d.include && d.join && d.joinTo);
+      toast(
+        review.leftover
+          ? `Added ${n} items. The rest is still in the box; press Sort it again.`
+          : joined && n === 1
+            ? `Added to “${joined.joinTo!.title}”`
+            : `Added ${n} item${n === 1 ? '' : 's'}`,
+      );
     } catch (err) {
       fail(err);
     }
@@ -161,15 +171,21 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
     }
   }
 
+  const going = (p: string[]) => (p.length === 1 ? `${p[0]} › a subfolder the AI picks` : p.join(PATH_SEP));
+  const counts = found ? `${found.links} link${found.links === 1 ? '' : 's'} and ${found.lines} line${found.lines === 1 ? '' : 's'}. ` : '';
   const hint = busy
     ? null
     : isInstr
       ? 'Read as an instruction. You see the changes before anything happens.'
-      : found
-        ? `${found.links} link${found.links === 1 ? '' : 's'} and ${found.lines} line${found.lines === 1 ? '' : 's'}. ${
-            found.paths.length ? `Going to ${found.paths.map((p) => p.join(PATH_SEP)).join(', ')}.` : 'Lines about the same thing become one item.'
-          }${found.clipped ? ` Folders go ${MAX_DEPTH} levels deep, so extra levels are dropped.` : ''}${found.links > LIMITS.maxLinks ? ` The first ${LIMITS.maxLinks} links are sorted now.` : ''}`
-        : 'Paste anything. Related lines and links become one item. Type \\ to pick a folder.';
+      : !found
+        ? 'Paste anything: it becomes one item. Type \\ to pick a folder.'
+        : split
+          ? `${counts}${found.paths.length ? `Going to ${found.paths.map(going).join(', ')}.` : 'Related lines become one item, the rest are split.'}${
+              found.clipped ? ` Folders go ${MAX_DEPTH} levels deep, so extra levels are dropped.` : ''
+            }${found.links > LIMITS.maxLinks ? ` The first ${LIMITS.maxLinks} links are sorted now.` : ''}`
+          : `${counts}All of it becomes one item${found.paths.length ? `, going to ${going(found.paths[0])}` : ''}.${
+              found.paths.length > 1 ? ' More than one folder is written: tick “Several things” to split, or the first one is used.' : ''
+            }${found.clipped ? ` Folders go ${MAX_DEPTH} levels deep, so extra levels are dropped.` : ''}`;
 
   return (
     <>
@@ -187,7 +203,7 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
                 onClick={() => setOverride(isInstr ? 'add' : 'instr')}
                 title="Click to switch between adding items and giving an instruction"
               >
-                {isInstr ? 'Instruction' : 'Add items'} ⇄
+                {isInstr ? 'Instruction' : split ? 'Add items' : 'Add one item'} ⇄
               </button>
               <button className="collapse" onClick={() => setCollapsed(true)} aria-expanded="true">
                 Collapse ▴
@@ -262,8 +278,14 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
             )}
             <div className="composer-bar">
               <div className="mode">{busy ? <span className="status">{busy}</span> : <span>{hint}</span>}</div>
+              {!isInstr && (
+                <label className="split-toggle" title="Split the paste into separate items, possibly in different folders">
+                  <input type="checkbox" checked={split} onChange={(e) => setSplit(e.target.checked)} />
+                  Several things
+                </label>
+              )}
               <button className="btn" onClick={() => void submit()} disabled={!text.trim() || !!busy} title="Ctrl/⌘ + Enter">
-                {isInstr ? 'Preview changes' : 'Sort it'}
+                {isInstr ? 'Preview changes' : split ? 'Sort it' : 'Add'}
               </button>
             </div>
             {error && <p className="error">{error}</p>}

@@ -39,6 +39,28 @@ describe('typed folder paths', () => {
     expect(lines[2].blankBefore).toBe(true);
   });
 
+  it('treats "put the following under \\x" as a folder line, not a note', () => {
+    const lines = parseLines('Put the following under \\robotics\\papers:\nhttps://arxiv.org/1\nSave these in \\cooking\nhttps://pizza.com\nput this under \\reading https://blog.com/a');
+    expect(lines.map((l) => [l.raw, l.text, l.folder ?? null, l.section ?? null])).toEqual([
+      ['https://arxiv.org/1', '', null, ['Robotics', 'Papers']],
+      ['https://pizza.com', '', null, ['Cooking']],
+      ['https://blog.com/a', '', ['Reading'], ['Cooking']],
+    ]);
+    // A note that merely mentions a folder keeps its words.
+    expect(parseLines('Great grasping survey \\robotics')[0].raw).toBe('Great grasping survey');
+  });
+
+  it('accepts forward slashes where they cannot be ordinary text', () => {
+    const lines = parseLines('Put the following under /folder1/folder2\nhttps://a.com/x\n/cooking\nhttps://b.com/y /reading');
+    expect(lines.map((l) => [l.raw, l.folder ?? null, l.section ?? null])).toEqual([
+      ['https://a.com/x', null, ['Folder1', 'Folder2']],
+      ['https://b.com/y', ['Reading'], ['Cooking']],
+    ]);
+    expect(extractPaths('edit /etc/hosts first').path).toBeNull();
+    expect(extractPaths('AI/ML notes').path).toBeNull();
+    expect(extractPaths('https://a.com/b/c').path).toBeNull();
+  });
+
   it('lists the paths in a paste for the hint', () => {
     expect(pathsIn('\\robotics\nx \\Robotics\ny \\a\\b\\c\\d')).toEqual({ paths: [['Robotics'], ['A', 'B', 'C']], clipped: true });
   });
