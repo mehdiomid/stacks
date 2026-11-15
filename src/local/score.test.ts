@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Item, Topic } from '../types';
 import { candidateFolders, centroid, distinctiveWords, itemText, joinCandidate, latestIn, rankFolders, sharesPhrase, titleFrequency, WEAK_MATCH } from './score';
-import { cleanName, namingMessages } from './namer';
+import { cleanPath, folderMessages } from './namer';
 
 const topic = (id: string, name: string, order: number, parentId: string | null = null): Topic => ({
   id, name, order, parentId, hue: 0, createdAt: 0, lastActivityAt: 0, open: true, sort: 'oldest',
@@ -71,19 +71,17 @@ describe('adding to an item you already have', () => {
   });
 });
 
-describe('naming suggestions', () => {
-  it('keeps a usable name and rejects the parent, existing folders and instruction words', () => {
-    expect(cleanName(' Grippers. ', ['Robotics', 'Papers'])).toEqual(['Grippers']);
-    expect(cleanName('Robotics', ['Robotics'])).toBeNull();
-    expect(cleanName('papers', ['Robotics', 'Papers'])).toBeNull();
-    expect(cleanName('Area › Subject', [])).toBeNull();
-    expect(cleanName('Finance › Investing', [])).toEqual(['Finance', 'Investing']);
+describe('new folder proposals', () => {
+  it('keeps a usable Area › Subfolder and rejects the rest', () => {
+    expect(cleanPath(' Finance › Investing. ')).toEqual(['Finance', 'Investing']);
+    expect(cleanPath('Robotics')).toBeNull();
+    expect(cleanPath('Area › Subject')).toBeNull();
+    expect(cleanPath('Japan › Japan')).toBeNull();
   });
 
-  it('asks with worked examples from areas outside the library', () => {
-    const m = namingMessages('Index funds vs ETFs explained', false);
-    expect(m.filter((x) => x.role === 'assistant').map((x) => x.content)).toEqual(['Vegetables', 'Guitar', 'Plumbing', 'Painting']);
-    expect(m.at(-1)?.content).toContain('Index funds vs ETFs explained');
-    expect(namingMessages('x', true).at(-1)?.content).toContain('Area › Subject:');
+  it('tells the model your areas, with examples that reuse one and make a new one', () => {
+    const m = folderMessages('Index funds vs ETFs explained', ['Robotics', 'Cooking']);
+    expect(m.filter((x) => x.role === 'assistant').map((x) => x.content)).toEqual(['Gardening › Vegetables', 'Music › Guitar', 'Home › Plumbing', 'Photography › Film Cameras']);
+    expect(m.at(-1)?.content).toBe('Existing areas: Robotics, Cooking\nItem: "Index funds vs ETFs explained"\nFolder (Area › Subfolder):');
   });
 });

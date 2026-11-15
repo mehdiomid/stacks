@@ -351,6 +351,91 @@ async function runGenOnnx(cfg, data) {
   return { loadMs, prompt, results };
 }
 
+// ---------- the app's folder proposals: speed with and without the pre-read, GPU vs CPU ----------
+// Same prompt, grammar and settings as src/local/namer.ts (copied, since this page is plain JS).
+const APP_SHOTS = [
+  ['Music, Home', 'How to prune tomato plants for bigger harvests', 'Gardening › Vegetables'],
+  ['Gardening, Music', 'Learn barre chords on guitar in 10 minutes', 'Music › Guitar'],
+  ['Music, Gardening, Home', 'Fixing a leaking kitchen faucet', 'Home › Plumbing'],
+  ['Music, Home', "Beginner's guide to film photography", 'Photography › Film Cameras'],
+];
+function appFolderMessages(item, areas) {
+  const ask = (a, it) => `Existing areas: ${a || 'none'}\nItem: "${it}"\nFolder (Area › Subfolder):`;
+  const turns = [{ role: 'system', content: 'File each item in a folder: a broad area, then a subject of 1 to 3 words, like library shelves. Reuse an existing area when it fits.' }];
+  for (const [a, it, ans] of APP_SHOTS) turns.push({ role: 'user', content: ask(a, it) }, { role: 'assistant', content: ans });
+  turns.push({ role: 'user', content: ask(areas.join(', '), item) });
+  return turns;
+}
+/** Variant without your areas in the prompt: same 4 examples, all as plain "Item → Area › Subfolder". */
+function appFolderMessagesNoAreas(item) {
+  const ask = (it) => `Item: "${it}"\nFolder (Area › Subfolder):`;
+  const turns = [{ role: 'system', content: 'File each item in a folder: a broad area, then a subject of 1 to 3 words, like library shelves.' }];
+  for (const [, it, ans] of APP_SHOTS) turns.push({ role: 'user', content: ask(it) }, { role: 'assistant', content: ans });
+  turns.push({ role: 'user', content: ask(item) });
+  return turns;
+}
+const APP_GRAMMAR = `root ::= name " › " name\nname ::= word (" " word)? (" " word)?\nword ::= ${WORD} | "&"\n`;
+
+async function runNamerSpeed() {
+  const device = q.get('device') ?? 'cpu';
+  const gpu = !!(navigator.gpu && (await Promise.race([navigator.gpu.requestAdapter().catch(() => null), new Promise((r) => setTimeout(() => r(null), 3000))])));
+  if (device === 'gpu' && !gpu) return { device, gpuAvailable: false };
+  const areas = ['Robotics', 'Cooking', 'Machine Learning'];
+  const items = ['Hiking the Kumano Kodo trail in Japan', 'Index funds vs ETFs explained', 'Learning to play the violin as an adult'];
+  const url = new URL('./vendor/qwen3-0.6b.gguf', location.href).href;
+  const threads = Math.max(1, Math.min(4, Math.floor((navigator.hardwareConcurrency || 2) / 2)));
+  const load = async () => {
+    const w = new Wllama({ default: new URL('./vendor/wllama/wllama.wasm', location.href).href }, { suppressNativeLog: true });
+    const t0 = now();
+    await w.loadModelFromUrl(url, { n_ctx: 1024, n_gpu_layers: device === 'gpu' ? 99 : 0, n_threads: threads });
+    return { w, ms: now() - t0 };
+  };
+  const ask = async (w, item) => {
+    const t0 = now();
+    const r = await w.createChatCompletion({ messages: appFolderMessages(item, areas), max_tokens: 16, temperature: 0, grammar: APP_GRAMMAR, chat_template_kwargs: { enable_thinking: false } });
+    return { item, answer: r.choices[0].message.content, ms: now() - t0, read: r.timings?.prompt_n, reused: r.timings?.cache_n, readPerSec: r.timings?.prompt_per_second };
+  };
+  // A: as before (no pre-read): load, then the first proposal reads the whole prompt.
+  status(`${device}: without pre-read`);
+  let { w, ms: loadA } = await load();
+  const noPre = await ask(w, items[0]);
+  await w.exit();
+  // B: as now: load, pre-read the fixed part, then three proposals.
+  status(`${device}: with pre-read`);
+  ({ w } = await load());
+  let t0 = now();
+  await w.createChatCompletion({ messages: appFolderMessages('', []), max_tokens: 1, temperature: 0, chat_template_kwargs: { enable_thinking: false } });
+  const preReadMs = now() - t0;
+  const withPre = [];
+  for (const it of items) withPre.push(await ask(w, it));
+  await w.exit();
+  return { device, gpuAvailable: gpu, threads, loadMs: loadA, noPreRead: noPre, preReadMs, withPreRead: withPre };
+}
+
+/** Both prompts over the 20 hidden-folder cases, each with the pre-read (grammar included). */
+async function runNamerQuality(data) {
+  const w = new Wllama({ default: new URL('./vendor/wllama/wllama.wasm', location.href).href }, { suppressNativeLog: true });
+  await w.loadModelFromUrl(new URL('./vendor/qwen3-0.6b.gguf', location.href).href, { n_ctx: 1024, n_gpu_layers: 0, n_threads: 4 });
+  const cases = namingCases(data);
+  const out = {};
+  for (const variant of ['areas', 'noAreas']) {
+    const build = (c) => (variant === 'areas' ? appFolderMessages(c.notes ? `${c.title}. ${c.notes}` : c.title, c.tops) : appFolderMessagesNoAreas(c.notes ? `${c.title}. ${c.notes}` : c.title));
+    let t0 = now();
+    await w.createChatCompletion({ messages: build({ title: '', notes: '', tops: [] }), max_tokens: 1, temperature: 0, grammar: APP_GRAMMAR, chat_template_kwargs: { enable_thinking: false } });
+    const preReadMs = now() - t0;
+    const rows = [];
+    for (const [i, c] of cases.entries()) {
+      status(`${variant} ${i + 1}/${cases.length}`);
+      t0 = now();
+      const r = await w.createChatCompletion({ messages: build(c), max_tokens: 16, temperature: 0, grammar: APP_GRAMMAR, chat_template_kwargs: { enable_thinking: false } });
+      rows.push({ truth: c.truth, tops: c.tops, title: c.title, answer: r.choices[0].message.content, ms: now() - t0, read: r.timings?.prompt_n });
+    }
+    out[variant] = { preReadMs, rows };
+  }
+  await w.exit();
+  return out;
+}
+
 // ---------- main ----------
 (async () => {
   try {
@@ -363,6 +448,9 @@ async function runGenOnnx(cfg, data) {
       const cfg = jobs.gen.find((g) => g.id === jobId.slice(4));
       return void (await post({ meta, ...(await runGen(cfg, data)) }));
     }
+
+    if (jobId === 'namer-quality') return void (await post({ meta, ...(await runNamerQuality(data)) }));
+    if (jobId === 'namer-speed') return void (await post({ meta, ...(await runNamerSpeed()) }));
 
     if (jobId.startsWith('onnxgen:')) {
       const cfg = jobs.genOnnx.find((g) => g.id === jobId.slice(8));

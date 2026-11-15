@@ -106,7 +106,7 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
         </div>
 
         {local ? (
-          <LocalPanel naming={ai.localNaming} onNaming={(on) => setAi({ ...ai, localNaming: on })} />
+          <LocalPanel naming={ai.suggestFolders} onNaming={(on) => setAi({ ...ai, suggestFolders: on })} />
         ) : (
           <>
         <p>Your key stays in this browser and goes straight to the AI provider. The Stacks server never sees it.</p>

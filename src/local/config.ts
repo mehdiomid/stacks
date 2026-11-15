@@ -11,7 +11,7 @@ export const EMBED_MODEL = {
   bytes: 22_972_992 + 711_649 + 26_900_000, // model + tokenizer + ONNX runtime (uncompressed)
 } as const;
 
-/** Suggests names for new folders when "Suggest names" is on. Downloaded the first time it's needed. */
+/** Proposes new folders (Area › Subfolder) when nothing fits. On by default; downloaded the first time it's needed. */
 export const NAMER_MODEL = {
   id: 'qwen3-0.6b',
   url: `${MODELS_BASE}/unsloth/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q4_K_M.gguf`,

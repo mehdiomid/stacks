@@ -7,8 +7,8 @@ export type Engine = 'local' | 'api';
 
 export interface AISettings {
   engine: Engine;
-  /** Local mode: suggest names for new folders with a small model (downloads ~400 MB on first use). */
-  localNaming: boolean;
+  /** Local mode: propose new folders with a small model (downloads ~400 MB the first time one is needed). On by default. */
+  suggestFolders: boolean;
   provider: ProviderId;
   models: Record<ProviderId, string>;
   /** Personal daily cap, counted in this browser. */
@@ -18,7 +18,7 @@ export interface AISettings {
 
 export const DEFAULT_AI: AISettings = {
   engine: 'local',
-  localNaming: false,
+  suggestFolders: true,
   provider: 'anthropic',
   models: { anthropic: 'claude-haiku-5-5', openai: 'gpt-5-mini' },
   dailyTokenLimit: 200_000,

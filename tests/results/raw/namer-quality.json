@@ -1,0 +1,655 @@
+{
+ "meta": {
+  "cores": 4,
+  "isolated": true,
+  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+ },
+ "areas": {
+  "preReadMs": 21889.00500011444,
+  "rows": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+    "answer": "Robotics \u203a Open Models",
+    "ms": 8723.244999885559,
+    "read": 72
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Imitation learning explained: behavior cloning vs DAgger",
+    "answer": "Robotics \u203a Imitation Learning",
+    "ms": 8768.005000114441,
+    "read": 33
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Choosing servo motors for a robot arm",
+    "answer": "Robotics \u203a Robot Arm",
+    "ms": 8084.799999952316,
+    "read": 36
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "ROS 2 Humble tutorial: publishers and subscribers",
+    "answer": "Robotics \u203a ROS 2",
+    "ms": 12791.484999895096,
+    "read": 34
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+    "answer": "Machine Learning \u203a Open Models",
+    "ms": 7690.525000095367,
+    "read": 35
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "YOLO object detection explained",
+    "answer": "Robotics \u203a Object Detection",
+    "ms": 7167.789999961853,
+    "read": 22
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Andrew Ng Machine Learning Specialization \u2014 Course 1",
+    "answer": "Machine Learning \u203a Andrew Ng",
+    "ms": 9249.060000181198,
+    "read": 35
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "3Blue1Brown: Essence of Linear Algebra",
+    "answer": "Robotics \u203a Open Models",
+    "ms": 11213.754999876022,
+    "read": 36
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Llama 4 release notes",
+    "answer": "Open Models \u203a Llama 4",
+    "ms": 9820.84500002861,
+    "read": 35
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Open models lecture: ecosystem, debates, and future access",
+    "answer": "Robotics \u203a Open Models",
+    "ms": 14520.115000009537,
+    "read": 45
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "The Rust Book: ownership chapter",
+    "answer": "Robotics \u203a Open Models",
+    "ms": 5431.710000038147,
+    "read": 23
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "TypeScript generics deep dive",
+    "answer": "Programming \u203a TypeScript",
+    "ms": 5937.945000171661,
+    "read": 22
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Neapolitan pizza at home in a regular oven",
+    "answer": "Robotics \u203a Programming",
+    "ms": 9018.360000133514,
+    "read": 34
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "How to make tonkotsu ramen broth",
+    "answer": "Robotics \u203a Machine Learning",
+    "ms": 6808.629999876022,
+    "read": 27
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Index funds vs ETFs explained",
+    "answer": "Robotics \u203a Index Funds",
+    "ms": 7285.514999866486,
+    "read": 30
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Travel"
+    ],
+    "title": "Zone 2 training for runners",
+    "answer": "Robotics \u203a Training Programs",
+    "ms": 6384.074999809265,
+    "read": 30
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness"
+    ],
+    "title": "Two weeks in Japan itinerary",
+    "answer": "Robotics \u203a Robotics",
+    "ms": 5238.074999809265,
+    "read": 27
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "tops": [
+     "Open Models",
+     "Robotics"
+    ],
+    "title": "Agentic World Action Models",
+    "answer": "Open Models \u203a Agentic World ActionModels",
+    "ms": 9184.789999961853,
+    "read": 42
+   },
+   {
+    "truth": "Open Models",
+    "tops": [
+     "Robotics"
+    ],
+    "title": "Open models lecture: ecosystem, debates, and future access",
+    "answer": "Robotics \u203a Open Models",
+    "ms": 9731.900000095367,
+    "read": 75
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "tops": [
+     "Robotics",
+     "Open Models"
+    ],
+    "title": "Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+    "answer": "Robotics \u203a Modern Robotics",
+    "ms": 8700.375,
+    "read": 75
+   }
+  ]
+ },
+ "noAreas": {
+  "preReadMs": 16465.109999895096,
+  "rows": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+    "answer": "Vision-Language-Act- Controllers \u203a Paper",
+    "ms": 8353.395000219345,
+    "read": 52
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Imitation learning explained: behavior cloning vs DAgger",
+    "answer": "Photography \u203a Behavior Cloning",
+    "ms": 6381.1050000190735,
+    "read": 33
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Choosing servo motors for a robot arm",
+    "answer": "Robotics & Automation \u203a Servo Motors",
+    "ms": 7129.640000104904,
+    "read": 36
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "ROS 2 Humble tutorial: publishers and subscribers",
+    "answer": "ROS 2 Humble \u203a Subfolder",
+    "ms": 6482.454999923706,
+    "read": 34
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+    "answer": "Music \u203a Guitar",
+    "ms": 6059.34500002861,
+    "read": 35
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "YOLO object detection explained",
+    "answer": "Photography \u203a Film Cameras",
+    "ms": 5050.819999933243,
+    "read": 22
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Andrew Ng Machine Learning Specialization \u2014 Course 1",
+    "answer": "Machine Learning \u203a Supervised Learning",
+    "ms": 6354.6849999427795,
+    "read": 35
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "3Blue1Brown: Essence of Linear Algebra",
+    "answer": "Music \u203a Film Cameras",
+    "ms": 5599.235000133514,
+    "read": 36
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Llama 4 release notes",
+    "answer": "Meta \u203a Open-Weight Models",
+    "ms": 6769.515000104904,
+    "read": 35
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Open models lecture: ecosystem, debates, and future access",
+    "answer": "Ecosystems \u203a Open Ecosystems",
+    "ms": 13589.105000019073,
+    "read": 45
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "The Rust Book: ownership chapter",
+    "answer": "Photography \u203a Film Cameras",
+    "ms": 5923.055000066757,
+    "read": 23
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "TypeScript generics deep dive",
+    "answer": "Photography \u203a Film Cameras",
+    "ms": 8498.835000038147,
+    "read": 22
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Neapolitan pizza at home in a regular oven",
+    "answer": "Home \u203a Cooking Methods",
+    "ms": 9396.394999980927,
+    "read": 34
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "How to make tonkotsu ramen broth",
+    "answer": "Photography \u203a Film Cameras",
+    "ms": 7108.045000076294,
+    "read": 27
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Fitness",
+     "Travel"
+    ],
+    "title": "Index funds vs ETFs explained",
+    "answer": "Index Funds &ETFs \u203a Index Funds",
+    "ms": 9516.430000066757,
+    "read": 23
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Travel"
+    ],
+    "title": "Zone 2 training for runners",
+    "answer": "Photography \u203a Film Cameras",
+    "ms": 21193.24499988556,
+    "read": 23
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "tops": [
+     "Robotics",
+     "Machine Learning",
+     "Open Models",
+     "Programming",
+     "Cooking",
+     "Finance",
+     "Fitness"
+    ],
+    "title": "Two weeks in Japan itinerary",
+    "answer": "Home \u203a Itinerary",
+    "ms": 7587.015000104904,
+    "read": 22
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "tops": [
+     "Open Models",
+     "Robotics"
+    ],
+    "title": "Agentic World Action Models",
+    "answer": "Paper \u203a Agentic World ActionModels",
+    "ms": 11378.84500002861,
+    "read": 34
+   },
+   {
+    "truth": "Open Models",
+    "tops": [
+     "Robotics"
+    ],
+    "title": "Open models lecture: ecosystem, debates, and future access",
+    "answer": "Ecosystems \u203a Open Model Lecture",
+    "ms": 16284.44000005722,
+    "read": 70
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "tops": [
+     "Robotics",
+     "Open Models"
+    ],
+    "title": "Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+    "answer": "Music \u203a Guitar",
+    "ms": 7640.115000009537,
+    "read": 68
+   }
+  ]
+ },
+ "peakRssMb": 1292,
+ "wallS": 402.4
+}

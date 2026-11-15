@@ -17,6 +17,8 @@ export interface LocalPlacement {
   weak: boolean;
   /** What the naming model should describe. */
   text: string;
+  /** Your top-level areas, most related to this paste first (the naming model leans on the first). */
+  areas: string[];
 }
 
 /**
@@ -42,12 +44,19 @@ export async function placeLocal(title: string, notes: string, topics: Topic[], 
   const shown = [...inScope].flatMap((id) => latestIn(id, items, LATEST_PER_FOLDER));
   const join = joinCandidate(q, `${title} ${notes}`, shown, (id) => vecs.get(id), titleFrequency(items.map((i) => i.title)));
 
+  const weak = !best || best.score < WEAK_MATCH;
+  // Areas in order of their best folder's score, then any others.
+  const tops = tree.children(null).filter((t) => t.name.trim().toLowerCase() !== 'inbox').map((t) => t.name);
+  const areas = [...new Set([...ranked.map((r) => names(r.topic)[0]), ...tops])].filter((a) => tops.includes(a));
   return {
     best: best?.topic.id ?? null,
     alternatives: ranked.slice(1, 3).map((r) => r.topic.id),
     joinTo: join?.item ?? null,
-    newParent: typed ? [top?.name ?? typed] : best ? [names(best.topic)[0]] : null,
-    weak: !best || best.score < WEAK_MATCH,
+    // When nothing fits well, the closest area is usually wrong too (a hike is not Robotics), so a
+    // weak match proposes a whole new "Area › Subject". A decent match puts it inside the closest area.
+    newParent: typed ? [top?.name ?? typed] : best && !weak ? [names(best.topic)[0]] : null,
+    weak,
     text,
+    areas,
   };
 }

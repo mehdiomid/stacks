@@ -46,7 +46,8 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
   /** "Several things": split the paste into items. Off by default, and cleared after each add. */
   const [splitTicked, setSplit] = useState(false);
   // Local mode places one item at a time; splitting and instructions need Claude or OpenAI.
-  const local = useLiveQuery(async () => (await getAISettings()).engine === 'local', [], true);
+  const ai = useLiveQuery(getAISettings, []);
+  const local = ai ? ai.engine === 'local' : true;
   const split = splitTicked && !local;
   const closedFor = useRef<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -84,6 +85,17 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
   }
 
   const isInstr = !local && (override ? override === 'instr' : looksLikeInstruction(text));
+
+  // Local mode: start loading the models while you type, so placing (and proposing a folder) is quicker.
+  const typing = text.trim().length > 0;
+  useEffect(() => {
+    if (!typing || !ai || ai.engine !== 'local') return;
+    const t = setTimeout(() => {
+      void import('../local/embedder').then((m) => m.embed(['warm up'])).catch(() => {});
+      if (ai.suggestFolders) void import('../local/namer').then((m) => m.warmUp());
+    }, 800);
+    return () => clearTimeout(t);
+  }, [typing, ai]);
   const found = useMemo(() => {
     if (isInstr || !text.trim()) return null;
     const lines = parseLines(text);

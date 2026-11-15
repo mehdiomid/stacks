@@ -118,12 +118,12 @@ def tree_rss_mb(root_pid: int) -> float:
     return total / 1024
 
 
-def run_job(job: str, warm: bool, extra: str = "") -> dict:
+def run_job(job: str, warm: bool, extra: str = "", gpu: bool = False) -> dict:
     done.clear()
     results.pop("last", None)
     url = f"http://localhost:{PORT}/bench/index.html?job={job}{'&warm=1' if warm else ''}{extra}"
     proc = subprocess.Popen(
-        [CHROME, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check", "--disable-extensions",
+        [CHROME, "--headless=new", *([] if gpu else ["--disable-gpu"]), "--no-first-run", "--no-default-browser-check", "--disable-extensions",
          f"--user-data-dir={PROFILE}", url],
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
     )

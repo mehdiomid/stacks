@@ -158,16 +158,21 @@ Limits to know about:
 
 1. The paste (title plus your notes) is turned into a vector by **snowflake-arctic-embed-xs** (23 MB).
 2. Every folder is described the same way: its path and its **latest 5 items**, averaged. Candidates are folders 2 levels deep or more, plus older top-level folders that hold items. Inbox is never a target.
-3. The closest folder is preselected; the next two become quick picks.
-4. If the best match scores below **0.81**, "+ New folder" opens first. Its parent is the area of the closest folder ("New folder in Robotics ›"); type `Area › Subject` to put it somewhere else.
+3. The tray's **Folder** box (at the top, with your folders suggested as you type) is pre-filled with the closest folder; the next two become quick picks under it.
+4. If the best match scores below **0.81**, no existing folder is filled in: the box stays empty and gray while the small model proposes a new folder as a whole path, `Area › Subfolder`, reusing one of your areas when it fits. The message says what it's doing (downloading it the first time, loading it, running it). You can type or pick a folder meanwhile. If no usable proposal comes, or proposals are turned off, the closest folder is filled in and marked as such.
 5. **Adding to an item:** offered only when the paste is very similar (≥ 0.86) to one of the latest 5 items of a folder **and** both share a distinctive name ("cs231n", "Rustlings", "Couch to 5K"). Words like *lecture*, *course* or *learning* don't count, and two different course codes (CS234 vs CS285) never join. It shows as the ticked "Add to …" checkbox.
 6. `\robotics\papers` still sets the folder without any model. `\robotics` picks the best subfolder of Robotics, or offers a new one inside it.
 
 The thresholds and the choice of model come from a test of 9 embedding models and 4 naming models on this kind of data, run in Chrome on a 2019 Intel MacBook Pro, CPU only. Results and code: [`tests/RESULTS.md`](tests/RESULTS.md). Measured: the right folder first about 82% of the time and in the top 3 about 96%; 17 of 18 join cases right.
 
-### Folder-name suggestions (optional)
+### New folder proposals (on by default)
 
-**Settings → Suggest names for new folders** uses **Qwen3-0.6B**. It's downloaded the first time you open "+ New folder" (397 MB), and its suggestion fills the name box, which you can edit. Expect to edit most names: in the test about a third were names you'd keep. On a slower computer the first name of a session takes up to half a minute, later ones a few seconds. The model is unloaded after 3 idle minutes to give back about 0.9 GB of memory.
+**Settings → Propose new folders when nothing fits** uses **Qwen3-0.6B**. It's downloaded the first time a new folder is needed (397 MB), then kept in the browser. It's told your top-level areas and answers with a full path (`Finance › Investing`, `Travel › Japan`), which fills the Folder box; you can change it before adding. On a match that's decent but not right, **+ Propose a new folder** under the box asks it on demand. To keep the wait short:
+
+- **Start early:** as soon as you type in the box, the model starts loading in the background (and the sorting model too), so it's usually ready by the time you press Add.
+- **Pre-read:** right after loading, it reads the fixed part of its prompt (the instructions and 4 worked examples, ~200 tokens) once. llama.cpp keeps what it read, so each proposal only reads your areas and the item (~50 tokens). On a CPU that reads prompts at ~10 tokens a second, that's the difference between ~25 s and ~5 s.
+- **GPU first:** it runs on the GPU through WebGPU when the browser has one (an integrated GPU counts), and falls back to the CPU otherwise or if the GPU can't run it. The tray says which.
+- **Unloaded after 3 idle minutes** to give back about 0.9 GB of memory; the next time you type, loading and pre-reading start again in the background.
 
 ### Where the models live
 
@@ -251,7 +256,7 @@ These are the cost-control layers we planned, as built:
    - A plain list of bare links, all of which are already saved or come from sites you've filed under one topic at least three times, is sorted **without the AI** ("same site as before"). General sites like YouTube, Medium or LinkedIn are excluded from that rule.
    - Hard caps: 100 links, 300 lines or 20,000 characters per round. Anything beyond that stays in the box for the next round.
    - The model's reply length is capped.
-2. **Personal daily token limit** (default 200,000, set in Settings). Stacks estimates each call first and refuses it if it would go over the limit. The **AI usage today** meter at the end of Settings (the API key button at the top right) shows the count. A dump of 50 links costs roughly 10,000 tokens.
+2. **Personal daily token limit** (default 200,000, set in Settings). Stacks estimates each call first and refuses it if it would go over the limit. The **AI usage today** meter at the end of **Settings** (in the menu next to Stacks and About) shows the count. A dump of 50 links costs roughly 10,000 tokens.
 3. **Provider spend limit.** Set a monthly limit in the Anthropic Console or the OpenAI dashboard. This is the hard backstop, and Settings reminds you to set it.
 4. **No silent fallback.** When there's no key, the key is rejected, or the account is out of credit, Stacks opens Settings and asks for a key. It never quietly sorts by keywords instead.
 
@@ -569,9 +574,10 @@ These are the choices made while planning Stacks, and why.
 | Server role | Stateless: serve the app and fetch link previews | Browsers can't read other sites (CORS). Nothing to store means nothing to leak. |
 | Local mode | Default sorting runs in the browser; Claude and OpenAI stay as options | You wanted to avoid API calls. Measured in `tests/RESULTS.md`: small embedding models choose folders well, while splitting and instructions need a large model. |
 | Local model | snowflake-arctic-embed-xs (23 MB), folders scored by their average | As accurate as models 5 times its size on the test library, and about 30 ms per paste on a 2019 laptop CPU. |
-| New folders locally | Always offer "+ New folder"; open it first below a 0.81 match | No model could reliably tell "nothing fits" from "fits" (66–75% separation), so you decide. |
+| No good fit | Below a 0.81 match, propose a new folder instead of filling in the closest | No model could reliably tell "nothing fits" from "fits" (66–75% separation), so the threshold is conservative and you can always pick the closest from the quick picks. |
 | Joining locally | Similarity ≥ 0.86 plus a shared distinctive name, and no clashing course codes | Similarity alone confuses similar courses (CS234 vs CS285); the name check fixes most of that. |
-| Naming locally | Optional Qwen3-0.6B suggestions, downloaded on first use, always editable | You wanted a proposal. About a third of its names are keepers, so it's a starting point, not a decision. |
+| New folders locally | Qwen3-0.6B proposes the whole path (Area › Subfolder), on by default, downloaded on first use | You wanted a folder suggestion every time, not a separate name. Its proposals pre-fill the Folder box and stay editable. |
+| Tray layout | One pre-filled Folder box at the top; empty and gray while a new folder is being proposed | A weak "closest" match looked like a real suggestion; waiting for the model's proposal is clearer. |
 | Model hosting | Built into the Docker image and served by Stacks; cached in the browser | Nothing is fetched from third parties at runtime, and it works offline once cached. |
 | AI | Cloud API now. Local Ollama deferred | Ollama depends on each machine's compute. The adapter design leaves room for it. |
 | Who pays | Each user brings their own API key, stored in their browser | Nobody can run up the host's bill. No server-side quotas or accounts needed. |

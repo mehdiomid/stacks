@@ -10,11 +10,12 @@ export function Header({ page, onHome }: { page: Page; onHome: () => void }) {
     return { ai, hasKey: !!(await getKey(ai.provider)) };
   });
   const local = status?.ai.engine === 'local';
-  const label = !status
-    ? 'Settings'
+  const needsKey = !!status && !local && !status.hasKey;
+  const where = !status
+    ? 'Saved on this device'
     : local
-      ? 'Sorting on this device'
-      : `${PROVIDERS[status.ai.provider].name} · ${modelLabel(status.ai.provider, status.ai.models[status.ai.provider]).replace(/^Claude /, '')}`;
+      ? 'Saved and sorted on this device'
+      : `Saved on this device · ${PROVIDERS[status.ai.provider].name} ${modelLabel(status.ai.provider, status.ai.models[status.ai.provider]).replace(/^Claude /, '')}`;
 
   return (
     <header className="top">
@@ -29,15 +30,19 @@ export function Header({ page, onHome }: { page: Page; onHome: () => void }) {
         <a href="#about" aria-current={page === 'about' ? 'page' : undefined}>
           About
         </a>
+        <button type="button" onClick={() => openSettings()} title="Sorting (on this device, Claude or OpenAI), backups, reminders">
+          Settings
+        </button>
       </nav>
       <div className="top-actions">
-        <span className="local" title="Your lists live in this browser, plus a backup folder if you choose one">
-          ● Saved on this device
+        <span className="local" title={local ? 'Your lists live in this browser, and sorting runs here too' : 'Your lists live in this browser; sorting uses your API key'}>
+          <span className="dot" aria-hidden="true" /> {where}
         </span>
-        <button className="chip-btn" onClick={() => openSettings()} title="Sorting (on this device, Claude or OpenAI), API key, backups">
-          <span className={`dot ${status?.hasKey || local ? '' : 'off'}`} />
-          {status && !local && !status.hasKey ? 'Add API key' : label}
-        </button>
+        {needsKey && (
+          <button className="chip-btn warn" onClick={() => openSettings()}>
+            Add API key
+          </button>
+        )}
       </div>
     </header>
   );

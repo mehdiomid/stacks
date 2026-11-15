@@ -47,7 +47,7 @@ export interface Draft {
    * Local mode: where "+ New folder" would go (inside `parent`, or a new area when null), whether to
    * offer it first because no folder fits well, and the text the naming model describes.
    */
-  newFolder?: { parent: string[] | null; preselect: boolean; text: string };
+  newFolder?: { parent: string[] | null; preselect: boolean; text: string; areas: string[] };
 }
 
 /** Everything known about one pasted link after its preview. */
@@ -381,7 +381,7 @@ async function placeOneLocally(
     d.joinTo = { id: p.joinTo.id, title: p.joinTo.title, topicId: p.joinTo.topicId };
     d.join = true;
   }
-  d.newFolder = { parent: p.newParent, preselect: p.weak && !d.join && (d.source === 'ai' || d.source === 'path'), text: p.text };
+  d.newFolder = { parent: p.newParent, preselect: p.weak && !d.join && (d.source === 'ai' || d.source === 'path'), text: p.text, areas: p.areas };
   return { drafts: [d], leftover: '', aiCount: 1, model: 'the local model' };
 }
 

@@ -46,11 +46,12 @@ export function LocalPanel({ naming, onNaming }: { naming: boolean; onNaming: (o
 
       <div className="row" style={{ marginTop: 10 }}>
         <input type="checkbox" id="local-naming" checked={naming} onChange={(e) => onNaming(e.target.checked)} />
-        <label htmlFor="local-naming">Suggest names for new folders</label>
+        <label htmlFor="local-naming">Propose new folders when nothing fits</label>
       </div>
       <small>
-        Uses {NAMER_MODEL.label}, a {MB(NAMER_MODEL.bytes)} download the first time you make a new folder. Its names are rough (about a third are keepers), so they appear in a box you can edit.
-        The first name in a session takes up to half a minute on a slower computer; later ones a few seconds.
+        Uses {NAMER_MODEL.label}, a {MB(NAMER_MODEL.bytes)} download the first time a new folder is needed. It proposes the whole path (Area › Subfolder), reusing one of your areas when it fits. Its
+        proposals are rough, so they fill the Folder box, where you can change them. The first one in a session takes up to half a minute on a slower computer; later ones a few seconds. Turned off, the
+        closest existing folder is filled in instead.
       </small>
 
       <div className="storage" style={{ marginTop: 10 }}>

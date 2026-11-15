@@ -110,7 +110,7 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
           folder and two others, and notices when a paste continues something you saved, like the next lecture of a course; you confirm in the tray. When nothing fits well, “+ New folder” opens first.
         </p>
         <p>
-          Turn on <b>Suggest names for new folders</b> in Settings to have a second small model (Qwen3-0.6B, 397 MB on first use) propose the name. Its names are rough, so they appear in a box you can edit.
+          When nothing fits, a second small model (Qwen3-0.6B, 397 MB, downloaded the first time it's needed) proposes a new folder such as “Finance › Investing”. It fills the Folder box, and you can change it before adding. You can turn this off in Settings.
           Splitting a paste into several items, and instructions like “move all pizza links to Cooking”, need Claude or OpenAI.
         </p>
       </section>
@@ -125,7 +125,7 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
         <ul>
           <li>Each dump is sorted in one request, using a small, fast model by default (Claude Haiku 5.5 or gpt-5-mini). You can pick a bigger model in Settings.</li>
           <li>Links you already saved are recognized, and a plain list of links from sites you always file under one topic is sorted without the AI.</li>
-          <li>Your personal daily token limit, set in Settings, stops all AI calls for the day once it's reached. Settings (the API key button at the top right) shows today's use at the bottom.</li>
+          <li>Your personal daily token limit, set in Settings, stops all AI calls for the day once it's reached. Settings (in the menu at the top, next to About) shows today's use at the bottom.</li>
           <li>For a hard cap on spending, also set a monthly limit in the Anthropic Console or the OpenAI dashboard.</li>
         </ul>
       </section>
