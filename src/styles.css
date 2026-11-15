@@ -142,6 +142,13 @@ kbd { font-family: var(--f-mono); font-size: 11px; border: 1px solid var(--line)
 .alt-picks { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 8px; font-size: 12.5px; color: var(--muted); }
 .chip { border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); border-radius: 999px; padding: 2px 10px; font-size: 12.5px; }
 .chip:hover, .chip.on { border-color: var(--accent); color: var(--accent); }
+.chip.new { border-style: dashed; color: var(--accent); }
+.new-folder { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 8px; padding: 8px 10px; border-radius: 10px; border: 1px dashed var(--accent); font-size: 13px; }
+.new-folder label { color: var(--muted); }
+.new-folder input { flex: 1 1 160px; min-width: 0; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: inherit; }
+.new-folder small { flex-basis: 100%; color: var(--muted); font-family: inherit; font-size: 12px; }
+.local-panel p { font-size: 13.5px; }
+.local-panel small { display: block; color: var(--muted); font-size: 12.5px; margin: 2px 0 0 24px; }
 .join-note { font-size: 12.5px; color: var(--muted); }
 .tray-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .ticon { width: 28px; height: 28px; border-radius: 7px; display: grid; place-items: center; background: var(--surface-2); color: var(--muted); font-size: 13px; }

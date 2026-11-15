@@ -12,11 +12,15 @@ const HOST = process.env.HOST ?? '0.0.0.0';
 const PREVIEW_PER_MINUTE = Number(process.env.PREVIEW_RATE_LIMIT ?? 60);
 const here = path.dirname(fileURLToPath(import.meta.url));
 const webRoot = process.env.WEB_ROOT ?? path.resolve(here, '../web');
+// Local-mode model files (scripts/fetch-models.mjs). The browser downloads them once and runs them itself.
+const modelsRoot = process.env.MODELS_ROOT ?? path.resolve(process.cwd(), 'models');
 
 // The browser talks to the AI provider directly and loads thumbnails from the sites themselves.
+// Local mode runs models as WebAssembly in workers ('wasm-unsafe-eval', blob: workers for wllama).
 const CSP = [
   "default-src 'self'",
-  "script-src 'self'",
+  "script-src 'self' 'wasm-unsafe-eval' blob:",
+  "worker-src 'self' blob:",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "img-src 'self' data: https: http:",
@@ -40,6 +44,10 @@ app.addHook('onSend', async (_req, reply, payload) => {
   reply.header('Referrer-Policy', 'no-referrer');
   reply.header('X-Frame-Options', 'DENY');
   reply.header('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  // Cross-origin isolation lets local models use several CPU threads. "credentialless" still loads
+  // thumbnails from other sites (without cookies), which is all Stacks needs from them.
+  reply.header('Cross-Origin-Opener-Policy', 'same-origin');
+  reply.header('Cross-Origin-Embedder-Policy', 'credentialless');
   return payload;
 });
 
@@ -65,10 +73,22 @@ app.get(
   },
 );
 
+if (fs.existsSync(modelsRoot)) {
+  await app.register(fastifyStatic, {
+    root: modelsRoot,
+    prefix: '/models/',
+    decorateReply: false,
+    // Files are pinned by checksum, so a browser can keep them for a long time.
+    setHeaders: (res) => res.header('Cache-Control', 'public, max-age=2592000'),
+  });
+} else {
+  app.log.info(`No model files at ${modelsRoot}; local mode is unavailable (run "npm run models").`);
+}
+
 if (fs.existsSync(path.join(webRoot, 'index.html'))) {
   await app.register(fastifyStatic, { root: webRoot, wildcard: false, index: ['index.html'] });
   app.setNotFoundHandler((req, reply) => {
-    if (req.url.startsWith('/api/')) return reply.code(404).send({ error: 'Not found' });
+    if (req.url.startsWith('/api/') || req.url.startsWith('/models/')) return reply.code(404).send({ error: 'Not found' });
     return reply.sendFile('index.html');
   });
 } else {

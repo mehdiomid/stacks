@@ -8,7 +8,7 @@ export default defineConfig({
     port: 5173,
     // Set VITE_DEV_HOST=0.0.0.0 when the dev server runs inside Docker.
     host: process.env.VITE_DEV_HOST || 'localhost',
-    proxy: { '/api': 'http://localhost:8787' },
+    proxy: { '/api': 'http://localhost:8787', '/models': 'http://localhost:8787' },
   },
   test: {
     include: ['src/**/*.test.ts', 'server/**/*.test.ts'],

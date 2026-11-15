@@ -1,0 +1,485 @@
+{
+ "meta": {
+  "cores": 4,
+  "isolated": true,
+  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+ },
+ "loadMs": 3320.380000114441,
+ "threads": 2,
+ "results": [
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a Papers",
+   "parent": "Robotics",
+   "siblings": [
+    "Robot Learning",
+    "Hardware",
+    "ROS & Simulation"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+   "notes": "Google DeepMind paper on co-fine-tuning vision-language models to output robot actions.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 12685.394999980927,
+   "promptTokens": 160,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a Robot Learning",
+   "parent": "Robotics",
+   "siblings": [
+    "Papers",
+    "Hardware",
+    "ROS & Simulation"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Imitation learning explained: behavior cloning vs DAgger",
+   "notes": "Blog post with examples.",
+   "answer": "Paper",
+   "ms": 8048.945000171661,
+   "promptTokens": 140,
+   "completionTokens": 2
+  },
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a Hardware",
+   "parent": "Robotics",
+   "siblings": [
+    "Papers",
+    "Robot Learning",
+    "ROS & Simulation"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Choosing servo motors for a robot arm",
+   "notes": "Torque, gearboxes and back-drivability explained.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 9440.634999990463,
+   "promptTokens": 144,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a ROS & Simulation",
+   "parent": "Robotics",
+   "siblings": [
+    "Papers",
+    "Robot Learning",
+    "Hardware"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "ROS 2 Humble tutorial: publishers and subscribers",
+   "notes": "Writing your first nodes in Python.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 9063.269999980927,
+   "promptTokens": 139,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Machine Learning \u203a LLMs",
+   "parent": "Machine Learning",
+   "siblings": [
+    "Computer Vision",
+    "Courses",
+    "Math"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+   "notes": "Parameter-efficient fine-tuning.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 9173.47000002861,
+   "promptTokens": 141,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Machine Learning \u203a Computer Vision",
+   "parent": "Machine Learning",
+   "siblings": [
+    "LLMs",
+    "Courses",
+    "Math"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "YOLO object detection explained",
+   "notes": "",
+   "answer": "LLMs",
+   "ms": 7177.645000219345,
+   "promptTokens": 128,
+   "completionTokens": 3
+  },
+  {
+   "set": "synthetic",
+   "truth": "Machine Learning \u203a Courses",
+   "parent": "Machine Learning",
+   "siblings": [
+    "LLMs",
+    "Computer Vision",
+    "Math"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Andrew Ng Machine Learning Specialization \u2014 Course 1",
+   "notes": "Supervised learning, regression and classification.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 9295.894999980927,
+   "promptTokens": 142,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Machine Learning \u203a Math",
+   "parent": "Machine Learning",
+   "siblings": [
+    "LLMs",
+    "Computer Vision",
+    "Courses"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "3Blue1Brown: Essence of Linear Algebra",
+   "notes": "Visual intuition for vectors, matrices and eigenvalues.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 9167.745000123978,
+   "promptTokens": 142,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Open Models \u203a Releases",
+   "parent": "Open Models",
+   "siblings": [
+    "Ecosystem"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Llama 4 release notes",
+   "notes": "Meta's new open-weight models, context length and benchmarks.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 8909.554999828339,
+   "promptTokens": 138,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Open Models \u203a Ecosystem",
+   "parent": "Open Models",
+   "siblings": [
+    "Releases"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Open models lecture: ecosystem, debates, and future access",
+   "notes": "Covering the pieces that build the open ecosystem: distillation, risks and access.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 9546.125,
+   "promptTokens": 144,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Programming \u203a Rust",
+   "parent": "Programming",
+   "siblings": [
+    "TypeScript"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "The Rust Book: ownership chapter",
+   "notes": "",
+   "answer": "Programming",
+   "ms": 10040.06500005722,
+   "promptTokens": 122,
+   "completionTokens": 2
+  },
+  {
+   "set": "synthetic",
+   "truth": "Programming \u203a TypeScript",
+   "parent": "Programming",
+   "siblings": [
+    "Rust"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "TypeScript generics deep dive",
+   "notes": "",
+   "answer": "Rust",
+   "ms": 13304.159999847412,
+   "promptTokens": 120,
+   "completionTokens": 2
+  },
+  {
+   "set": "synthetic",
+   "truth": "Cooking \u203a Pizza",
+   "parent": "Cooking",
+   "siblings": [
+    "Japanese Food"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Neapolitan pizza at home in a regular oven",
+   "notes": "Steel plate and broiler method.",
+   "answer": "Okay. I'm Ready.",
+   "ms": 15419.19000005722,
+   "promptTokens": 132,
+   "completionTokens": 8
+  },
+  {
+   "set": "synthetic",
+   "truth": "Cooking \u203a Japanese Food",
+   "parent": "Cooking",
+   "siblings": [
+    "Pizza"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "How to make tonkotsu ramen broth",
+   "notes": "",
+   "answer": "Pizza",
+   "ms": 7784.200000047684,
+   "promptTokens": 124,
+   "completionTokens": 2
+  },
+  {
+   "set": "synthetic",
+   "truth": "Finance \u203a Investing",
+   "parent": null,
+   "siblings": [],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Index funds vs ETFs explained",
+   "notes": "",
+   "answer": "Okay. I'm Ready. \u203a 2 Levels 1",
+   "ms": 10153.22000002861,
+   "promptTokens": 123,
+   "completionTokens": 16
+  },
+  {
+   "set": "synthetic",
+   "truth": "Fitness \u203a Running",
+   "parent": null,
+   "siblings": [],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Travel"
+   ],
+   "title": "Zone 2 training for runners",
+   "notes": "",
+   "answer": "Okay. I'm Ready. \u203a 2 Levels 1",
+   "ms": 9979.715000152588,
+   "promptTokens": 124,
+   "completionTokens": 16
+  },
+  {
+   "set": "synthetic",
+   "truth": "Travel \u203a Japan",
+   "parent": null,
+   "siblings": [],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness"
+   ],
+   "title": "Two weeks in Japan itinerary",
+   "notes": "",
+   "answer": "Okay. I'm Ready. \u203a 2 Weeks InJapan",
+   "ms": 9812.125,
+   "promptTokens": 123,
+   "completionTokens": 16
+  },
+  {
+   "set": "real",
+   "truth": "Robotics \u203a Papers",
+   "parent": "Robotics",
+   "siblings": [
+    "Robot Learning"
+   ],
+   "tops": [
+    "Open Models",
+    "Robotics"
+   ],
+   "title": "Agentic World Action Models",
+   "notes": "Put the following under Paper about Agentic World Action Models",
+   "answer": "Okay. I'm Ready.",
+   "ms": 9754.894999980927,
+   "promptTokens": 136,
+   "completionTokens": 8
+  },
+  {
+   "set": "real",
+   "truth": "Open Models",
+   "parent": null,
+   "siblings": [],
+   "tops": [
+    "Robotics"
+   ],
+   "title": "Open models lecture: ecosystem, debates, and future access",
+   "notes": "My first open model lecture, covering all the many pieces that build the ecosystem, and the open questions/debates determining where it goes next. How does distillation fit in? How do we manage risks?",
+   "answer": "Okay. I'm Ready. \u203a 2 Levels 1",
+   "ms": 13818.670000076294,
+   "promptTokens": 156,
+   "completionTokens": 16
+  },
+  {
+   "set": "real",
+   "truth": "Robotics \u203a Robot Learning",
+   "parent": "Robotics",
+   "siblings": [
+    "Papers"
+   ],
+   "tops": [
+    "Robotics",
+    "Open Models"
+   ],
+   "title": "Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+   "notes": "Vizuara robotics from scratch Lecture 3 - Deep Generative Modeling | Variational AutoEncoders | Modern Robot Learning from Scratch Lecture 4 - The Transformer Architecture for Robotics | Modern Robot ",
+   "answer": "Okay. I'm Ready.",
+   "ms": 10850.130000114441,
+   "promptTokens": 168,
+   "completionTokens": 8
+  }
+ ],
+ "peakRssMb": 1043,
+ "wallS": 276.7,
+ "warm": {
+  "loadMs": 15258.479999780655,
+  "wallS": 17.0,
+  "peakRssMb": 1108,
+  "error": null
+ }
+}

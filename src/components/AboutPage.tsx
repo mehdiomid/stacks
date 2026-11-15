@@ -29,8 +29,9 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
             <li>No account, no tracking, no analytics.</li>
             <li>Backups go to a folder on your own disk, or to a file you export.</li>
             <li>
-              Only two things ever leave your device, and only when you use them: text you ask the AI to sort goes straight to the AI provider with your own key, and a link's address goes to the Stacks server just
-              long enough to fetch its title and image. The Stacks server keeps neither.
+              By default, sorting runs on this device: a small model in your browser picks the folder, so nothing you paste is sent anywhere. A link's address goes to the Stacks server just long enough to
+              fetch its title and image. Only if you switch to Claude or OpenAI in Settings does the text you sort go to that provider, straight from your browser with your own key. The Stacks server keeps
+              nothing.
             </li>
           </ul>
         </div>
@@ -103,9 +104,21 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
       <TryStacks onTry={onTry} />
 
       <section>
-        <h3>The AI, and what it costs</h3>
+        <h3>Sorting on this device</h3>
         <p>
-          Sorting and instructions use Claude (Anthropic) or OpenAI, with your own API key. The key is kept in this browser, and your browser sends requests directly to the provider, so the Stacks server never sees
+          Out of the box, Stacks sorts with a small model (snowflake-arctic-embed-xs, 23 MB) that runs in your browser. It's downloaded once from your Stacks server and kept in the browser. It chooses the
+          folder and two others, and notices when a paste continues something you saved, like the next lecture of a course; you confirm in the tray. When nothing fits well, “+ New folder” opens first.
+        </p>
+        <p>
+          Turn on <b>Suggest names for new folders</b> in Settings to have a second small model (Qwen3-0.6B, 397 MB on first use) propose the name. Its names are rough, so they appear in a box you can edit.
+          Splitting a paste into several items, and instructions like “move all pizza links to Cooking”, need Claude or OpenAI.
+        </p>
+      </section>
+
+      <section>
+        <h3>Claude or OpenAI, and what they cost</h3>
+        <p>
+          If you choose them in Settings, sorting and instructions use Claude (Anthropic) or OpenAI, with your own API key. The key is kept in this browser, and your browser sends requests directly to the provider, so the Stacks server never sees
           it. A Claude or ChatGPT subscription does not include API access; you create an API key in the provider's console and pay per use.
         </p>
         <p>What gets sent: the text you pasted (links replaced by short references), each link's address, site, page title and the first part of its description, plus your folder names and the titles of the latest few items in each. Full pages are never sent.</p>

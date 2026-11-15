@@ -1,0 +1,1204 @@
+{
+ "note": "Synthetic test library written for the local-model assessment. Not real user data.",
+ "folders": [
+  "Robotics › Papers",
+  "Robotics › Robot Learning",
+  "Robotics › Hardware",
+  "Robotics › ROS & Simulation",
+  "Machine Learning › LLMs",
+  "Machine Learning › Computer Vision",
+  "Machine Learning › Courses",
+  "Machine Learning › Math",
+  "Open Models › Releases",
+  "Open Models › Ecosystem",
+  "Programming › Rust",
+  "Programming › TypeScript",
+  "Cooking › Pizza",
+  "Cooking › Japanese Food",
+  "Finance › Investing",
+  "Fitness › Running",
+  "Travel › Japan"
+ ],
+ "items": [
+  {
+   "id": "s1",
+   "folder": "Robotics › Papers",
+   "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+   "notes": "Google DeepMind paper on co-fine-tuning vision-language models to output robot actions.",
+   "addedAt": 1,
+   "course": false
+  },
+  {
+   "id": "s2",
+   "folder": "Robotics › Papers",
+   "title": "OpenVLA: An Open-Source Vision-Language-Action Model",
+   "notes": "7B VLA trained on Open X-Embodiment; outperforms RT-2-X.",
+   "addedAt": 2,
+   "course": false
+  },
+  {
+   "id": "s3",
+   "folder": "Robotics › Papers",
+   "title": "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",
+   "notes": "Represents robot policies as conditional denoising diffusion.",
+   "addedAt": 3,
+   "course": false
+  },
+  {
+   "id": "s4",
+   "folder": "Robotics › Papers",
+   "title": "π0: A Vision-Language-Action Flow Model for General Robot Control",
+   "notes": "Physical Intelligence's flow matching VLA.",
+   "addedAt": 4,
+   "course": false
+  },
+  {
+   "id": "s5",
+   "folder": "Robotics › Papers",
+   "title": "Dex-Net 2.0: Deep Learning to Plan Robust Grasps",
+   "notes": "Synthetic point clouds and a grasp quality CNN.",
+   "addedAt": 5,
+   "course": false
+  },
+  {
+   "id": "s6",
+   "folder": "Robotics › Papers",
+   "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+   "notes": "Dataset pooled from 22 robots across 21 institutions.",
+   "addedAt": 6,
+   "course": false
+  },
+  {
+   "id": "s7",
+   "folder": "Robotics › Papers",
+   "title": "Observing and Controlling Features in Vision-Language-Action Models",
+   "notes": "Steering VLA internal representations at inference time without fine-tuning.",
+   "addedAt": 7,
+   "course": false
+  },
+  {
+   "id": "s8",
+   "folder": "Robotics › Papers",
+   "title": "ALOHA: Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+   "notes": "ACT, action chunking with transformers, and a teleoperation setup.",
+   "addedAt": 8,
+   "course": false
+  },
+  {
+   "id": "s9",
+   "folder": "Robotics › Robot Learning",
+   "title": "Imitation learning explained: behavior cloning vs DAgger",
+   "notes": "Blog post with examples.",
+   "addedAt": 9,
+   "course": false
+  },
+  {
+   "id": "s10",
+   "folder": "Robotics › Robot Learning",
+   "title": "Sim-to-real transfer: domain randomization tutorial",
+   "notes": "How to train in simulation and deploy on real robots.",
+   "addedAt": 10,
+   "course": false
+  },
+  {
+   "id": "s11",
+   "folder": "Robotics › Robot Learning",
+   "title": "Reinforcement learning for legged locomotion",
+   "notes": "Talk: how quadrupeds learn to walk with PPO in Isaac Gym.",
+   "addedAt": 11,
+   "course": false
+  },
+  {
+   "id": "s12",
+   "folder": "Robotics › Robot Learning",
+   "title": "Teleoperation data collection best practices",
+   "notes": "Tips for collecting demonstrations for policy learning.",
+   "addedAt": 12,
+   "course": false
+  },
+  {
+   "id": "s13",
+   "folder": "Robotics › Robot Learning",
+   "title": "Berkeley CS285 Deep Reinforcement Learning — Lecture 1",
+   "notes": "Sergey Levine's course introduction.",
+   "addedAt": 13,
+   "course": true
+  },
+  {
+   "id": "s14",
+   "folder": "Robotics › Robot Learning",
+   "title": "Russ Tedrake: Underactuated Robotics — Lecture 1",
+   "notes": "MIT course on nonlinear dynamics and control.",
+   "addedAt": 14,
+   "course": true
+  },
+  {
+   "id": "s15",
+   "folder": "Robotics › Robot Learning",
+   "title": "Hugging Face Robotics Course — Unit 1: Introduction to LeRobot",
+   "notes": "Free course; setting up LeRobot and its datasets.",
+   "addedAt": 15,
+   "course": true
+  },
+  {
+   "id": "s16",
+   "folder": "Robotics › Robot Learning",
+   "title": "Vizuara: Modern Robot Learning from Scratch — Lectures 3–4",
+   "notes": "Lecture 3 - Deep Generative Modeling | Variational AutoEncoders. Lecture 4 - The Transformer Architecture for Robotics.",
+   "addedAt": 16,
+   "course": true
+  },
+  {
+   "id": "s17",
+   "folder": "Robotics › Hardware",
+   "title": "Choosing servo motors for a robot arm",
+   "notes": "Torque, gearboxes and back-drivability explained.",
+   "addedAt": 17,
+   "course": false
+  },
+  {
+   "id": "s18",
+   "folder": "Robotics › Hardware",
+   "title": "Building a low-cost 6-DoF arm with 3D printed parts",
+   "notes": "Bill of materials under $300, STL files included.",
+   "addedAt": 18,
+   "course": false
+  },
+  {
+   "id": "s19",
+   "folder": "Robotics › Hardware",
+   "title": "SO-100 arm assembly guide",
+   "notes": "Assembling the open-source SO-100 arm with Feetech servos.",
+   "addedAt": 19,
+   "course": false
+  },
+  {
+   "id": "s20",
+   "folder": "Robotics › Hardware",
+   "title": "Soft robotic grippers: design and fabrication",
+   "notes": "Silicone casting for pneumatic fingers.",
+   "addedAt": 20,
+   "course": false
+  },
+  {
+   "id": "s21",
+   "folder": "Robotics › Hardware",
+   "title": "Brushless motor control with FOC explained",
+   "notes": "Field-oriented control on a cheap driver board.",
+   "addedAt": 21,
+   "course": false
+  },
+  {
+   "id": "s22",
+   "folder": "Robotics › Hardware",
+   "title": "Intel RealSense vs ZED depth cameras for robots",
+   "notes": "Comparison of depth sensors.",
+   "addedAt": 22,
+   "course": false
+  },
+  {
+   "id": "s23",
+   "folder": "Robotics › Hardware",
+   "title": "Harmonic drives vs cycloidal reducers",
+   "notes": "Which gearbox for robot joints.",
+   "addedAt": 23,
+   "course": false
+  },
+  {
+   "id": "s24",
+   "folder": "Robotics › Hardware",
+   "title": "Wiring and power distribution for mobile robots",
+   "notes": "Batteries, fuses and voltage regulators.",
+   "addedAt": 24,
+   "course": false
+  },
+  {
+   "id": "s25",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "ROS 2 Humble tutorial: publishers and subscribers",
+   "notes": "Writing your first nodes in Python.",
+   "addedAt": 25,
+   "course": false
+  },
+  {
+   "id": "s26",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "MuJoCo getting started",
+   "notes": "Physics simulation for robotics research.",
+   "addedAt": 26,
+   "course": false
+  },
+  {
+   "id": "s27",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "NVIDIA Isaac Sim: importing a URDF",
+   "notes": "Setting up a robot in Isaac Sim.",
+   "addedAt": 27,
+   "course": false
+  },
+  {
+   "id": "s28",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "Gazebo vs Isaac Sim vs MuJoCo",
+   "notes": "Which simulator should you use?",
+   "addedAt": 28,
+   "course": false
+  },
+  {
+   "id": "s29",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "MoveIt 2 motion planning basics",
+   "notes": "Planning arm trajectories in ROS 2.",
+   "addedAt": 29,
+   "course": false
+  },
+  {
+   "id": "s30",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "Nav2 navigation stack walkthrough",
+   "notes": "SLAM and path planning for mobile robots.",
+   "addedAt": 30,
+   "course": false
+  },
+  {
+   "id": "s31",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "Writing URDF and Xacro files",
+   "notes": "Describing robot kinematics.",
+   "addedAt": 31,
+   "course": false
+  },
+  {
+   "id": "s32",
+   "folder": "Robotics › ROS & Simulation",
+   "title": "ros2_control hardware interfaces explained",
+   "notes": "",
+   "addedAt": 32,
+   "course": false
+  },
+  {
+   "id": "s33",
+   "folder": "Machine Learning › LLMs",
+   "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+   "notes": "Parameter-efficient fine-tuning.",
+   "addedAt": 33,
+   "course": false
+  },
+  {
+   "id": "s34",
+   "folder": "Machine Learning › LLMs",
+   "title": "Prompt engineering guide",
+   "notes": "Few-shot, chain of thought and structured output.",
+   "addedAt": 34,
+   "course": false
+  },
+  {
+   "id": "s35",
+   "folder": "Machine Learning › LLMs",
+   "title": "How RLHF works",
+   "notes": "Reward models and PPO for aligning language models.",
+   "addedAt": 35,
+   "course": false
+  },
+  {
+   "id": "s36",
+   "folder": "Machine Learning › LLMs",
+   "title": "Retrieval-augmented generation from scratch",
+   "notes": "Building a RAG pipeline with embeddings and a vector store.",
+   "addedAt": 36,
+   "course": false
+  },
+  {
+   "id": "s37",
+   "folder": "Machine Learning › LLMs",
+   "title": "Speculative decoding explained",
+   "notes": "Faster LLM inference with a draft model.",
+   "addedAt": 37,
+   "course": false
+  },
+  {
+   "id": "s38",
+   "folder": "Machine Learning › LLMs",
+   "title": "Scaling laws for neural language models",
+   "notes": "Kaplan et al.",
+   "addedAt": 38,
+   "course": false
+  },
+  {
+   "id": "s39",
+   "folder": "Machine Learning › LLMs",
+   "title": "KV cache and paged attention in vLLM",
+   "notes": "",
+   "addedAt": 39,
+   "course": false
+  },
+  {
+   "id": "s40",
+   "folder": "Machine Learning › LLMs",
+   "title": "DPO: Direct Preference Optimization",
+   "notes": "Aligning LLMs without a reward model.",
+   "addedAt": 40,
+   "course": false
+  },
+  {
+   "id": "s41",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "YOLO object detection explained",
+   "notes": "",
+   "addedAt": 41,
+   "course": false
+  },
+  {
+   "id": "s42",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "Vision Transformers (ViT): An Image is Worth 16x16 Words",
+   "notes": "Transformers applied to image patches.",
+   "addedAt": 42,
+   "course": false
+  },
+  {
+   "id": "s43",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "Segment Anything Model (SAM) paper",
+   "notes": "Promptable segmentation foundation model.",
+   "addedAt": 43,
+   "course": false
+  },
+  {
+   "id": "s44",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+   "notes": "",
+   "addedAt": 44,
+   "course": false
+  },
+  {
+   "id": "s45",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "Data augmentation for image classification",
+   "notes": "Mixup, cutmix, random erasing.",
+   "addedAt": 45,
+   "course": false
+  },
+  {
+   "id": "s46",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "Depth estimation with monocular cameras",
+   "notes": "Depth Anything and MiDaS.",
+   "addedAt": 46,
+   "course": false
+  },
+  {
+   "id": "s47",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "ResNet: Deep Residual Learning for Image Recognition",
+   "notes": "",
+   "addedAt": 47,
+   "course": false
+  },
+  {
+   "id": "s48",
+   "folder": "Machine Learning › Computer Vision",
+   "title": "Stanford CS231n: Deep Learning for Computer Vision — Lectures 1–2",
+   "notes": "Image classification, kNN and linear classifiers.",
+   "addedAt": 48,
+   "course": true
+  },
+  {
+   "id": "s49",
+   "folder": "Machine Learning › Courses",
+   "title": "Andrew Ng Machine Learning Specialization — Course 1",
+   "notes": "Supervised learning, regression and classification.",
+   "addedAt": 49,
+   "course": false
+  },
+  {
+   "id": "s50",
+   "folder": "Machine Learning › Courses",
+   "title": "fast.ai Practical Deep Learning for Coders — Lesson 1",
+   "notes": "",
+   "addedAt": 50,
+   "course": false
+  },
+  {
+   "id": "s51",
+   "folder": "Machine Learning › Courses",
+   "title": "Dive into Deep Learning (d2l.ai)",
+   "notes": "Interactive deep learning book with code.",
+   "addedAt": 51,
+   "course": false
+  },
+  {
+   "id": "s52",
+   "folder": "Machine Learning › Courses",
+   "title": "Full Stack Deep Learning — course page",
+   "notes": "",
+   "addedAt": 52,
+   "course": false
+  },
+  {
+   "id": "s53",
+   "folder": "Machine Learning › Courses",
+   "title": "Stanford CS229 Machine Learning — lecture notes",
+   "notes": "",
+   "addedAt": 53,
+   "course": false
+  },
+  {
+   "id": "s54",
+   "folder": "Machine Learning › Courses",
+   "title": "Google Machine Learning Crash Course",
+   "notes": "",
+   "addedAt": 54,
+   "course": false
+  },
+  {
+   "id": "s55",
+   "folder": "Machine Learning › Courses",
+   "title": "MIT 6.S191 Introduction to Deep Learning — Lecture 1",
+   "notes": "Foundations of deep learning, 2026 edition.",
+   "addedAt": 55,
+   "course": true
+  },
+  {
+   "id": "s56",
+   "folder": "Machine Learning › Courses",
+   "title": "Andrej Karpathy: Neural Networks Zero to Hero — micrograd",
+   "notes": "Building backpropagation from scratch.",
+   "addedAt": 56,
+   "course": true
+  },
+  {
+   "id": "s57",
+   "folder": "Machine Learning › Math",
+   "title": "3Blue1Brown: Essence of Linear Algebra",
+   "notes": "Visual intuition for vectors, matrices and eigenvalues.",
+   "addedAt": 57,
+   "course": false
+  },
+  {
+   "id": "s58",
+   "folder": "Machine Learning › Math",
+   "title": "Probability for machine learning — cheat sheet",
+   "notes": "",
+   "addedAt": 58,
+   "course": false
+  },
+  {
+   "id": "s59",
+   "folder": "Machine Learning › Math",
+   "title": "Matrix calculus for deep learning",
+   "notes": "Derivatives of vectors and matrices.",
+   "addedAt": 59,
+   "course": false
+  },
+  {
+   "id": "s60",
+   "folder": "Machine Learning › Math",
+   "title": "Information theory basics: entropy and KL divergence",
+   "notes": "",
+   "addedAt": 60,
+   "course": false
+  },
+  {
+   "id": "s61",
+   "folder": "Machine Learning › Math",
+   "title": "Convex optimization (Boyd) lecture videos",
+   "notes": "",
+   "addedAt": 61,
+   "course": false
+  },
+  {
+   "id": "s62",
+   "folder": "Machine Learning › Math",
+   "title": "Bayes' theorem explained visually",
+   "notes": "",
+   "addedAt": 62,
+   "course": false
+  },
+  {
+   "id": "s63",
+   "folder": "Machine Learning › Math",
+   "title": "Gradient descent and its variants: SGD, momentum, Adam",
+   "notes": "",
+   "addedAt": 63,
+   "course": false
+  },
+  {
+   "id": "s64",
+   "folder": "Machine Learning › Math",
+   "title": "Singular value decomposition intuition",
+   "notes": "",
+   "addedAt": 64,
+   "course": false
+  },
+  {
+   "id": "s65",
+   "folder": "Open Models › Releases",
+   "title": "Llama 4 release notes",
+   "notes": "Meta's new open-weight models, context length and benchmarks.",
+   "addedAt": 65,
+   "course": false
+  },
+  {
+   "id": "s66",
+   "folder": "Open Models › Releases",
+   "title": "Qwen3 technical report",
+   "notes": "Alibaba's open model family from 0.6B to 235B.",
+   "addedAt": 66,
+   "course": false
+  },
+  {
+   "id": "s67",
+   "folder": "Open Models › Releases",
+   "title": "Mistral Small 3.1 announcement",
+   "notes": "24B open model under Apache 2.0.",
+   "addedAt": 67,
+   "course": false
+  },
+  {
+   "id": "s68",
+   "folder": "Open Models › Releases",
+   "title": "OLMo 2: fully open language models",
+   "notes": "AI2 releases weights, data and training code.",
+   "addedAt": 68,
+   "course": false
+  },
+  {
+   "id": "s69",
+   "folder": "Open Models › Releases",
+   "title": "Gemma 3 open models from Google",
+   "notes": "",
+   "addedAt": 69,
+   "course": false
+  },
+  {
+   "id": "s70",
+   "folder": "Open Models › Releases",
+   "title": "DeepSeek-V3 technical report",
+   "notes": "Mixture-of-experts open model.",
+   "addedAt": 70,
+   "course": false
+  },
+  {
+   "id": "s71",
+   "folder": "Open Models › Releases",
+   "title": "SmolLM2: small language models by Hugging Face",
+   "notes": "",
+   "addedAt": 71,
+   "course": false
+  },
+  {
+   "id": "s72",
+   "folder": "Open Models › Releases",
+   "title": "Phi-4 model card",
+   "notes": "",
+   "addedAt": 72,
+   "course": false
+  },
+  {
+   "id": "s73",
+   "folder": "Open Models › Ecosystem",
+   "title": "Open models lecture: ecosystem, debates, and future access",
+   "notes": "Covering the pieces that build the open ecosystem: distillation, risks and access.",
+   "addedAt": 73,
+   "course": false
+  },
+  {
+   "id": "s74",
+   "folder": "Open Models › Ecosystem",
+   "title": "An Introduction to Open Source AI",
+   "notes": "Course on open source models.",
+   "addedAt": 74,
+   "course": false
+  },
+  {
+   "id": "s75",
+   "folder": "Open Models › Ecosystem",
+   "title": "What counts as open source AI? The OSI definition",
+   "notes": "",
+   "addedAt": 75,
+   "course": false
+  },
+  {
+   "id": "s76",
+   "folder": "Open Models › Ecosystem",
+   "title": "Open-weight model licenses compared",
+   "notes": "Llama license vs Apache 2.0 vs MIT.",
+   "addedAt": 76,
+   "course": false
+  },
+  {
+   "id": "s77",
+   "folder": "Open Models › Ecosystem",
+   "title": "The state of open models — Interconnects",
+   "notes": "Nathan Lambert's yearly review.",
+   "addedAt": 77,
+   "course": false
+  },
+  {
+   "id": "s78",
+   "folder": "Open Models › Ecosystem",
+   "title": "Policy debate: should frontier model weights be released?",
+   "notes": "",
+   "addedAt": 78,
+   "course": false
+  },
+  {
+   "id": "s79",
+   "folder": "Open Models › Ecosystem",
+   "title": "Hugging Face Open LLM Leaderboard explained",
+   "notes": "",
+   "addedAt": 79,
+   "course": false
+  },
+  {
+   "id": "s80",
+   "folder": "Open Models › Ecosystem",
+   "title": "Distillation and the open model ecosystem",
+   "notes": "",
+   "addedAt": 80,
+   "course": false
+  },
+  {
+   "id": "s81",
+   "folder": "Programming › Rust",
+   "title": "The Rust Book: ownership chapter",
+   "notes": "",
+   "addedAt": 81,
+   "course": false
+  },
+  {
+   "id": "s82",
+   "folder": "Programming › Rust",
+   "title": "Async Rust with Tokio tutorial",
+   "notes": "",
+   "addedAt": 82,
+   "course": false
+  },
+  {
+   "id": "s83",
+   "folder": "Programming › Rust",
+   "title": "Error handling in Rust: anyhow vs thiserror",
+   "notes": "",
+   "addedAt": 83,
+   "course": false
+  },
+  {
+   "id": "s84",
+   "folder": "Programming › Rust",
+   "title": "Writing a CLI in Rust with clap",
+   "notes": "",
+   "addedAt": 84,
+   "course": false
+  },
+  {
+   "id": "s85",
+   "folder": "Programming › Rust",
+   "title": "Rust lifetimes explained",
+   "notes": "",
+   "addedAt": 85,
+   "course": false
+  },
+  {
+   "id": "s86",
+   "folder": "Programming › Rust",
+   "title": "Zero-cost abstractions in Rust",
+   "notes": "",
+   "addedAt": 86,
+   "course": false
+  },
+  {
+   "id": "s87",
+   "folder": "Programming › Rust",
+   "title": "Rust for Python developers",
+   "notes": "",
+   "addedAt": 87,
+   "course": false
+  },
+  {
+   "id": "s88",
+   "folder": "Programming › Rust",
+   "title": "Rustlings exercises walkthrough — part 1",
+   "notes": "Variables, functions and if.",
+   "addedAt": 88,
+   "course": true
+  },
+  {
+   "id": "s89",
+   "folder": "Programming › TypeScript",
+   "title": "TypeScript generics deep dive",
+   "notes": "",
+   "addedAt": 89,
+   "course": false
+  },
+  {
+   "id": "s90",
+   "folder": "Programming › TypeScript",
+   "title": "Type narrowing and discriminated unions",
+   "notes": "",
+   "addedAt": 90,
+   "course": false
+  },
+  {
+   "id": "s91",
+   "folder": "Programming › TypeScript",
+   "title": "Zod schema validation in TypeScript",
+   "notes": "",
+   "addedAt": 91,
+   "course": false
+  },
+  {
+   "id": "s92",
+   "folder": "Programming › TypeScript",
+   "title": "React 19 with TypeScript: typing hooks",
+   "notes": "",
+   "addedAt": 92,
+   "course": false
+  },
+  {
+   "id": "s93",
+   "folder": "Programming › TypeScript",
+   "title": "tsconfig options explained",
+   "notes": "",
+   "addedAt": 93,
+   "course": false
+  },
+  {
+   "id": "s94",
+   "folder": "Programming › TypeScript",
+   "title": "Effect-TS introduction",
+   "notes": "",
+   "addedAt": 94,
+   "course": false
+  },
+  {
+   "id": "s95",
+   "folder": "Programming › TypeScript",
+   "title": "Vite + TypeScript project setup",
+   "notes": "",
+   "addedAt": 95,
+   "course": false
+  },
+  {
+   "id": "s96",
+   "folder": "Programming › TypeScript",
+   "title": "Type-level programming with template literal types",
+   "notes": "",
+   "addedAt": 96,
+   "course": false
+  },
+  {
+   "id": "s97",
+   "folder": "Cooking › Pizza",
+   "title": "Neapolitan pizza at home in a regular oven",
+   "notes": "Steel plate and broiler method.",
+   "addedAt": 97,
+   "course": false
+  },
+  {
+   "id": "s98",
+   "folder": "Cooking › Pizza",
+   "title": "New York style pizza dough recipe",
+   "notes": "",
+   "addedAt": 98,
+   "course": false
+  },
+  {
+   "id": "s99",
+   "folder": "Cooking › Pizza",
+   "title": "Detroit-style pizza in a cast iron pan",
+   "notes": "",
+   "addedAt": 99,
+   "course": false
+  },
+  {
+   "id": "s100",
+   "folder": "Cooking › Pizza",
+   "title": "Best flour for pizza: 00 vs bread flour",
+   "notes": "",
+   "addedAt": 100,
+   "course": false
+  },
+  {
+   "id": "s101",
+   "folder": "Cooking › Pizza",
+   "title": "Pizza sauce: San Marzano tomatoes, no cooking",
+   "notes": "",
+   "addedAt": 101,
+   "course": false
+  },
+  {
+   "id": "s102",
+   "folder": "Cooking › Pizza",
+   "title": "Ooni Koda 16 review",
+   "notes": "Outdoor gas pizza oven.",
+   "addedAt": 102,
+   "course": false
+  },
+  {
+   "id": "s103",
+   "folder": "Cooking › Pizza",
+   "title": "Cold fermentation for pizza dough",
+   "notes": "48–72 hour fridge proof.",
+   "addedAt": 103,
+   "course": false
+  },
+  {
+   "id": "s104",
+   "folder": "Cooking › Pizza",
+   "title": "Sourdough pizza series ep. 1: making the starter",
+   "notes": "Feeding schedule and hydration.",
+   "addedAt": 104,
+   "course": true
+  },
+  {
+   "id": "s105",
+   "folder": "Cooking › Japanese Food",
+   "title": "How to make tonkotsu ramen broth",
+   "notes": "",
+   "addedAt": 105,
+   "course": false
+  },
+  {
+   "id": "s106",
+   "folder": "Cooking › Japanese Food",
+   "title": "Homemade sushi rice",
+   "notes": "",
+   "addedAt": 106,
+   "course": false
+  },
+  {
+   "id": "s107",
+   "folder": "Cooking › Japanese Food",
+   "title": "Miso soup with dashi from scratch",
+   "notes": "",
+   "addedAt": 107,
+   "course": false
+  },
+  {
+   "id": "s108",
+   "folder": "Cooking › Japanese Food",
+   "title": "Gyoza folding technique",
+   "notes": "",
+   "addedAt": 108,
+   "course": false
+  },
+  {
+   "id": "s109",
+   "folder": "Cooking › Japanese Food",
+   "title": "Japanese curry roux from scratch",
+   "notes": "",
+   "addedAt": 109,
+   "course": false
+  },
+  {
+   "id": "s110",
+   "folder": "Cooking › Japanese Food",
+   "title": "Okonomiyaki recipe",
+   "notes": "",
+   "addedAt": 110,
+   "course": false
+  },
+  {
+   "id": "s111",
+   "folder": "Cooking › Japanese Food",
+   "title": "Teriyaki chicken, the authentic way",
+   "notes": "",
+   "addedAt": 111,
+   "course": false
+  },
+  {
+   "id": "s112",
+   "folder": "Cooking › Japanese Food",
+   "title": "Onigiri filling ideas",
+   "notes": "",
+   "addedAt": 112,
+   "course": false
+  },
+  {
+   "id": "s113",
+   "folder": "Finance › Investing",
+   "title": "Index funds vs ETFs explained",
+   "notes": "",
+   "addedAt": 113,
+   "course": false
+  },
+  {
+   "id": "s114",
+   "folder": "Finance › Investing",
+   "title": "How to build a three-fund portfolio",
+   "notes": "",
+   "addedAt": 114,
+   "course": false
+  },
+  {
+   "id": "s115",
+   "folder": "Finance › Investing",
+   "title": "Dollar-cost averaging: does it work?",
+   "notes": "",
+   "addedAt": 115,
+   "course": false
+  },
+  {
+   "id": "s116",
+   "folder": "Finance › Investing",
+   "title": "Understanding P/E ratios",
+   "notes": "",
+   "addedAt": 116,
+   "course": false
+  },
+  {
+   "id": "s117",
+   "folder": "Finance › Investing",
+   "title": "Roth IRA vs traditional IRA",
+   "notes": "",
+   "addedAt": 117,
+   "course": false
+  },
+  {
+   "id": "s118",
+   "folder": "Finance › Investing",
+   "title": "Bond ladders for beginners",
+   "notes": "",
+   "addedAt": 118,
+   "course": false
+  },
+  {
+   "id": "s119",
+   "folder": "Finance › Investing",
+   "title": "Warren Buffett's shareholder letters summary",
+   "notes": "",
+   "addedAt": 119,
+   "course": false
+  },
+  {
+   "id": "s120",
+   "folder": "Finance › Investing",
+   "title": "Rebalancing your portfolio once a year",
+   "notes": "",
+   "addedAt": 120,
+   "course": false
+  },
+  {
+   "id": "s121",
+   "folder": "Fitness › Running",
+   "title": "Zone 2 training for runners",
+   "notes": "",
+   "addedAt": 121,
+   "course": false
+  },
+  {
+   "id": "s122",
+   "folder": "Fitness › Running",
+   "title": "How to choose running shoes",
+   "notes": "",
+   "addedAt": 122,
+   "course": false
+  },
+  {
+   "id": "s123",
+   "folder": "Fitness › Running",
+   "title": "Marathon fueling strategy",
+   "notes": "",
+   "addedAt": 123,
+   "course": false
+  },
+  {
+   "id": "s124",
+   "folder": "Fitness › Running",
+   "title": "Running form drills",
+   "notes": "",
+   "addedAt": 124,
+   "course": false
+  },
+  {
+   "id": "s125",
+   "folder": "Fitness › Running",
+   "title": "Interval training: 400m repeats",
+   "notes": "",
+   "addedAt": 125,
+   "course": false
+  },
+  {
+   "id": "s126",
+   "folder": "Fitness › Running",
+   "title": "Preventing shin splints",
+   "notes": "",
+   "addedAt": 126,
+   "course": false
+  },
+  {
+   "id": "s127",
+   "folder": "Fitness › Running",
+   "title": "Strength training for runners",
+   "notes": "",
+   "addedAt": 127,
+   "course": false
+  },
+  {
+   "id": "s128",
+   "folder": "Fitness › Running",
+   "title": "Couch to 5K: week 1 plan",
+   "notes": "Run/walk intervals for beginners.",
+   "addedAt": 128,
+   "course": true
+  },
+  {
+   "id": "s129",
+   "folder": "Travel › Japan",
+   "title": "Two weeks in Japan itinerary",
+   "notes": "",
+   "addedAt": 129,
+   "course": false
+  },
+  {
+   "id": "s130",
+   "folder": "Travel › Japan",
+   "title": "JR Pass: is it still worth it?",
+   "notes": "",
+   "addedAt": 130,
+   "course": false
+  },
+  {
+   "id": "s131",
+   "folder": "Travel › Japan",
+   "title": "Best ramen shops in Tokyo",
+   "notes": "",
+   "addedAt": 131,
+   "course": false
+  },
+  {
+   "id": "s132",
+   "folder": "Travel › Japan",
+   "title": "Kyoto temples guide",
+   "notes": "",
+   "addedAt": 132,
+   "course": false
+  },
+  {
+   "id": "s133",
+   "folder": "Travel › Japan",
+   "title": "Hiking the Kumano Kodo",
+   "notes": "",
+   "addedAt": 133,
+   "course": false
+  },
+  {
+   "id": "s134",
+   "folder": "Travel › Japan",
+   "title": "Japan travel tips for first-timers",
+   "notes": "",
+   "addedAt": 134,
+   "course": false
+  },
+  {
+   "id": "s135",
+   "folder": "Travel › Japan",
+   "title": "Hakone onsen ryokan recommendations",
+   "notes": "",
+   "addedAt": 135,
+   "course": false
+  },
+  {
+   "id": "s136",
+   "folder": "Travel › Japan",
+   "title": "Osaka street food guide",
+   "notes": "",
+   "addedAt": 136,
+   "course": false
+  }
+ ],
+ "joins": [
+  {
+   "title": "CS231n Lecture 5: Convolutional Neural Networks",
+   "notes": "Stanford CS231n, spring lectures.",
+   "join": "Stanford CS231n: Deep Learning for Computer Vision — Lectures 1–2"
+  },
+  {
+   "title": "Lecture 5 - Diffusion Policy | Modern Robot Learning from Scratch",
+   "notes": "Vizuara robotics from scratch.",
+   "join": "Vizuara: Modern Robot Learning from Scratch — Lectures 3–4"
+  },
+  {
+   "title": "MIT 6.S191 (2026) Lecture 2: Recurrent Neural Networks and Transformers",
+   "notes": "",
+   "join": "MIT 6.S191 Introduction to Deep Learning — Lecture 1"
+  },
+  {
+   "title": "Hugging Face Robotics Course — Unit 2: Imitation learning with LeRobot",
+   "notes": "",
+   "join": "Hugging Face Robotics Course — Unit 1: Introduction to LeRobot"
+  },
+  {
+   "title": "Rustlings walkthrough part 2: ownership and borrowing",
+   "notes": "",
+   "join": "Rustlings exercises walkthrough — part 1"
+  },
+  {
+   "title": "Let's build GPT: from scratch, in code, spelled out",
+   "notes": "Andrej Karpathy, Neural Networks: Zero to Hero.",
+   "join": "Andrej Karpathy: Neural Networks Zero to Hero — micrograd"
+  },
+  {
+   "title": "Sourdough pizza series ep. 2: shaping and baking",
+   "notes": "",
+   "join": "Sourdough pizza series ep. 1: making the starter"
+  },
+  {
+   "title": "Couch to 5K: week 4 guide",
+   "notes": "Longer runs, shorter walks.",
+   "join": "Couch to 5K: week 1 plan"
+  },
+  {
+   "title": "Underactuated Robotics — Lecture 2: The Simple Pendulum",
+   "notes": "Russ Tedrake, MIT.",
+   "join": "Russ Tedrake: Underactuated Robotics — Lecture 1"
+  },
+  {
+   "title": "CS285 Deep RL Lecture 5: Policy Gradients",
+   "notes": "Sergey Levine.",
+   "join": "Berkeley CS285 Deep Reinforcement Learning — Lecture 1"
+  },
+  {
+   "title": "Stanford CS234 Reinforcement Learning — Lecture 3",
+   "notes": "Emma Brunskill.",
+   "join": null
+  },
+  {
+   "title": "Stanford CS224n NLP with Deep Learning — Lecture 4: Dependency Parsing",
+   "notes": "",
+   "join": null
+  },
+  {
+   "title": "DeepLearning.AI: Neural Networks and Deep Learning — Week 2",
+   "notes": "Coursera course.",
+   "join": null
+  },
+  {
+   "title": "Neapolitan pizza dough masterclass",
+   "notes": "A 70% hydration dough by a pizzaiolo from Naples.",
+   "join": null
+  },
+  {
+   "title": "Rust by Example: traits chapter",
+   "notes": "",
+   "join": null
+  },
+  {
+   "title": "Half marathon training plan — week 1",
+   "notes": "",
+   "join": null
+  },
+  {
+   "title": "Stanford CS223A Introduction to Robotics — Lecture 2",
+   "notes": "Oussama Khatib.",
+   "join": null
+  },
+  {
+   "title": "Coursera Modern Robotics Specialization — Course 1: Foundations of Robot Motion",
+   "notes": "Kevin Lynch, Northwestern.",
+   "join": null
+  }
+ ]
+}

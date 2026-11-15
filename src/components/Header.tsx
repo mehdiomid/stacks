@@ -9,9 +9,12 @@ export function Header({ page, onHome }: { page: Page; onHome: () => void }) {
     const ai = await getAISettings();
     return { ai, hasKey: !!(await getKey(ai.provider)) };
   });
-  const label = status
-    ? `${PROVIDERS[status.ai.provider].name} · ${modelLabel(status.ai.provider, status.ai.models[status.ai.provider]).replace(/^Claude /, '')}`
-    : 'Settings';
+  const local = status?.ai.engine === 'local';
+  const label = !status
+    ? 'Settings'
+    : local
+      ? 'Sorting on this device'
+      : `${PROVIDERS[status.ai.provider].name} · ${modelLabel(status.ai.provider, status.ai.models[status.ai.provider]).replace(/^Claude /, '')}`;
 
   return (
     <header className="top">
@@ -31,9 +34,9 @@ export function Header({ page, onHome }: { page: Page; onHome: () => void }) {
         <span className="local" title="Your lists live in this browser, plus a backup folder if you choose one">
           ● Saved on this device
         </span>
-        <button className="chip-btn" onClick={() => openSettings()} title="AI provider, API key, backups">
-          <span className={`dot ${status?.hasKey ? '' : 'off'}`} />
-          {status && !status.hasKey ? 'Add API key' : label}
+        <button className="chip-btn" onClick={() => openSettings()} title="Sorting (on this device, Claude or OpenAI), API key, backups">
+          <span className={`dot ${status?.hasKey || local ? '' : 'off'}`} />
+          {status && !local && !status.hasKey ? 'Add API key' : label}
         </button>
       </div>
     </header>

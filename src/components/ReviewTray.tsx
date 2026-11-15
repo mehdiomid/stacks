@@ -1,7 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { choiceForPath, NEW, newChoiceLabel, type Draft } from '../ingest';
 import { folderNamesFrom } from '../lib/parse';
-import { flattenTree, indexTree, PATH_SEP } from '../lib/tree';
+import { flattenTree, indexTree, nameKey, PATH_SEP } from '../lib/tree';
+import { getAISettings } from '../settings';
 import type { Topic } from '../types';
 
 interface Props {
@@ -16,12 +18,29 @@ interface Props {
 
 const NAME_IT = '__name__';
 
+/** Local mode's "+ New folder" box for one row. */
+interface Fresh {
+  name: string;
+  /** What to go back to when the box is closed. */
+  before: string;
+  status: 'idle' | 'loading' | 'thinking';
+  pct?: number;
+  note?: string;
+  /** You typed in the box, so a late suggestion must not overwrite it. */
+  touched?: boolean;
+}
+
 /** Everything the AI suggested, with a topic picker per row. Nothing is saved until "Add". */
 export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept, onCancel }: Props) {
   const [drafts, setDrafts] = useState(initial);
   const [naming, setNaming] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const single = drafts.length === 1;
+  const naming_on = useLiveQuery(async () => (await getAISettings()).localNaming, [], false);
+  const [fresh, setFresh] = useState<Record<string, Fresh>>({});
+  const asked = useRef(new Set<string>());
+  const freshRef = useRef(fresh);
+  freshRef.current = fresh;
 
   const update = (key: string, patch: Partial<Draft>) => setDrafts((ds) => ds.map((d) => (d.key === key ? { ...d, ...patch } : d)));
 
@@ -35,6 +54,68 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
   const labelOf = (choice: string) => (choice.startsWith(NEW) ? `+ New: ${newChoiceLabel(choice)}` : folders.find((f) => f.topic.id === choice)?.path.join(PATH_SEP) ?? '');
   const joining = (d: Draft) => !!(d.join && d.joinTo);
   const dupCount = drafts.filter((d) => d.source === 'duplicate').length;
+
+  /** Folder names a "+ New folder" box stands for: inside the parent, or the path you typed. */
+  const freshNames = (d: Draft, name: string): string[] => {
+    const typed = folderNamesFrom(name);
+    const parent = d.newFolder?.parent;
+    if (!typed.length) return [];
+    return (parent && typed.length === 1 ? [...parent, ...typed] : typed).slice(0, 3);
+  };
+  const setFreshName = (d: Draft, name: string, touched = true) => {
+    setFresh((f) => ({ ...f, [d.key]: { ...f[d.key], name, touched: touched || f[d.key]?.touched } }));
+    const names = freshNames(d, name);
+    update(d.key, { choice: names.length ? choiceForPath(names, tree) : '', include: true });
+  };
+  const openFresh = (d: Draft) => {
+    setFresh((f) => ({ ...f, [d.key]: { name: '', before: d.choice, status: 'idle' } }));
+    update(d.key, { choice: '' });
+  };
+  const closeFresh = (d: Draft, choice?: string) => {
+    const before = fresh[d.key]?.before ?? d.choice;
+    setFresh((f) => {
+      const { [d.key]: _, ...rest } = f;
+      return rest;
+    });
+    update(d.key, { choice: choice ?? before, include: true });
+  };
+
+  // Rows where nothing fits well start with the box open.
+  useEffect(() => {
+    for (const d of initial) if (d.newFolder?.preselect && !asked.current.has(`open:${d.key}`)) {
+      asked.current.add(`open:${d.key}`);
+      openFresh(d);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initial]);
+
+  // With "Suggest names" on, the naming model fills in an open, empty box once.
+  useEffect(() => {
+    if (!naming_on) return;
+    for (const d of drafts) {
+      const f = fresh[d.key];
+      if (!f || f.name || f.touched || asked.current.has(d.key) || !d.newFolder) continue;
+      asked.current.add(d.key);
+      const parent = d.newFolder.parent;
+      const parentTopic = parent ? tree.children(null).find((t) => nameKey(t.name) === nameKey(parent[0])) : undefined;
+      const avoid = (parentTopic ? tree.children(parentTopic.id) : tree.children(null)).map((t) => t.name);
+      setFresh((x) => (x[d.key] ? { ...x, [d.key]: { ...x[d.key], status: 'thinking' } } : x));
+      void import('../local/namer')
+        .then(({ suggestFolderName }) =>
+          suggestFolderName(d.newFolder!.text, parent, avoid, (pct) => setFresh((x) => (x[d.key] ? { ...x, [d.key]: { ...x[d.key], status: 'loading', pct } } : x))),
+        )
+        .then((names) => {
+          const cur = freshRef.current[d.key];
+          if (!cur) return;
+          if (cur.touched) return setFresh((x) => ({ ...x, [d.key]: { ...x[d.key], status: 'idle' } }));
+          if (!names) return setFresh((x) => ({ ...x, [d.key]: { ...x[d.key], status: 'idle', note: 'No good suggestion this time. Type a name.' } }));
+          update(d.key, { choice: choiceForPath(names, tree), include: true });
+          setFresh((x) => ({ ...x, [d.key]: { ...x[d.key], name: parent ? names[names.length - 1] : names.join(' › '), status: 'idle', note: 'Suggested on this device. Edit it if it’s not right.' } }));
+        })
+        .catch(() => setFresh((x) => (x[d.key] ? { ...x, [d.key]: { ...x[d.key], status: 'idle', note: 'The naming model could not run here. Type a name.' } } : x)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [naming_on, fresh, drafts]);
 
   const finishNaming = (key: string) => {
     // A name, or a path like \robotics\papers or "Robotics › Papers"; existing folders are reused.
@@ -92,14 +173,40 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
                 </span>
               </label>
             )}
-            {!joining(d) && !!d.alternatives?.length && (
+            {!joining(d) && (!!d.alternatives?.length || d.newFolder) && (
               <div className="alt-picks">
                 <span>Or:</span>
-                {d.alternatives.map((c) => (
-                  <button key={c} type="button" className={`chip ${d.choice === c ? 'on' : ''}`} onClick={() => update(d.key, { choice: c, include: true })}>
+                {d.alternatives?.map((c) => (
+                  <button key={c} type="button" className={`chip ${d.choice === c ? 'on' : ''}`} onClick={() => (fresh[d.key] ? closeFresh(d, c) : update(d.key, { choice: c, include: true }))}>
                     {labelOf(c)}
                   </button>
                 ))}
+                {d.newFolder && !fresh[d.key] && (
+                  <button type="button" className="chip new" onClick={() => openFresh(d)}>
+                    + New folder{d.newFolder.parent ? ` in ${d.newFolder.parent.join(PATH_SEP)}` : ''}
+                  </button>
+                )}
+              </div>
+            )}
+            {!joining(d) && fresh[d.key] && (
+              <div className="new-folder">
+                <label htmlFor={`nf-${d.key}`}>
+                  {d.newFolder?.parent ? `New folder in ${d.newFolder.parent.join(PATH_SEP)} ›` : 'New folder (Area › Subject)'}
+                </label>
+                <input
+                  id={`nf-${d.key}`}
+                  type="text"
+                  autoFocus
+                  value={fresh[d.key].name}
+                  placeholder={fresh[d.key].status === 'loading' ? `Downloading the naming model… ${fresh[d.key].pct ?? 0}%` : fresh[d.key].status === 'thinking' ? 'Suggesting a name…' : d.newFolder?.parent ? 'Folder name, or Area › Subject elsewhere' : 'Area › Subject'}
+                  onChange={(e) => setFreshName(d, e.target.value)}
+                  onKeyDown={(e) => e.key === 'Escape' && closeFresh(d)}
+                />
+                <button type="button" className="linkish" onClick={() => closeFresh(d)}>
+                  Cancel
+                </button>
+                {fresh[d.key].note && <small>{fresh[d.key].note}</small>}
+                {!fresh[d.key].name && fresh[d.key].status === 'idle' && <small>Nothing fits well yet. Name a new folder, or pick one.</small>}
               </div>
             )}
           </div>
@@ -125,9 +232,13 @@ export function ReviewTray({ initial, topics, model, aiCount, leftover, onAccept
                 value={d.choice}
                 className={d.choice.startsWith(NEW) ? 'new' : ''}
                 aria-label={`Topic for ${d.title}`}
-                onChange={(e) => (e.target.value === NAME_IT ? setNaming(d.key) : update(d.key, { choice: e.target.value, include: true }))}
+                onChange={(e) => {
+                  if (e.target.value === NAME_IT) return setNaming(d.key);
+                  if (fresh[d.key]) return closeFresh(d, e.target.value);
+                  update(d.key, { choice: e.target.value, include: true });
+                }}
               >
-                {!d.choice && <option value="">Choose a topic…</option>}
+                {!d.choice && <option value="">{fresh[d.key] ? 'New folder (name it on the left)' : 'Choose a topic…'}</option>}
                 {folders.map((f) => (
                   <option key={f.topic.id} value={f.topic.id}>
                     {f.path.join(PATH_SEP)}

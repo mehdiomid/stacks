@@ -1,0 +1,119 @@
+{
+ "meta": {
+  "cores": 4,
+  "isolated": true,
+  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+ },
+ "loadMs": 3145.8099999427795,
+ "prompt": "v2",
+ "results": [
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a Papers",
+   "parent": "Robotics",
+   "siblings": [
+    "Robot Learning",
+    "Hardware",
+    "ROS & Simulation"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+   "notes": "Google DeepMind paper on co-fine-tuning vision-language models to output robot actions.",
+   "answer": "Computer Vision",
+   "raw": "Computer Vision",
+   "ms": 10505.47000002861
+  },
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a Robot Learning",
+   "parent": "Robotics",
+   "siblings": [
+    "Papers",
+    "Hardware",
+    "ROS & Simulation"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Imitation learning explained: behavior cloning vs DAgger",
+   "notes": "Blog post with examples.",
+   "answer": "Behaviorism",
+   "raw": "Behaviorism",
+   "ms": 6550.109999895096
+  },
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a Hardware",
+   "parent": "Robotics",
+   "siblings": [
+    "Papers",
+    "Robot Learning",
+    "ROS & Simulation"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "Choosing servo motors for a robot arm",
+   "notes": "Torque, gearboxes and back-drivability explained.",
+   "answer": "Robotics",
+   "raw": "Robotics",
+   "ms": 5778.175000190735
+  },
+  {
+   "set": "synthetic",
+   "truth": "Robotics \u203a ROS & Simulation",
+   "parent": "Robotics",
+   "siblings": [
+    "Papers",
+    "Robot Learning",
+    "Hardware"
+   ],
+   "tops": [
+    "Robotics",
+    "Machine Learning",
+    "Open Models",
+    "Programming",
+    "Cooking",
+    "Finance",
+    "Fitness",
+    "Travel"
+   ],
+   "title": "ROS 2 Humble tutorial: publishers and subscribers",
+   "notes": "Writing your first nodes in Python.",
+   "answer": "Programming",
+   "raw": "Programming",
+   "ms": 5640.460000038147
+  }
+ ],
+ "peakRssMb": 1987,
+ "wallS": 32.7,
+ "warm": {
+  "loadMs": 18234.81500005722,
+  "wallS": 19.5,
+  "peakRssMb": 2204,
+  "error": null
+ }
+}

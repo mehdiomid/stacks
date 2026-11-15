@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useApp } from '../app-context';
 import { AIError } from '../ai/errors';
 import { interpret, type ResolvedAction } from '../ai/interpret';
@@ -6,6 +7,7 @@ import { applyActions } from '../ai/actions';
 import { acceptDrafts, prepareDrafts, prepareOne, type Draft } from '../ingest';
 import { LIMITS, looksLikeInstruction, parseLines, pathsIn, uniqueUrls } from '../lib/parse';
 import { flattenTree, MAX_DEPTH, nameKey, PATH_SEP, typedPath } from '../lib/tree';
+import { getAISettings } from '../settings';
 import type { Item, Topic } from '../types';
 import { ReviewTray } from './ReviewTray';
 import { InstructionTray } from './InstructionTray';
@@ -42,7 +44,10 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
   const [collapsed, setCollapsedState] = useState(readCollapsed);
   const [suggest, setSuggest] = useState<Suggest | null>(null);
   /** "Several things": split the paste into items. Off by default, and cleared after each add. */
-  const [split, setSplit] = useState(false);
+  const [splitTicked, setSplit] = useState(false);
+  // Local mode places one item at a time; splitting and instructions need Claude or OpenAI.
+  const local = useLiveQuery(async () => (await getAISettings()).engine === 'local', [], true);
+  const split = splitTicked && !local;
   const closedFor = useRef<string | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const folderPaths = useMemo(() => flattenTree(topics).map((f) => f.path), [topics]);
@@ -78,7 +83,7 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
     });
   }
 
-  const isInstr = override ? override === 'instr' : looksLikeInstruction(text);
+  const isInstr = !local && (override ? override === 'instr' : looksLikeInstruction(text));
   const found = useMemo(() => {
     if (isInstr || !text.trim()) return null;
     const lines = parseLines(text);
@@ -183,9 +188,11 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
           ? `${counts}${found.paths.length ? `Going to ${found.paths.map(going).join(', ')}.` : 'Related lines become one item, the rest are split.'}${
               found.clipped ? ` Folders go ${MAX_DEPTH} levels deep, so extra levels are dropped.` : ''
             }${found.links > LIMITS.maxLinks ? ` The first ${LIMITS.maxLinks} links are sorted now.` : ''}`
-          : `${counts}All of it becomes one item${found.paths.length ? `, going to ${going(found.paths[0])}` : ''}.${
-              found.paths.length > 1 ? ' More than one folder is written: tick “Several things” to split, or the first one is used.' : ''
-            }${found.clipped ? ` Folders go ${MAX_DEPTH} levels deep, so extra levels are dropped.` : ''}`;
+          : `${counts}All of it becomes one item${found.paths.length ? `, going to ${local ? found.paths[0].join(PATH_SEP) + (found.paths[0].length === 1 ? ' › the best subfolder' : '') : going(found.paths[0])}` : ''}.${
+              found.paths.length > 1 ? (local ? ' More than one folder is written: the first one is used.' : ' More than one folder is written: tick “Several things” to split, or the first one is used.') : ''
+            }${found.clipped ? ` Folders go ${MAX_DEPTH} levels deep, so extra levels are dropped.` : ''}${
+              local && looksLikeInstruction(text) ? ' Instructions need Claude or OpenAI (Settings); this is saved as a note.' : ''
+            }`;
 
   return (
     <>
@@ -198,13 +205,19 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
         ) : (
           <>
             <div className="composer-head">
-              <button
-                className={`pill ${isInstr ? 'instr' : 'on'}`}
-                onClick={() => setOverride(isInstr ? 'add' : 'instr')}
-                title="Click to switch between adding items and giving an instruction"
-              >
-                {isInstr ? 'Instruction' : split ? 'Add items' : 'Add one item'} ⇄
-              </button>
+              {local ? (
+                <span className="pill on" title="Local mode: sorted on this device. Splitting and instructions need Claude or OpenAI (Settings).">
+                  Add one item · on this device
+                </span>
+              ) : (
+                <button
+                  className={`pill ${isInstr ? 'instr' : 'on'}`}
+                  onClick={() => setOverride(isInstr ? 'add' : 'instr')}
+                  title="Click to switch between adding items and giving an instruction"
+                >
+                  {isInstr ? 'Instruction' : split ? 'Add items' : 'Add one item'} ⇄
+                </button>
+              )}
               <button className="collapse" onClick={() => setCollapsed(true)} aria-expanded="true">
                 Collapse ▴
               </button>
@@ -278,7 +291,7 @@ export function Composer({ topics, items }: { topics: Topic[]; items: Item[] }) 
             )}
             <div className="composer-bar">
               <div className="mode">{busy ? <span className="status">{busy}</span> : <span>{hint}</span>}</div>
-              {!isInstr && (
+              {!isInstr && !local && (
                 <label className="split-toggle" title="Split the paste into separate items, possibly in different folders">
                   <input type="checkbox" checked={split} onChange={(e) => setSplit(e.target.checked)} />
                   Several things

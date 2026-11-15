@@ -15,6 +15,7 @@ import {
 import { agoShort } from '../lib/time';
 import { deleteAllLists } from '../store';
 import { UsageSummary } from './UsagePanel';
+import { LocalPanel } from './LocalPanel';
 import { DEFAULT_AI, getAISettings, getKey, MODEL_OPTIONS, PROVIDERS, saveAISettings, setKey, type AISettings, type ProviderId } from '../settings';
 
 export function SettingsModal({ notice, onClose }: { notice?: string; onClose: () => void }) {
@@ -48,6 +49,7 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
   }, [onClose]);
 
   const p = ai.provider;
+  const local = ai.engine === 'local';
   const info = PROVIDERS[p];
   const refreshFolder = async () => setFolder(await folderStatus());
 
@@ -87,19 +89,27 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
     <div className="scrim" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
         <h3 id="settings-title">Settings</h3>
-        <p>Your key stays in this browser and goes straight to the AI provider. The Stacks server never sees it.</p>
         {notice && <div className="notice">{notice}</div>}
 
         <div className="field">
-          <label id="provider-label">AI provider</label>
+          <label id="provider-label">Sorting</label>
           <div className="seg" role="group" aria-labelledby="provider-label">
+            <button aria-pressed={local} onClick={() => setAi({ ...ai, engine: 'local' })}>
+              On this device
+            </button>
             {(Object.keys(PROVIDERS) as ProviderId[]).map((id) => (
-              <button key={id} aria-pressed={p === id} onClick={() => setAi({ ...ai, provider: id })}>
-                {id === 'anthropic' ? 'Anthropic (Claude)' : 'OpenAI'}
+              <button key={id} aria-pressed={!local && p === id} onClick={() => setAi({ ...ai, engine: 'api', provider: id })}>
+                {id === 'anthropic' ? 'Claude' : 'OpenAI'}
               </button>
             ))}
           </div>
         </div>
+
+        {local ? (
+          <LocalPanel naming={ai.localNaming} onNaming={(on) => setAi({ ...ai, localNaming: on })} />
+        ) : (
+          <>
+        <p>Your key stays in this browser and goes straight to the AI provider. The Stacks server never sees it.</p>
 
         <div className="field">
           <label htmlFor="api-key">{info.name} API key</label>
@@ -171,6 +181,8 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
         >
           Forget my {info.name} key
         </button>
+          </>
+        )}
 
         <h4>Backup</h4>
         {folderBackupSupported() ? (
@@ -269,7 +281,7 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
           <label htmlFor="notify">Send me a desktop notification for my top “Up next” pick, at most once a day while Stacks is open</label>
         </div>
 
-        <h4>AI usage today</h4>
+        <h4>{local ? 'Storage' : 'AI usage today'}</h4>
         <UsageSummary limit={ai.dailyTokenLimit} />
 
         <div className="modal-foot">

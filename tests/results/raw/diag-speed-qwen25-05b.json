@@ -1,0 +1,250 @@
+{
+ "2 threads, grammar": {
+  "threads": 2,
+  "ms": [
+   39023,
+   8218,
+   8554,
+   7695
+  ],
+  "answers": [
+   "Robotics",
+   "Robotics",
+   "Robotics",
+   "Robotics"
+  ],
+  "timings": [
+   {
+    "cache_n": 0,
+    "prompt_n": 283,
+    "prompt_ms": 38532.211,
+    "prompt_per_token_ms": 136.156222614841,
+    "prompt_per_second": 7.344504575665279,
+    "predicted_n": 3,
+    "predicted_ms": 460.79,
+    "predicted_per_token_ms": 230.395,
+    "predicted_per_second": 4.340371969877818
+   },
+   {
+    "cache_n": 211,
+    "prompt_n": 53,
+    "prompt_ms": 7770.21,
+    "prompt_per_token_ms": 146.6077358490566,
+    "prompt_per_second": 6.820922471850825,
+    "predicted_n": 3,
+    "predicted_ms": 432.03,
+    "predicted_per_token_ms": 216.015,
+    "predicted_per_second": 4.629308149896998
+   },
+   {
+    "cache_n": 213,
+    "prompt_n": 55,
+    "prompt_ms": 8105.34,
+    "prompt_per_token_ms": 147.36981818181818,
+    "prompt_per_second": 6.785649954227706,
+    "predicted_n": 3,
+    "predicted_ms": 436.849,
+    "predicted_per_token_ms": 218.4245,
+    "predicted_per_second": 4.578240994027685
+   },
+   {
+    "cache_n": 216,
+    "prompt_n": 48,
+    "prompt_ms": 7211.175,
+    "prompt_per_token_ms": 150.2328125,
+    "prompt_per_second": 6.656335479308157,
+    "predicted_n": 3,
+    "predicted_ms": 472.244,
+    "predicted_per_token_ms": 236.122,
+    "predicted_per_second": 4.235098804855117
+   }
+  ],
+  "error": null
+ },
+ "4 threads, grammar": {
+  "threads": 4,
+  "ms": [
+   34424,
+   5944,
+   8741,
+   8744
+  ],
+  "answers": [
+   "Robotics",
+   "Robotics",
+   "Robotics",
+   "Robotics"
+  ],
+  "timings": [
+   {
+    "cache_n": 0,
+    "prompt_n": 283,
+    "prompt_ms": 32966.3,
+    "prompt_per_token_ms": 116.48869257950531,
+    "prompt_per_second": 8.584524195921288,
+    "predicted_n": 3,
+    "predicted_ms": 1413.896,
+    "predicted_per_token_ms": 706.948,
+    "predicted_per_second": 1.414531196070998
+   },
+   {
+    "cache_n": 211,
+    "prompt_n": 53,
+    "prompt_ms": 5349.815,
+    "prompt_per_token_ms": 100.93990566037735,
+    "prompt_per_second": 9.90688463059003,
+    "predicted_n": 3,
+    "predicted_ms": 564.17,
+    "predicted_per_token_ms": 282.085,
+    "predicted_per_second": 3.5450307531417837
+   },
+   {
+    "cache_n": 213,
+    "prompt_n": 55,
+    "prompt_ms": 7017.459,
+    "prompt_per_token_ms": 127.59016363636363,
+    "prompt_per_second": 7.8375947761148295,
+    "predicted_n": 3,
+    "predicted_ms": 1705.68,
+    "predicted_per_token_ms": 852.84,
+    "predicted_per_second": 1.1725528821349842
+   },
+   {
+    "cache_n": 216,
+    "prompt_n": 48,
+    "prompt_ms": 8154.264,
+    "prompt_per_token_ms": 169.8805,
+    "prompt_per_second": 5.88649079794326,
+    "predicted_n": 3,
+    "predicted_ms": 563.861,
+    "predicted_per_token_ms": 281.9305,
+    "predicted_per_second": 3.5469734562241406
+   }
+  ],
+  "error": null
+ },
+ "4 threads, no grammar": {
+  "threads": 4,
+  "ms": [
+   38157,
+   7340,
+   6129,
+   4844
+  ],
+  "answers": [
+   "Robotics",
+   "Robotics",
+   "Robotics",
+   "Robotics"
+  ],
+  "timings": [
+   {
+    "cache_n": 0,
+    "prompt_n": 283,
+    "prompt_ms": 37727.279,
+    "prompt_per_token_ms": 133.31193992932862,
+    "prompt_per_second": 7.501203572089045,
+    "predicted_n": 3,
+    "predicted_ms": 372.411,
+    "predicted_per_token_ms": 186.2055,
+    "predicted_per_second": 5.370410648450234
+   },
+   {
+    "cache_n": 211,
+    "prompt_n": 53,
+    "prompt_ms": 6789.415,
+    "prompt_per_token_ms": 128.10216981132075,
+    "prompt_per_second": 7.806269023177991,
+    "predicted_n": 3,
+    "predicted_ms": 506.905,
+    "predicted_per_token_ms": 253.4525,
+    "predicted_per_second": 3.9455124727513047
+   },
+   {
+    "cache_n": 213,
+    "prompt_n": 55,
+    "prompt_ms": 5786.829,
+    "prompt_per_token_ms": 105.21507272727273,
+    "prompt_per_second": 9.504341669677816,
+    "predicted_n": 3,
+    "predicted_ms": 316.841,
+    "predicted_per_token_ms": 158.4205,
+    "predicted_per_second": 6.312314378505307
+   },
+   {
+    "cache_n": 216,
+    "prompt_n": 48,
+    "prompt_ms": 4533.516,
+    "prompt_per_token_ms": 94.44824999999999,
+    "prompt_per_second": 10.587808667709567,
+    "predicted_n": 3,
+    "predicted_ms": 293.19,
+    "predicted_per_token_ms": 146.595,
+    "predicted_per_second": 6.821515058494492
+   }
+  ],
+  "error": null
+ },
+ "8 threads, no grammar": {
+  "threads": 8,
+  "ms": [
+   77480,
+   34436,
+   27889,
+   42985
+  ],
+  "answers": [
+   "Robotics",
+   "Robotics",
+   "Robotics",
+   "Robotics"
+  ],
+  "timings": [
+   {
+    "cache_n": 0,
+    "prompt_n": 283,
+    "prompt_ms": 51147.804,
+    "prompt_per_token_ms": 180.73428975265017,
+    "prompt_per_second": 5.532984368204742,
+    "predicted_n": 3,
+    "predicted_ms": 26245.426,
+    "predicted_per_token_ms": 13122.713,
+    "predicted_per_second": 0.07620375451326261
+   },
+   {
+    "cache_n": 211,
+    "prompt_n": 53,
+    "prompt_ms": 17687.191,
+    "prompt_per_token_ms": 333.72058490566036,
+    "prompt_per_second": 2.9965187801726123,
+    "predicted_n": 3,
+    "predicted_ms": 16687.474,
+    "predicted_per_token_ms": 8343.737,
+    "predicted_per_second": 0.11985037399908459
+   },
+   {
+    "cache_n": 213,
+    "prompt_n": 55,
+    "prompt_ms": 12033.025,
+    "prompt_per_token_ms": 218.78227272727273,
+    "prompt_per_second": 4.570754236777535,
+    "predicted_n": 3,
+    "predicted_ms": 15800.02,
+    "predicted_per_token_ms": 7900.01,
+    "predicted_per_second": 0.1265821182504832
+   },
+   {
+    "cache_n": 216,
+    "prompt_n": 48,
+    "prompt_ms": 15795.635,
+    "prompt_per_token_ms": 329.0757291666667,
+    "prompt_per_second": 3.0388142040506763,
+    "predicted_n": 3,
+    "predicted_ms": 27170.415,
+    "predicted_per_token_ms": 13585.2075,
+    "predicted_per_second": 0.07360947560057511
+   }
+  ],
+  "error": null
+ }
+}

@@ -15,19 +15,20 @@ Your lists stay on your device. The server stores nothing, even when Stacks is h
 3. [How it works](#how-it-works)
 4. [Where your data lives (local-first)](#where-your-data-lives-local-first)
 5. [AI: providers, keys and cost control](#ai-providers-keys-and-cost-control)
-6. [How "Up next" picks](#how-up-next-picks)
-7. [Smart input rules](#smart-input-rules)
-8. [Folders, subfolders and `\` paths](#folders-subfolders-and--paths)
-9. [Backups, export and import](#backups-export-and-import)
-10. [Configuration](#configuration)
-11. [Hosting on a server](#hosting-on-a-server)
-12. [Security and privacy](#security-and-privacy)
-13. [Design](#design)
-14. [Development](#development)
-15. [Project structure](#project-structure)
-16. [Decision log](#decision-log)
-17. [Roadmap](#roadmap)
-18. [Troubleshooting](#troubleshooting)
+6. [Local mode: sorting on this device](#local-mode-sorting-on-this-device)
+7. [How "Up next" picks](#how-up-next-picks)
+8. [Smart input rules](#smart-input-rules)
+9. [Folders, subfolders and `\` paths](#folders-subfolders-and--paths)
+10. [Backups, export and import](#backups-export-and-import)
+11. [Configuration](#configuration)
+12. [Hosting on a server](#hosting-on-a-server)
+13. [Security and privacy](#security-and-privacy)
+14. [Design](#design)
+15. [Development](#development)
+16. [Project structure](#project-structure)
+17. [Decision log](#decision-log)
+18. [Roadmap](#roadmap)
+19. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -42,11 +43,14 @@ docker compose up -d --build
 
 Open **http://localhost:8080**.
 
-1. Click **Add API key** (top right) and paste a Claude or OpenAI API key (see [AI](#ai-providers-keys-and-cost-control)).
-2. Paste links or notes into the box and press **Add** (or `Ctrl`/`⌘` + `Enter`). Everything you paste becomes one item; tick **Several things** to split a paste into separate items.
-3. Check the title and folder, then press **Add item**.
+1. Paste links or notes into the box and press **Add** (or `Ctrl`/`⌘` + `Enter`). Everything you paste becomes one item; tick **Several things** to split a paste into separate items.
+2. Check the title and folder, then press **Add item**.
 
-To try the app without a key, click **Load example topics** on the empty page.
+Out of the box, Stacks sorts **on this device**: a small model runs in your browser, so no API key is needed and nothing you paste is sent anywhere (see [Local mode](#local-mode-sorting-on-this-device)). For splitting a paste into several items and for instructions, choose Claude or OpenAI in **Settings → Sorting** and add your API key (see [AI](#ai-providers-keys-and-cost-control)).
+
+To look around first, click **Load example topics** on the empty page.
+
+The first build downloads the local models (about 420 MB, checked against pinned checksums) into the image; later builds reuse them.
 
 Stop it with `docker compose down`. Your data is unaffected because it lives in your browser, not in the container.
 
@@ -72,7 +76,8 @@ Stop it with `docker compose down`. Your data is unaffected because it lives in 
 | **Examples and starting over** | **Load example topics** on the empty page fills in sample topics. While they're there, a banner offers **Remove examples**: it removes only the example items, and any example topic you added your own items to is kept as yours. **Settings → Start over → Delete all my lists** wipes every topic and item but keeps settings, API keys and the backup folder. |
 | **Collapsible input** | Collapse the box to a one-line bar so topics sit near the top. Press `/` anywhere to open it again. The choice is remembered. |
 | **Backups** | Automatic JSON backup to a folder you choose (Chrome, Edge, Brave), plus Export and Import. |
-| **Two AI providers** | Claude (Anthropic) or OpenAI, using your own key, with a per-browser daily token limit. |
+| **Local sorting** | The default. A 23 MB embedding model runs in your browser and picks the folder, two quick picks, and the saved item a paste continues. **+ New folder** is always offered, and opened first when nothing fits well. Optional folder-name suggestions from a small model (Qwen3-0.6B, 397 MB on first use). No key, no API calls. See [Local mode](#local-mode-sorting-on-this-device). |
+| **Two AI providers** | Claude (Anthropic) or OpenAI, using your own key, with a per-browser daily token limit. Needed for splitting a paste ("Several things") and for instructions. |
 | **About page** | `#about` explains usage, scoring, storage, AI and privacy inside the app, starting with a highlighted note that your lists stay on your device. On the first visit, while nothing is saved yet, Stacks opens on this page, with **Try Stacks** buttons between the sections. |
 | **Themes** | Light and dark follow the system setting. Works at phone width. Respects reduced motion. |
 
@@ -133,6 +138,52 @@ Limits to know about:
 
 ---
 
+## Local mode: sorting on this device
+
+**Settings → Sorting** has three choices: **On this device** (the default), **Claude** and **OpenAI**. On this device, sorting runs in your browser with small models. There's no key, nothing you paste is sent to any service, and it keeps working with the network off once the models are downloaded.
+
+### What it does, and what it doesn't
+
+| Job | On this device |
+|---|---|
+| Choose the folder, plus 2 quick picks | ✅ |
+| Notice when a paste continues an item you already have (the next lecture of a saved course) | ✅ |
+| Offer a new folder when nothing fits | ✅ "+ New folder" is always offered, and opened first when the best match is weak |
+| Name a new folder | Optional suggestion (see below), otherwise you type it |
+| Title | From the page title or your first line (editable in the tray) |
+| Split a paste into several items ("Several things") | ❌ needs Claude or OpenAI; the checkbox is hidden |
+| Instructions ("move all pizza links to Cooking") | ❌ needs Claude or OpenAI; such text is saved as a note |
+
+### How a paste is placed
+
+1. The paste (title plus your notes) is turned into a vector by **snowflake-arctic-embed-xs** (23 MB).
+2. Every folder is described the same way: its path and its **latest 5 items**, averaged. Candidates are folders 2 levels deep or more, plus older top-level folders that hold items. Inbox is never a target.
+3. The closest folder is preselected; the next two become quick picks.
+4. If the best match scores below **0.81**, "+ New folder" opens first. Its parent is the area of the closest folder ("New folder in Robotics ›"); type `Area › Subject` to put it somewhere else.
+5. **Adding to an item:** offered only when the paste is very similar (≥ 0.86) to one of the latest 5 items of a folder **and** both share a distinctive name ("cs231n", "Rustlings", "Couch to 5K"). Words like *lecture*, *course* or *learning* don't count, and two different course codes (CS234 vs CS285) never join. It shows as the ticked "Add to …" checkbox.
+6. `\robotics\papers` still sets the folder without any model. `\robotics` picks the best subfolder of Robotics, or offers a new one inside it.
+
+The thresholds and the choice of model come from a test of 9 embedding models and 4 naming models on this kind of data, run in Chrome on a 2019 Intel MacBook Pro, CPU only. Results and code: [`tests/RESULTS.md`](tests/RESULTS.md). Measured: the right folder first about 82% of the time and in the top 3 about 96%; 17 of 18 join cases right.
+
+### Folder-name suggestions (optional)
+
+**Settings → Suggest names for new folders** uses **Qwen3-0.6B**. It's downloaded the first time you open "+ New folder" (397 MB), and its suggestion fills the name box, which you can edit. Expect to edit most names: in the test about a third were names you'd keep. On a slower computer the first name of a session takes up to half a minute, later ones a few seconds. The model is unloaded after 3 idle minutes to give back about 0.9 GB of memory.
+
+### Where the models live
+
+- **On the server:** the files are built into the Docker image (`/app/models`, pinned to a Hugging Face commit and checked against SHA-256 by `scripts/fetch-models.mjs`) and served at `/models/`. The server never runs them.
+- **In your browser:** the first time local mode needs a model, the browser downloads it **from your Stacks server** (never from Hugging Face or a CDN) and keeps it in the site's browser storage: the embedding model in the Cache API, the naming model in the origin-private file system. After that it loads from there.
+- **Removing them:** Settings shows what's stored, with **Remove** buttons. A removed model downloads again from your server when it's next needed. Clearing the site's data in the browser removes them too.
+- **Your saved items** are prepared once in the background (about 11 s per 1,000 items) and each new or edited item afterwards. These vectors are kept in IndexedDB, rebuilt when needed, and left out of backups and Export.
+
+### Technical notes
+
+- The embedding model runs in a Web Worker (Transformers.js 4.3.2 with the ONNX runtime, bundled by Vite); the naming model runs in wllama 3.8.1 (llama.cpp). Both load only when local mode needs them. Browsers without WebAssembly JSPI or Memory64 (Safari, Firefox, Chrome before 137) get wllama's slower "compat" build, also served by Stacks (`/models/wllama/compat/`) rather than wllama's default CDN.
+- The server sends `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: credentialless`, so the models can use several CPU threads. Thumbnails from other sites still load (without cookies). Browsers without `credentialless` (Safari) run single-threaded, which is slower but works.
+- The CSP allows `'wasm-unsafe-eval'` and `blob:` workers for this; `connect-src` is still only the Stacks server and the two AI providers.
+
+---
+
 ## AI: providers, keys and cost control
 
 ### Bring your own key
@@ -180,6 +231,8 @@ Every reply is validated again with Zod before anything is used. Each SDK is loa
 Claude requests run at `effort: "low"`, because sorting is simple. Sonnet 5.5 and Opus 5.5 requests also turn on server-side refusal fallbacks (`fallbacks: "default"`).
 
 ### What is sent to the AI
+
+In local mode (the default): nothing. The models run in your browser. With Claude or OpenAI:
 
 | Request | What's sent |
 |---|---|
@@ -396,6 +449,8 @@ stacks.example.com {
 
 Each visitor uses their own API key and their own browser storage, so one deployment can serve several people without them seeing each other's data and without you paying for their AI use.
 
+**Local mode on a server:** the models run in each visitor's browser, so the server needs no GPU and very little CPU or memory (the smallest VPS is plenty). It serves the model files once per browser: 23 MB plus the runtime, and 397 MB more for anyone who turns on name suggestions. HTTPS is required for local mode's threads and model storage.
+
 ---
 
 ## Security and privacy
@@ -453,10 +508,13 @@ docker run --rm -v "$PWD":/app -v stacks_nm:/app/node_modules -w /app node:22-al
 
 `stacks_nm` is a Docker volume for `node_modules`, so Linux binaries don't end up in your project folder. Remove it with `docker volume rm stacks_nm`.
 
+Local mode needs the model files in `./models` (the Docker image has them built in). In development, run `npm run models` once (inside the container above, after `npm ci`); `/models` is proxied to the API server like `/api`.
+
 ### With Node 22+ installed
 
 ```bash
 npm install      # npm 11 recommended; npm 10 has a resolver bug with this tree
+npm run models   # local-mode model files into ./models (~420 MB, pinned and checksummed)
 npm run dev      # http://localhost:5173 (API proxied to :8787)
 npm test         # Vitest: parsing, URLs, scoring, preview parsing, SSRF guards
 npm run build    # dist/web (static app) + dist/server (Node server)
@@ -471,8 +529,11 @@ npm start        # serves dist on :8080
 stacks/
 ├─ Dockerfile, docker-compose.yml   two-stage build: compile + test, then a small runtime image
 ├─ index.html, vite.config.ts       Vite entry and config (dev proxy /api → :8787)
+├─ scripts/fetch-models.mjs        downloads the local-mode models (pinned commit + SHA-256) into models/
+├─ models/                          local-mode model files, served at /models/ (built into the image; not in git)
+├─ tests/                           local-model assessment: RESULTS.md, benchmark code, synthetic test library
 ├─ server/                          Fastify server (Node 22, ESM)
-│  ├─ index.ts                      static files, CSP and security headers, /api/health, /api/preview
+│  ├─ index.ts                      static files, /models/, CSP, isolation and security headers, /api/health, /api/preview
 │  ├─ preview.ts                    oEmbed (YouTube, Vimeo) and Open Graph / <meta> parsing
 │  ├─ net.ts                        safe fetch: URL checks, DNS-time private-address blocking, redirects, limits
 │  └─ server.test.ts
@@ -481,7 +542,7 @@ stacks/
    ├─ db.ts                         Dexie (IndexedDB) schema and settings helpers
    ├─ store.ts                      every write: topics, items, ordering, examples (triggers backup)
    ├─ ingest.ts                     text → numbered lines → previews (short links resolved) → AI grouping → review drafts
-   ├─ settings.ts                   provider, models, daily limit, API key storage
+   ├─ settings.ts                   sorting engine (local or API), provider, models, daily limit, API key storage
    ├─ ai/
    │  ├─ call.ts                    key and budget checks, lazy-loaded adapters, usage tracking
    │  ├─ anthropic.ts, openai.ts    provider adapters (structured JSON output, error mapping)
@@ -489,6 +550,8 @@ stacks/
    │  ├─ place.ts                   one-item prompt and schema: title, folder, 2 other folders, item to add to
    │  ├─ interpret.ts               instruction prompt, schema, resolving refs to real items/topics
    │  └─ actions.ts                 describe and apply instruction actions
+   ├─ local/                        local mode: config, score (folder choice, joins; tested), embed.worker + embedder,
+   │                                vectors (prepared items), place, namer (Qwen suggestions), storage
    ├─ lib/                          parse (incl. \ paths), tree (folders), url, scoring, preview client, backup, usage, time, reminders
    └─ components/                   Header, Composer, ReviewTray, InstructionTray, TopicList, TopicCard,
                                     ItemRow, Thumb, UpNext, UsagePanel, SettingsModal, AboutPage, Sky, Spark
@@ -504,6 +567,12 @@ These are the choices made while planning Stacks, and why.
 |---|---|---|
 | Storage | Browser IndexedDB as the source of truth, plus an optional backup folder and Export/Import | "Nothing in the cloud", even when the app is hosted in the cloud. |
 | Server role | Stateless: serve the app and fetch link previews | Browsers can't read other sites (CORS). Nothing to store means nothing to leak. |
+| Local mode | Default sorting runs in the browser; Claude and OpenAI stay as options | You wanted to avoid API calls. Measured in `tests/RESULTS.md`: small embedding models choose folders well, while splitting and instructions need a large model. |
+| Local model | snowflake-arctic-embed-xs (23 MB), folders scored by their average | As accurate as models 5 times its size on the test library, and about 30 ms per paste on a 2019 laptop CPU. |
+| New folders locally | Always offer "+ New folder"; open it first below a 0.81 match | No model could reliably tell "nothing fits" from "fits" (66–75% separation), so you decide. |
+| Joining locally | Similarity ≥ 0.86 plus a shared distinctive name, and no clashing course codes | Similarity alone confuses similar courses (CS234 vs CS285); the name check fixes most of that. |
+| Naming locally | Optional Qwen3-0.6B suggestions, downloaded on first use, always editable | You wanted a proposal. About a third of its names are keepers, so it's a starting point, not a decision. |
+| Model hosting | Built into the Docker image and served by Stacks; cached in the browser | Nothing is fetched from third parties at runtime, and it works offline once cached. |
 | AI | Cloud API now. Local Ollama deferred | Ollama depends on each machine's compute. The adapter design leaves room for it. |
 | Who pays | Each user brings their own API key, stored in their browser | Nobody can run up the host's bill. No server-side quotas or accounts needed. |
 | Subscriptions | Not supported | Claude and ChatGPT subscriptions don't cover third-party apps; reusing their tokens breaks the providers' terms. |

@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { AppContext } from './app-context';
 import { db, getSetting, setSetting } from './db';
 import { useReminders } from './lib/reminders';
+import { getAISettings } from './settings';
 import type { Item, Topic } from './types';
 import { Header } from './components/Header';
 import { Composer } from './components/Composer';
@@ -59,6 +60,14 @@ export default function App() {
     void navigator.storage?.persist?.().catch(() => false);
   }, []);
   useReminders(topics, items);
+
+  // Local mode: prepare new and edited items in the background, a moment after they change.
+  const local = useLiveQuery(async () => (await getAISettings()).engine === 'local', []);
+  useEffect(() => {
+    if (!local || !items) return;
+    const t = setTimeout(() => void import('./local/vectors').then((m) => m.syncVectors()), 1500);
+    return () => clearTimeout(t);
+  }, [local, items]);
 
   const doneCount = items?.filter((i) => i.doneAt).length ?? 0;
 
