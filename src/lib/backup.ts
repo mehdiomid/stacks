@@ -92,6 +92,19 @@ export interface FolderStatus {
   folder: string | null;
   permission: PermissionState | null;
   lastAt: number | null;
+  /** The last write in this session failed (folder moved, deleted or full). */
+  failed: boolean;
+}
+
+type WriteResult = 'ok' | 'no-folder' | 'needs-permission' | 'error';
+let lastResult: WriteResult | null = null;
+const listeners = new Set<() => void>();
+const changed = () => listeners.forEach((fn) => fn());
+
+/** Called after every backup write and folder change, so the reminder bar can update. */
+export function onBackupChange(fn: () => void): () => void {
+  listeners.add(fn);
+  return () => void listeners.delete(fn);
 }
 
 async function getHandle(): Promise<PermissionedDir | null> {
@@ -101,14 +114,15 @@ async function getHandle(): Promise<PermissionedDir | null> {
 export async function folderStatus(): Promise<FolderStatus> {
   const handle = await getHandle();
   const lastAt = await getSetting<number | null>('lastBackupAt', null);
-  if (!folderBackupSupported() || !handle) return { supported: folderBackupSupported(), folder: handle?.name ?? null, permission: null, lastAt };
+  const failed = lastResult === 'error';
+  if (!folderBackupSupported() || !handle) return { supported: folderBackupSupported(), folder: handle?.name ?? null, permission: null, lastAt, failed };
   let permission: PermissionState | null = null;
   try {
     permission = await handle.queryPermission({ mode: 'readwrite' });
   } catch {
     permission = null;
   }
-  return { supported: true, folder: handle.name, permission, lastAt };
+  return { supported: true, folder: handle.name, permission, lastAt, failed };
 }
 
 export async function chooseFolder(): Promise<string | null> {
@@ -126,11 +140,14 @@ export async function reconnectFolder(): Promise<boolean> {
   if (!handle) return false;
   const state = await handle.requestPermission({ mode: 'readwrite' });
   if (state === 'granted') await writeFolderBackup();
+  else changed();
   return state === 'granted';
 }
 
 export async function forgetFolder(): Promise<void> {
   await setSetting('backupHandle', null);
+  lastResult = null;
+  changed();
 }
 
 async function writeFile(dir: FileSystemDirectoryHandle, name: string, text: string) {
@@ -141,7 +158,13 @@ async function writeFile(dir: FileSystemDirectoryHandle, name: string, text: str
 }
 
 /** Writes stacks-backup.json (latest) and stacks-YYYY-MM-DD.json (one per day, as history). */
-export async function writeFolderBackup(): Promise<'ok' | 'no-folder' | 'needs-permission' | 'error'> {
+export async function writeFolderBackup(): Promise<WriteResult> {
+  lastResult = await write();
+  changed();
+  return lastResult;
+}
+
+async function write(): Promise<WriteResult> {
   const handle = await getHandle();
   if (!handle || !folderBackupSupported()) return 'no-folder';
   try {

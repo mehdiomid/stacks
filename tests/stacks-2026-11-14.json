@@ -1,0 +1,190 @@
+{
+  "app": "stacks",
+  "version": 1,
+  "exportedAt": "2026-11-14T23:03:27.800Z",
+  "topics": [
+    {
+      "id": "3e3d9a44-a465-45b1-afd1-183b05e18f50",
+      "name": "Papers",
+      "parentId": "35008130-d5af-4a39-a3f9-d5351b1e7d45",
+      "order": 0,
+      "hue": 18,
+      "createdAt": 1793374920507,
+      "lastActivityAt": 1793374920507,
+      "open": false,
+      "sort": "oldest"
+    },
+    {
+      "id": "6ce03c9d-a245-4910-ba81-426f91f9305e",
+      "name": "Open Models",
+      "order": 0,
+      "hue": 232,
+      "createdAt": 1793332229582,
+      "lastActivityAt": 1793332229582,
+      "open": false,
+      "sort": "oldest"
+    },
+    {
+      "id": "35008130-d5af-4a39-a3f9-d5351b1e7d45",
+      "name": "Robotics",
+      "order": 1,
+      "hue": 18,
+      "createdAt": 1793374920501,
+      "lastActivityAt": 1793374920501,
+      "open": true,
+      "sort": "oldest"
+    },
+    {
+      "id": "4251c1b8-a764-4cd6-8397-914f9d014692",
+      "name": "Robot Learning",
+      "parentId": "35008130-d5af-4a39-a3f9-d5351b1e7d45",
+      "order": 1,
+      "hue": 18,
+      "createdAt": 1793412215957,
+      "lastActivityAt": 1793412215957,
+      "open": false,
+      "sort": "oldest"
+    }
+  ],
+  "items": [
+    {
+      "id": "036f6fb6-3c56-46ac-8a77-055a3130216e",
+      "topicId": "3e3d9a44-a465-45b1-afd1-183b05e18f50",
+      "kind": "link",
+      "url": "https://arxiv.org/abs/2610.30136v1",
+      "normUrl": "arxiv.org/abs/2610.30136v1",
+      "title": "Agentic World Action Models",
+      "description": "Put the following under\n\nPaper about Agentic World Action Models",
+      "siteName": "arXiv.org",
+      "author": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+      "duration": null,
+      "addedAt": 1793374920511,
+      "doneAt": null,
+      "snoozedUntil": null,
+      "dismissed": false
+    },
+    {
+      "id": "3660f3d4-2071-4dfe-b27e-8a162a12745e",
+      "topicId": "4251c1b8-a764-4cd6-8397-914f9d014692",
+      "kind": "video",
+      "url": "https://www.youtube.com/watch?v=BCkiHJHn990",
+      "normUrl": "youtube.com/watch?v=BCkiHJHn990",
+      "title": "Modern Robot Learning from Scratch — Lectures 3–4",
+      "description": "Vizuara robotics from scratch\n\nLecture 3 - Deep Generative Modeling | Variational AutoEncoders | Modern Robot Learning from Scratch\n\nLecture 4 - The Transformer Architecture for Robotics | Modern Robot Learning from Scratch",
+      "siteName": "YouTube",
+      "author": "Vizuara",
+      "image": "https://i.ytimg.com/vi/BCkiHJHn990/hqdefault.jpg",
+      "duration": null,
+      "links": [
+        {
+          "url": "https://www.youtube.com/watch?v=BCkiHJHn990",
+          "normUrl": "youtube.com/watch?v=BCkiHJHn990",
+          "label": "",
+          "title": "Lecture 3 - Deep Generative Modeling | Variational AutoEncoders | Modern Robot Learning from Scratch",
+          "siteName": "YouTube",
+          "image": "https://i.ytimg.com/vi/BCkiHJHn990/hqdefault.jpg",
+          "kind": "video",
+          "duration": null
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=8otn0N8Lwkw",
+          "normUrl": "youtube.com/watch?v=8otn0N8Lwkw",
+          "label": "",
+          "title": "Lecture 4 - The Transformer Architecture for Robotics | Modern Robot Learning from Scratch",
+          "siteName": "YouTube",
+          "image": "https://i.ytimg.com/vi/8otn0N8Lwkw/hqdefault.jpg",
+          "kind": "video",
+          "duration": null
+        }
+      ],
+      "addedAt": 1793412215960,
+      "doneAt": null,
+      "snoozedUntil": null,
+      "dismissed": false
+    },
+    {
+      "id": "524ce347-d7fa-45ba-939f-a526de3f47c2",
+      "topicId": "3e3d9a44-a465-45b1-afd1-183b05e18f50",
+      "kind": "link",
+      "url": "https://arxiv.org/abs/2603.05487",
+      "normUrl": "arxiv.org/abs/2603.05487",
+      "title": "Observing and Controlling Features in Vision-Language-Action Models",
+      "description": "￼\nMarco Pavone\n\nAssociate Professor at Stanford University and Senior Director of AI at NVIDIA\n\nFollowing\nCan we steer a robot foundation model without retraining it?\n\nOur new paper explores this question through control-inspired notions of feature observability and controllability in Vision-Language-Action (VLA) models.\n\nWe find that state- and action-relevant information can often be linearly predicted from VLA internal representations—and that these representations can be steered at inference time to change robot behavior, without fine-tuning.\n\nAs an example, on a real robot, our approach increased the preferred handle-grasp rate from 14% to 74%, while adding only ~1% inference-time overhead.\n\nThe broader idea is that representation-level control could provide a lightweight interface for adapting robot foundation models to new preferences and constraints—without retraining.\n\nJoint work with Hugo Buurmeijer Carmen Amo Alonso Aiden Swann\n\n#PhysicalAI #Robotics #VLA #RobotLearning\n\nStanford University School of Engineering Stanford Artificial Intelligence Laboratory (SAIL\n￼\nPaper",
+      "siteName": "arXiv.org",
+      "author": "",
+      "image": "https://arxiv.org/static/browse/0.3.4/images/arxiv-logo-fb.png",
+      "duration": null,
+      "addedAt": 1793384380685,
+      "doneAt": null,
+      "snoozedUntil": null,
+      "dismissed": false
+    },
+    {
+      "id": "9ddea2ad-d604-4605-9f2b-5408494e79e5",
+      "topicId": "6ce03c9d-a245-4910-ba81-426f91f9305e",
+      "kind": "link",
+      "url": "https://lnkd.in/eTjszwXh",
+      "normUrl": "lnkd.in/eTjszwXh",
+      "title": "Open models lecture: ecosystem, debates, and future access",
+      "description": "My first open model lecture, covering all the many pieces that build the ecosystem, and the open questions/debates determining where it goes next.\n\nHow does distillation fit in?\nHow do we manage risks?\nHow do we see access to models changing in the future?\n\nI'm excited to revisit these questions about every 6 months, to give a state of the union on the field.",
+      "siteName": "lnkd.in",
+      "author": "",
+      "image": null,
+      "duration": null,
+      "links": [
+        {
+          "url": "https://lnkd.in/eTjszwXh",
+          "normUrl": "lnkd.in/eTjszwXh",
+          "label": "Video",
+          "title": "",
+          "siteName": "lnkd.in",
+          "image": null,
+          "kind": "link",
+          "duration": null
+        },
+        {
+          "url": "https://lnkd.in/ejEKx9Cu",
+          "normUrl": "lnkd.in/ejEKx9Cu",
+          "label": "Slides",
+          "title": "",
+          "siteName": "lnkd.in",
+          "image": null,
+          "kind": "link",
+          "duration": null
+        },
+        {
+          "url": "https://lnkd.in/gfyZ7pKf",
+          "normUrl": "lnkd.in/gfyZ7pKf",
+          "label": "Reading list",
+          "title": "",
+          "siteName": "lnkd.in",
+          "image": null,
+          "kind": "link",
+          "duration": null
+        }
+      ],
+      "addedAt": 1793332229586,
+      "doneAt": null,
+      "snoozedUntil": null,
+      "dismissed": false
+    },
+    {
+      "id": "e16b7263-a0ed-4aff-b082-ac227e7c1253",
+      "topicId": "6ce03c9d-a245-4910-ba81-426f91f9305e",
+      "kind": "link",
+      "url": "https://www.udemy.com/course/an-introduction-to-open-source-ai/?srsltid=AYCX9vJxPTKR13wxVsLbou7ranHeuwVojCtLeG3JrBo4Uf2IAXs6g8m-",
+      "normUrl": "udemy.com/course/an-introduction-to-open-source-ai?srsltid=AYCX9vJxPTKR13wxVsLbou7ranHeuwVojCtLeG3JrBo4Uf2IAXs6g8m-",
+      "title": "An Introduction to Open Source AI",
+      "description": "open source models are great. See the course here",
+      "siteName": "udemy.com",
+      "author": "",
+      "image": null,
+      "duration": null,
+      "addedAt": 1793333010120,
+      "doneAt": null,
+      "snoozedUntil": null,
+      "dismissed": false
+    }
+  ]
+}

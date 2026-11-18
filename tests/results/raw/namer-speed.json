@@ -1,0 +1,61 @@
+{
+ "gpu": {
+  "meta": {
+   "cores": 4,
+   "isolated": true,
+   "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+  },
+  "device": "gpu",
+  "gpuAvailable": false,
+  "peakRssMb": 414,
+  "wallS": 9.2
+ },
+ "cpu": {
+  "meta": {
+   "cores": 4,
+   "isolated": true,
+   "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+  },
+  "device": "cpu",
+  "gpuAvailable": false,
+  "threads": 2,
+  "loadMs": 14938.130000114441,
+  "noPreRead": {
+   "item": "Hiking the Kumano Kodo trail in Japan",
+   "answer": "Robotics \u203a Hiking",
+   "ms": 36983.68499994278,
+   "read": 249,
+   "reused": 0,
+   "readPerSec": 7.105197354846311
+  },
+  "preReadMs": 38210.00500011444,
+  "withPreRead": [
+   {
+    "item": "Hiking the Kumano Kodo trail in Japan",
+    "answer": "Robotics \u203a Hiking",
+    "ms": 30912.930000066757,
+    "read": 37,
+    "reused": 212,
+    "readPerSec": 1.2950588604252062
+   },
+   {
+    "item": "Index funds vs ETFs explained",
+    "answer": "Robotics \u203a Index Funds",
+    "ms": 8231.889999866486,
+    "read": 23,
+    "reused": 222,
+    "readPerSec": 3.570170141890979
+   },
+   {
+    "item": "Learning to play the violin as an adult",
+    "answer": "Robotics \u203a Learning Robotics",
+    "ms": 7800.77999997139,
+    "read": 25,
+    "reused": 222,
+    "readPerSec": 4.180748123136745
+   }
+  ],
+  "peakRssMb": 999,
+  "wallS": 144.5
+ }
+}

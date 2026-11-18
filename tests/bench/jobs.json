@@ -1,0 +1,178 @@
+{
+  "embed": [
+    {
+      "id": "tfidf",
+      "label": "Word overlap (baseline, no model)",
+      "kind": "tfidf"
+    },
+    {
+      "id": "potion-8m",
+      "label": "potion-base-8M",
+      "kind": "potion",
+      "repo": "minishlab/potion-base-8M",
+      "files": [
+        "model.safetensors",
+        "tokenizer.json"
+      ]
+    },
+    {
+      "id": "minilm",
+      "label": "all-MiniLM-L6-v2",
+      "kind": "tjs",
+      "repo": "Xenova/all-MiniLM-L6-v2",
+      "dtype": "q8",
+      "pooling": "mean",
+      "files": [
+        "onnx/model_quantized.onnx",
+        "tokenizer.json"
+      ]
+    },
+    {
+      "id": "arctic-xs",
+      "label": "snowflake-arctic-embed-xs",
+      "kind": "tjs",
+      "repo": "Snowflake/snowflake-arctic-embed-xs",
+      "dtype": "q8",
+      "pooling": "cls",
+      "files": [
+        "onnx/model_quantized.onnx",
+        "tokenizer.json"
+      ]
+    },
+    {
+      "id": "bge-small",
+      "label": "bge-small-en-v1.5",
+      "kind": "tjs",
+      "repo": "Xenova/bge-small-en-v1.5",
+      "dtype": "q8",
+      "pooling": "cls",
+      "files": [
+        "onnx/model_quantized.onnx",
+        "tokenizer.json"
+      ]
+    },
+    {
+      "id": "bge-base",
+      "label": "bge-base-en-v1.5",
+      "kind": "tjs",
+      "repo": "Xenova/bge-base-en-v1.5",
+      "dtype": "q8",
+      "pooling": "cls",
+      "files": [
+        "onnx/model_quantized.onnx",
+        "tokenizer.json"
+      ]
+    },
+    {
+      "id": "arctic-m",
+      "label": "snowflake-arctic-embed-m-v1.5",
+      "kind": "tjs",
+      "repo": "Snowflake/snowflake-arctic-embed-m-v1.5",
+      "dtype": "q8",
+      "pooling": "cls",
+      "files": [
+        "onnx/model_quantized.onnx",
+        "tokenizer.json"
+      ]
+    },
+    {
+      "id": "nomic",
+      "label": "nomic-embed-text-v1.5",
+      "kind": "tjs",
+      "repo": "nomic-ai/nomic-embed-text-v1.5",
+      "dtype": "q8",
+      "pooling": "mean",
+      "prefix": "classification: ",
+      "files": [
+        "onnx/model_quantized.onnx",
+        "tokenizer.json"
+      ]
+    },
+    {
+      "id": "gemma-emb",
+      "label": "EmbeddingGemma-300M (q4)",
+      "kind": "gemma",
+      "repo": "onnx-community/embeddinggemma-300m-ONNX",
+      "dtype": "q4",
+      "prefix": "task: sentence similarity | query: ",
+      "files": [
+        "onnx/model_no_gather_q4.onnx",
+        "onnx/model_no_gather_q4.onnx_data",
+        "tokenizer.json"
+      ],
+      "modelFile": "model_no_gather"
+    }
+  ],
+  "gen": [
+    {
+      "id": "smollm2-360m",
+      "label": "SmolLM2-360M-Instruct (Q4_K_M)",
+      "repo": "bartowski/SmolLM2-360M-Instruct-GGUF",
+      "file": "SmolLM2-360M-Instruct-Q4_K_M.gguf"
+    },
+    {
+      "id": "gemma3-270m",
+      "label": "Gemma 3 270M-IT (Q4_K_M)",
+      "repo": "unsloth/gemma-3-270m-it-GGUF",
+      "file": "gemma-3-270m-it-Q4_K_M.gguf"
+    },
+    {
+      "id": "qwen25-05b",
+      "label": "Qwen2.5-0.5B-Instruct (Q4_K_M)",
+      "repo": "bartowski/Qwen2.5-0.5B-Instruct-GGUF",
+      "file": "Qwen2.5-0.5B-Instruct-Q4_K_M.gguf"
+    },
+    {
+      "id": "qwen3-06b",
+      "label": "Qwen3-0.6B (Q4_K_M, thinking off)",
+      "repo": "unsloth/Qwen3-0.6B-GGUF",
+      "file": "Qwen3-0.6B-Q4_K_M.gguf",
+      "templateKwargs": {
+        "enable_thinking": false
+      }
+    }
+  ],
+  "nameScorer": "bge-small",
+  "genOnnx": [
+    {
+      "id": "onnx-smollm2-360m",
+      "label": "SmolLM2-360M-Instruct (ONNX int8)",
+      "repo": "HuggingFaceTB/SmolLM2-360M-Instruct",
+      "dtype": "q8",
+      "files": [
+        "onnx/model_quantized.onnx"
+      ]
+    },
+    {
+      "id": "onnx-gemma3-270m",
+      "label": "Gemma 3 270M-IT (ONNX q4)",
+      "repo": "onnx-community/gemma-3-270m-it-ONNX",
+      "dtype": "q4",
+      "files": [
+        "onnx/model_q4.onnx",
+        "onnx/model_q4.onnx_data"
+      ]
+    },
+    {
+      "id": "onnx-qwen25-05b",
+      "label": "Qwen2.5-0.5B-Instruct (ONNX int8)",
+      "repo": "onnx-community/Qwen2.5-0.5B-Instruct",
+      "dtype": "q8",
+      "files": [
+        "onnx/model_quantized.onnx"
+      ]
+    },
+    {
+      "id": "onnx-qwen3-06b",
+      "label": "Qwen3-0.6B (ONNX int8, thinking off)",
+      "repo": "onnx-community/Qwen3-0.6B-ONNX",
+      "dtype": "q8",
+      "files": [
+        "onnx/model_quantized.onnx"
+      ],
+      "templateKwargs": {
+        "enable_thinking": false
+      }
+    }
+  ]
+}

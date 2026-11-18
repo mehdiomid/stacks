@@ -57,6 +57,15 @@ export interface Item {
   links?: ItemLink[];
 }
 
+/** Local mode: an item's embedding, and what it was made from (to know when to redo it). */
+export interface ItemVector {
+  itemId: string;
+  model: string;
+  /** Hash of the embedded text; a different hash means the title or notes changed. */
+  key: string;
+  vec: Float32Array;
+}
+
 export interface Setting {
   key: string;
   value: unknown;

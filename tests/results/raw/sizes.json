@@ -1,0 +1,47 @@
+{
+ "models": {
+  "tfidf": 0,
+  "potion-8m": 30920426,
+  "minilm": 23684031,
+  "arctic-xs": 23684641,
+  "bge-small": 34725822,
+  "bge-base": 110794733,
+  "arctic-m": 110856811,
+  "nomic": 138007688,
+  "gemma-emb": 215481396,
+  "gen:smollm2-360m": 270590880,
+  "gen:gemma3-270m": 253115424,
+  "gen:qwen25-05b": 397808192,
+  "gen:qwen3-06b": 396705472
+ },
+ "runtime": {
+  "transformers.min.js": {
+   "raw": 587917,
+   "gzip": 171042
+  },
+  "ort/ort-wasm-simd-threaded.asyncify.mjs": {
+   "raw": 53057,
+   "gzip": 19322
+  },
+  "ort/ort-wasm-simd-threaded.asyncify.wasm": {
+   "raw": 26861777,
+   "gzip": 6676271
+  },
+  "ort/ort-wasm-simd-threaded.mjs": {
+   "raw": 24381,
+   "gzip": 9075
+  },
+  "ort/ort-wasm-simd-threaded.wasm": {
+   "raw": 14264838,
+   "gzip": 3677906
+  },
+  "wllama/index.js": {
+   "raw": 382633,
+   "gzip": 156110
+  },
+  "wllama/wllama.wasm": {
+   "raw": 8763949,
+   "gzip": 2394067
+  }
+ }
+}

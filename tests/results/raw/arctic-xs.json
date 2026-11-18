@@ -1,0 +1,4096 @@
+{
+ "meta": {
+  "cores": 4,
+  "isolated": true,
+  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+ },
+ "loadMs": 870.4700000286102,
+ "indexMsPerItem": 11.263602942228317,
+ "choice": [
+  {
+   "id": "s1",
+   "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Robotics \u203a Papers",
+   "top3": [
+    "Robotics \u203a Papers",
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8535029510316807,
+   "second": 0.8114713377516447
+  },
+  {
+   "id": "s2",
+   "title": "OpenVLA: An Open-Source Vision-Language-Action Model",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Robotics \u203a Papers",
+   "top3": [
+    "Robotics \u203a Papers",
+    "Machine Learning \u203a Computer Vision",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.8607773297366914,
+   "second": 0.8229341868832514
+  },
+  {
+   "id": "s3",
+   "title": "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Robotics \u203a Papers",
+   "top3": [
+    "Robotics \u203a Papers",
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8159355020958953,
+   "second": 0.8139478603802534
+  },
+  {
+   "id": "s4",
+   "title": "\u03c00: A Vision-Language-Action Flow Model for General Robot Control",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Robotics \u203a Papers",
+   "top3": [
+    "Robotics \u203a Papers",
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8665042123037593,
+   "second": 0.8362902937009842
+  },
+  {
+   "id": "s5",
+   "title": "Dex-Net 2.0: Deep Learning to Plan Robust Grasps",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 7,
+   "top": 0.8378651612933523,
+   "second": 0.8219517814870552
+  },
+  {
+   "id": "s6",
+   "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Robotics \u203a Papers",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 2,
+   "top": 0.8337416938769376,
+   "second": 0.8062575559381693
+  },
+  {
+   "id": "s7",
+   "title": "Observing and Controlling Features in Vision-Language-Action Models",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Robotics \u203a Papers",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 2,
+   "top": 0.858503718311435,
+   "second": 0.8530252476868863
+  },
+  {
+   "id": "s8",
+   "title": "ALOHA: Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+   "folder": "Robotics \u203a Papers",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Robotics \u203a Hardware",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 3,
+   "top": 0.8178421826672155,
+   "second": 0.8093184610671486
+  },
+  {
+   "id": "s9",
+   "title": "Imitation learning explained: behavior cloning vs DAgger",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.8282081201905989,
+   "second": 0.8157150635366244
+  },
+  {
+   "id": "s10",
+   "title": "Sim-to-real transfer: domain randomization tutorial",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Robotics \u203a Papers",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 1,
+   "top": 0.8490694969382279,
+   "second": 0.8387024730618211
+  },
+  {
+   "id": "s11",
+   "title": "Reinforcement learning for legged locomotion",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Fitness \u203a Running",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8142858359973696,
+   "second": 0.7869366841254499
+  },
+  {
+   "id": "s12",
+   "title": "Teleoperation data collection best practices",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Robotics \u203a Papers",
+   "top3": [
+    "Robotics \u203a Papers",
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 2,
+   "top": 0.8471110124229948,
+   "second": 0.8351078768275713
+  },
+  {
+   "id": "s13",
+   "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 4,
+   "top": 0.8982306515911982,
+   "second": 0.8752376460754718
+  },
+  {
+   "id": "s14",
+   "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Robotics \u203a Papers",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.8533810558543802,
+   "second": 0.8333858320437182
+  },
+  {
+   "id": "s15",
+   "title": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a Courses",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.856997025446652,
+   "second": 0.8481058277094992
+  },
+  {
+   "id": "s16",
+   "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+   "folder": "Robotics \u203a Robot Learning",
+   "pick": "Robotics \u203a Robot Learning",
+   "top3": [
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a Courses",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8650311792051946,
+   "second": 0.8467445655717947
+  },
+  {
+   "id": "s17",
+   "title": "Choosing servo motors for a robot arm",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Robotics \u203a Hardware",
+   "top3": [
+    "Robotics \u203a Hardware",
+    "Robotics \u203a Papers",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 1,
+   "top": 0.8667963492354109,
+   "second": 0.8376453640936024
+  },
+  {
+   "id": "s18",
+   "title": "Building a low-cost 6-DoF arm with 3D printed parts",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Robotics \u203a Hardware",
+   "top3": [
+    "Robotics \u203a Hardware",
+    "Finance \u203a Investing",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.7171211969197369,
+   "second": 0.7020191958055426
+  },
+  {
+   "id": "s19",
+   "title": "SO-100 arm assembly guide",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Robotics \u203a Hardware",
+   "top3": [
+    "Robotics \u203a Hardware",
+    "Robotics \u203a ROS & Simulation",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.8059533485927832,
+   "second": 0.7896907224175655
+  },
+  {
+   "id": "s20",
+   "title": "Soft robotic grippers: design and fabrication",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Robotics \u203a Hardware",
+   "top3": [
+    "Robotics \u203a Hardware",
+    "Robotics \u203a Papers",
+    "Robotics \u203a Robot Learning"
+   ],
+   "rank": 1,
+   "top": 0.8077114468220676,
+   "second": 0.7858525686794109
+  },
+  {
+   "id": "s21",
+   "title": "Brushless motor control with FOC explained",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Robotics \u203a Papers",
+   "top3": [
+    "Robotics \u203a Papers",
+    "Robotics \u203a Hardware",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 2,
+   "top": 0.8106917738481245,
+   "second": 0.8012857743483762
+  },
+  {
+   "id": "s22",
+   "title": "Intel RealSense vs ZED depth cameras for robots",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Robotics \u203a Hardware",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 2,
+   "top": 0.8234936869072635,
+   "second": 0.804927526151662
+  },
+  {
+   "id": "s23",
+   "title": "Harmonic drives vs cycloidal reducers",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Robotics \u203a Hardware",
+   "top3": [
+    "Robotics \u203a Hardware",
+    "Robotics \u203a ROS & Simulation",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8058351205896306,
+   "second": 0.7923605352838222
+  },
+  {
+   "id": "s24",
+   "title": "Wiring and power distribution for mobile robots",
+   "folder": "Robotics \u203a Hardware",
+   "pick": "Robotics \u203a Hardware",
+   "top3": [
+    "Robotics \u203a Hardware",
+    "Robotics \u203a ROS & Simulation",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8590748250332265,
+   "second": 0.8491394075911911
+  },
+  {
+   "id": "s25",
+   "title": "ROS 2 Humble tutorial: publishers and subscribers",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Robotics \u203a ROS & Simulation",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 2,
+   "top": 0.8384157247457178,
+   "second": 0.8368758888918335
+  },
+  {
+   "id": "s26",
+   "title": "MuJoCo getting started",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Robotics \u203a ROS & Simulation",
+   "top3": [
+    "Robotics \u203a ROS & Simulation",
+    "Robotics \u203a Robot Learning",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8741891437570943,
+   "second": 0.8624289788040359
+  },
+  {
+   "id": "s27",
+   "title": "NVIDIA Isaac Sim: importing a URDF",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Robotics \u203a ROS & Simulation",
+   "top3": [
+    "Robotics \u203a ROS & Simulation",
+    "Robotics \u203a Robot Learning",
+    "Robotics \u203a Hardware"
+   ],
+   "rank": 1,
+   "top": 0.8206234751270003,
+   "second": 0.7887723738679138
+  },
+  {
+   "id": "s28",
+   "title": "Gazebo vs Isaac Sim vs MuJoCo",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Robotics \u203a ROS & Simulation",
+   "top3": [
+    "Robotics \u203a ROS & Simulation",
+    "Open Models \u203a Releases",
+    "Fitness \u203a Running"
+   ],
+   "rank": 1,
+   "top": 0.7808574372740475,
+   "second": 0.7596592353961524
+  },
+  {
+   "id": "s29",
+   "title": "MoveIt 2 motion planning basics",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Robotics \u203a ROS & Simulation",
+   "top3": [
+    "Robotics \u203a ROS & Simulation",
+    "Robotics \u203a Papers",
+    "Robotics \u203a Hardware"
+   ],
+   "rank": 1,
+   "top": 0.8502718596427563,
+   "second": 0.7928909620050456
+  },
+  {
+   "id": "s30",
+   "title": "Nav2 navigation stack walkthrough",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Robotics \u203a ROS & Simulation",
+   "top3": [
+    "Robotics \u203a ROS & Simulation",
+    "Robotics \u203a Papers",
+    "Robotics \u203a Robot Learning"
+   ],
+   "rank": 1,
+   "top": 0.8481765069755636,
+   "second": 0.8292671856668765
+  },
+  {
+   "id": "s31",
+   "title": "Writing URDF and Xacro files",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Robotics \u203a Papers",
+   "top3": [
+    "Robotics \u203a Papers",
+    "Robotics \u203a Robot Learning",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 3,
+   "top": 0.871183629773757,
+   "second": 0.8517609180387649
+  },
+  {
+   "id": "s32",
+   "title": "ros2_control hardware interfaces explained",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "pick": "Robotics \u203a ROS & Simulation",
+   "top3": [
+    "Robotics \u203a ROS & Simulation",
+    "Robotics \u203a Hardware",
+    "Programming \u203a Rust"
+   ],
+   "rank": 1,
+   "top": 0.8392497135187345,
+   "second": 0.8349099780355786
+  },
+  {
+   "id": "s33",
+   "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a LLMs",
+   "top3": [
+    "Machine Learning \u203a LLMs",
+    "Open Models \u203a Releases",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8618769485558786,
+   "second": 0.8329865194778292
+  },
+  {
+   "id": "s34",
+   "title": "Prompt engineering guide",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a LLMs",
+   "top3": [
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8626973375345017,
+   "second": 0.8555573802901845
+  },
+  {
+   "id": "s35",
+   "title": "How RLHF works",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a LLMs",
+   "top3": [
+    "Machine Learning \u203a LLMs",
+    "Robotics \u203a Papers",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8626986334933215,
+   "second": 0.8439339513113031
+  },
+  {
+   "id": "s36",
+   "title": "Retrieval-augmented generation from scratch",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a LLMs",
+   "top3": [
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 1,
+   "top": 0.8467631743715855,
+   "second": 0.8429554882508086
+  },
+  {
+   "id": "s37",
+   "title": "Speculative decoding explained",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a LLMs",
+   "top3": [
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.8668313196462949,
+   "second": 0.8447866394938692
+  },
+  {
+   "id": "s38",
+   "title": "Scaling laws for neural language models",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 3,
+   "top": 0.8606478470859866,
+   "second": 0.8602145300665671
+  },
+  {
+   "id": "s39",
+   "title": "KV cache and paged attention in vLLM",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a LLMs",
+   "top3": [
+    "Machine Learning \u203a LLMs",
+    "Open Models \u203a Ecosystem",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.8392525692401922,
+   "second": 0.8194340888935578
+  },
+  {
+   "id": "s40",
+   "title": "DPO: Direct Preference Optimization",
+   "folder": "Machine Learning \u203a LLMs",
+   "pick": "Machine Learning \u203a LLMs",
+   "top3": [
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8602421539095884,
+   "second": 0.8136722535359054
+  },
+  {
+   "id": "s41",
+   "title": "YOLO object detection explained",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Math",
+    "Robotics \u203a Hardware"
+   ],
+   "rank": 1,
+   "top": 0.837823750359729,
+   "second": 0.8131067916959765
+  },
+  {
+   "id": "s42",
+   "title": "Vision Transformers (ViT): An Image is Worth 16x16 Words",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Robotics \u203a Papers",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 1,
+   "top": 0.7626878641174475,
+   "second": 0.7456799950619146
+  },
+  {
+   "id": "s43",
+   "title": "Segment Anything Model (SAM) paper",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 3,
+   "top": 0.8268904075635981,
+   "second": 0.8253301706545115
+  },
+  {
+   "id": "s44",
+   "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a LLMs",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8821497222663717,
+   "second": 0.8689015988013864
+  },
+  {
+   "id": "s45",
+   "title": "Data augmentation for image classification",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.8620221916873776,
+   "second": 0.8484935126796979
+  },
+  {
+   "id": "s46",
+   "title": "Depth estimation with monocular cameras",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Robotics \u203a Hardware",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.855504856080914,
+   "second": 0.8466112723462079
+  },
+  {
+   "id": "s47",
+   "title": "ResNet: Deep Residual Learning for Image Recognition",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8767740850352655,
+   "second": 0.8519168901643523
+  },
+  {
+   "id": "s48",
+   "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Computer Vision",
+    "Robotics \u203a Robot Learning"
+   ],
+   "rank": 2,
+   "top": 0.8903060184033398,
+   "second": 0.8890049030364808
+  },
+  {
+   "id": "s49",
+   "title": "Andrew Ng Machine Learning Specialization \u2014 Course 1",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8757990936295481,
+   "second": 0.8374684527641694
+  },
+  {
+   "id": "s50",
+   "title": "fast.ai Practical Deep Learning for Coders \u2014 Lesson 1",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Computer Vision",
+    "Robotics \u203a Robot Learning"
+   ],
+   "rank": 1,
+   "top": 0.8839702537361283,
+   "second": 0.8631500614019296
+  },
+  {
+   "id": "s51",
+   "title": "Dive into Deep Learning (d2l.ai)",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8763191207201595,
+   "second": 0.8589822285262867
+  },
+  {
+   "id": "s52",
+   "title": "Full Stack Deep Learning \u2014 course page",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 1,
+   "top": 0.9151405081611557,
+   "second": 0.8863671201355101
+  },
+  {
+   "id": "s53",
+   "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.9030499618874801,
+   "second": 0.8805938147000142
+  },
+  {
+   "id": "s54",
+   "title": "Google Machine Learning Crash Course",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8782534115393308,
+   "second": 0.8363416753256195
+  },
+  {
+   "id": "s55",
+   "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Robotics \u203a Robot Learning",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8901624879981261,
+   "second": 0.8704872751491155
+  },
+  {
+   "id": "s56",
+   "title": "Andrej Karpathy: Neural Networks Zero to Hero \u2014 micrograd",
+   "folder": "Machine Learning \u203a Courses",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 3,
+   "top": 0.831018589535383,
+   "second": 0.8293877774625542
+  },
+  {
+   "id": "s57",
+   "title": "3Blue1Brown: Essence of Linear Algebra",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Computer Vision",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8351119363841498,
+   "second": 0.8171744574781061
+  },
+  {
+   "id": "s58",
+   "title": "Probability for machine learning \u2014 cheat sheet",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.9208849624573598,
+   "second": 0.9165869398456836
+  },
+  {
+   "id": "s59",
+   "title": "Matrix calculus for deep learning",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8686606878091345,
+   "second": 0.8539764804087078
+  },
+  {
+   "id": "s60",
+   "title": "Information theory basics: entropy and KL divergence",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8318301106503934,
+   "second": 0.8140505496463301
+  },
+  {
+   "id": "s61",
+   "title": "Convex optimization (Boyd) lecture videos",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8717070702987693,
+   "second": 0.868981609100923
+  },
+  {
+   "id": "s62",
+   "title": "Bayes' theorem explained visually",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8635402103660594,
+   "second": 0.8244585430550158
+  },
+  {
+   "id": "s63",
+   "title": "Gradient descent and its variants: SGD, momentum, Adam",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8574577719873446,
+   "second": 0.844783370159168
+  },
+  {
+   "id": "s64",
+   "title": "Singular value decomposition intuition",
+   "folder": "Machine Learning \u203a Math",
+   "pick": "Machine Learning \u203a Math",
+   "top3": [
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8307473574624399,
+   "second": 0.807757083591095
+  },
+  {
+   "id": "s65",
+   "title": "Llama 4 release notes",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Ecosystem",
+   "top3": [
+    "Open Models \u203a Ecosystem",
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 2,
+   "top": 0.8800508346140259,
+   "second": 0.8761047438613412
+  },
+  {
+   "id": "s66",
+   "title": "Qwen3 technical report",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Open Models \u203a Ecosystem",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8212180077474849,
+   "second": 0.7837335100293363
+  },
+  {
+   "id": "s67",
+   "title": "Mistral Small 3.1 announcement",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Open Models \u203a Ecosystem",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8664132023848128,
+   "second": 0.8557865196885232
+  },
+  {
+   "id": "s68",
+   "title": "OLMo 2: fully open language models",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Open Models \u203a Ecosystem",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8380944841937301,
+   "second": 0.815655771914773
+  },
+  {
+   "id": "s69",
+   "title": "Gemma 3 open models from Google",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Open Models \u203a Ecosystem",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8659599583725346,
+   "second": 0.8423239321690604
+  },
+  {
+   "id": "s70",
+   "title": "DeepSeek-V3 technical report",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Ecosystem",
+   "top3": [
+    "Open Models \u203a Ecosystem",
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 2,
+   "top": 0.8692869980351203,
+   "second": 0.8691176061342216
+  },
+  {
+   "id": "s71",
+   "title": "SmolLM2: small language models by Hugging Face",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Ecosystem",
+   "top3": [
+    "Open Models \u203a Ecosystem",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 4,
+   "top": 0.8334874959032235,
+   "second": 0.8223745627503353
+  },
+  {
+   "id": "s72",
+   "title": "Phi-4 model card",
+   "folder": "Open Models \u203a Releases",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a Math",
+    "Robotics \u203a Papers"
+   ],
+   "rank": 1,
+   "top": 0.8016417272532743,
+   "second": 0.7976500834609631
+  },
+  {
+   "id": "s73",
+   "title": "Open models lecture: ecosystem, debates, and future access",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Open Models \u203a Ecosystem",
+   "top3": [
+    "Open Models \u203a Ecosystem",
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.8872067091880036,
+   "second": 0.8147660657069238
+  },
+  {
+   "id": "s74",
+   "title": "An Introduction to Open Source AI",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Machine Learning \u203a Courses",
+   "top3": [
+    "Machine Learning \u203a Courses",
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 7,
+   "top": 0.9047054398505927,
+   "second": 0.8844913649640118
+  },
+  {
+   "id": "s75",
+   "title": "What counts as open source AI? The OSI definition",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Machine Learning \u203a Computer Vision",
+   "top3": [
+    "Machine Learning \u203a Computer Vision",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 5,
+   "top": 0.8034148483832231,
+   "second": 0.8027934434779248
+  },
+  {
+   "id": "s76",
+   "title": "Open-weight model licenses compared",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Open Models \u203a Ecosystem",
+   "top3": [
+    "Open Models \u203a Ecosystem",
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8207575336800156,
+   "second": 0.8205786692641346
+  },
+  {
+   "id": "s77",
+   "title": "The state of open models \u2014 Interconnects",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Open Models \u203a Ecosystem",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 2,
+   "top": 0.8597206971559703,
+   "second": 0.8571952398715614
+  },
+  {
+   "id": "s78",
+   "title": "Policy debate: should frontier model weights be released?",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Open Models \u203a Ecosystem",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 2,
+   "top": 0.8345728319579312,
+   "second": 0.8191345947589159
+  },
+  {
+   "id": "s79",
+   "title": "Hugging Face Open LLM Leaderboard explained",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Open Models \u203a Releases",
+   "top3": [
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 5,
+   "top": 0.8470479551761815,
+   "second": 0.8251719410306013
+  },
+  {
+   "id": "s80",
+   "title": "Distillation and the open model ecosystem",
+   "folder": "Open Models \u203a Ecosystem",
+   "pick": "Open Models \u203a Ecosystem",
+   "top3": [
+    "Open Models \u203a Ecosystem",
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.907457753783615,
+   "second": 0.8653192589938505
+  },
+  {
+   "id": "s81",
+   "title": "The Rust Book: ownership chapter",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Finance \u203a Investing",
+    "Open Models \u203a Ecosystem"
+   ],
+   "rank": 1,
+   "top": 0.8648689254597304,
+   "second": 0.816921822724977
+  },
+  {
+   "id": "s82",
+   "title": "Async Rust with Tokio tutorial",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Programming \u203a TypeScript",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 1,
+   "top": 0.86203859176796,
+   "second": 0.7833617867642558
+  },
+  {
+   "id": "s83",
+   "title": "Error handling in Rust: anyhow vs thiserror",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Programming \u203a TypeScript",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.8458838874859156,
+   "second": 0.8071194371831425
+  },
+  {
+   "id": "s84",
+   "title": "Writing a CLI in Rust with clap",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Programming \u203a TypeScript",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8650674335073689,
+   "second": 0.7913154066593978
+  },
+  {
+   "id": "s85",
+   "title": "Rust lifetimes explained",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Finance \u203a Investing",
+    "Programming \u203a TypeScript"
+   ],
+   "rank": 1,
+   "top": 0.8742420970406888,
+   "second": 0.793531851682307
+  },
+  {
+   "id": "s86",
+   "title": "Zero-cost abstractions in Rust",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Finance \u203a Investing",
+    "Programming \u203a TypeScript"
+   ],
+   "rank": 1,
+   "top": 0.8825782198354549,
+   "second": 0.8168914329371983
+  },
+  {
+   "id": "s87",
+   "title": "Rust for Python developers",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Programming \u203a TypeScript",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.9065297427352199,
+   "second": 0.8220370478460142
+  },
+  {
+   "id": "s88",
+   "title": "Rustlings exercises walkthrough \u2014 part 1",
+   "folder": "Programming \u203a Rust",
+   "pick": "Programming \u203a Rust",
+   "top3": [
+    "Programming \u203a Rust",
+    "Machine Learning \u203a Math",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 1,
+   "top": 0.8589134308102728,
+   "second": 0.8434455747312926
+  },
+  {
+   "id": "s89",
+   "title": "TypeScript generics deep dive",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Programming \u203a Rust",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.8956592063727724,
+   "second": 0.7732836128261106
+  },
+  {
+   "id": "s90",
+   "title": "Type narrowing and discriminated unions",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Machine Learning \u203a LLMs",
+    "Machine Learning \u203a Computer Vision"
+   ],
+   "rank": 1,
+   "top": 0.8153676683782456,
+   "second": 0.8124536604580843
+  },
+  {
+   "id": "s91",
+   "title": "Zod schema validation in TypeScript",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Programming \u203a Rust",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.8366266190811115,
+   "second": 0.7655404013301075
+  },
+  {
+   "id": "s92",
+   "title": "React 19 with TypeScript: typing hooks",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Programming \u203a Rust",
+    "Travel \u203a Japan"
+   ],
+   "rank": 1,
+   "top": 0.8576048440556636,
+   "second": 0.7468269326756547
+  },
+  {
+   "id": "s93",
+   "title": "tsconfig options explained",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Finance \u203a Investing",
+    "Programming \u203a Rust"
+   ],
+   "rank": 1,
+   "top": 0.874696244420637,
+   "second": 0.8399848027890544
+  },
+  {
+   "id": "s94",
+   "title": "Effect-TS introduction",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Finance \u203a Investing",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8654272263115519,
+   "second": 0.8537128581039762
+  },
+  {
+   "id": "s95",
+   "title": "Vite + TypeScript project setup",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Programming \u203a Rust",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8866624328560004,
+   "second": 0.7963561621419069
+  },
+  {
+   "id": "s96",
+   "title": "Type-level programming with template literal types",
+   "folder": "Programming \u203a TypeScript",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Programming \u203a Rust",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8782404901141105,
+   "second": 0.8474760355503388
+  },
+  {
+   "id": "s97",
+   "title": "Neapolitan pizza at home in a regular oven",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Fitness \u203a Running"
+   ],
+   "rank": 1,
+   "top": 0.8689286098411787,
+   "second": 0.7943379265014945
+  },
+  {
+   "id": "s98",
+   "title": "New York style pizza dough recipe",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Fitness \u203a Running"
+   ],
+   "rank": 1,
+   "top": 0.8678430932081456,
+   "second": 0.781066134655364
+  },
+  {
+   "id": "s99",
+   "title": "Detroit-style pizza in a cast iron pan",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Robotics \u203a Hardware"
+   ],
+   "rank": 1,
+   "top": 0.8623703994855169,
+   "second": 0.8068343208916978
+  },
+  {
+   "id": "s100",
+   "title": "Best flour for pizza: 00 vs bread flour",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8293673097149743,
+   "second": 0.7404174027032135
+  },
+  {
+   "id": "s101",
+   "title": "Pizza sauce: San Marzano tomatoes, no cooking",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Travel \u203a Japan"
+   ],
+   "rank": 1,
+   "top": 0.854741202430419,
+   "second": 0.807032368907556
+  },
+  {
+   "id": "s102",
+   "title": "Ooni Koda 16 review",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.7941656663757214,
+   "second": 0.7208334827869348
+  },
+  {
+   "id": "s103",
+   "title": "Cold fermentation for pizza dough",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Fitness \u203a Running"
+   ],
+   "rank": 1,
+   "top": 0.7845152655544534,
+   "second": 0.6816432929205123
+  },
+  {
+   "id": "s104",
+   "title": "Sourdough pizza series ep. 1: making the starter",
+   "folder": "Cooking \u203a Pizza",
+   "pick": "Cooking \u203a Pizza",
+   "top3": [
+    "Cooking \u203a Pizza",
+    "Cooking \u203a Japanese Food",
+    "Fitness \u203a Running"
+   ],
+   "rank": 1,
+   "top": 0.8072259047805689,
+   "second": 0.7497307203925603
+  },
+  {
+   "id": "s105",
+   "title": "How to make tonkotsu ramen broth",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Travel \u203a Japan",
+    "Programming \u203a Rust"
+   ],
+   "rank": 1,
+   "top": 0.8065764916121587,
+   "second": 0.7723657320116221
+  },
+  {
+   "id": "s106",
+   "title": "Homemade sushi rice",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Cooking \u203a Pizza",
+    "Travel \u203a Japan"
+   ],
+   "rank": 1,
+   "top": 0.8600906974267688,
+   "second": 0.8030432265723554
+  },
+  {
+   "id": "s107",
+   "title": "Miso soup with dashi from scratch",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Finance \u203a Investing",
+    "Cooking \u203a Pizza"
+   ],
+   "rank": 1,
+   "top": 0.8311652241658944,
+   "second": 0.7749544835473043
+  },
+  {
+   "id": "s108",
+   "title": "Gyoza folding technique",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Machine Learning \u203a Math",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.7991103925308356,
+   "second": 0.7889199326599705
+  },
+  {
+   "id": "s109",
+   "title": "Japanese curry roux from scratch",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Travel \u203a Japan",
+    "Cooking \u203a Pizza"
+   ],
+   "rank": 1,
+   "top": 0.8356716854333526,
+   "second": 0.8037668190767674
+  },
+  {
+   "id": "s110",
+   "title": "Okonomiyaki recipe",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Cooking \u203a Pizza",
+    "Travel \u203a Japan"
+   ],
+   "rank": 1,
+   "top": 0.8449905018446329,
+   "second": 0.7990351040591654
+  },
+  {
+   "id": "s111",
+   "title": "Teriyaki chicken, the authentic way",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Travel \u203a Japan",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8326239170655843,
+   "second": 0.8030027915879083
+  },
+  {
+   "id": "s112",
+   "title": "Onigiri filling ideas",
+   "folder": "Cooking \u203a Japanese Food",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8037294885128028,
+   "second": 0.794474215212555
+  },
+  {
+   "id": "s113",
+   "title": "Index funds vs ETFs explained",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Open Models \u203a Ecosystem",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 1,
+   "top": 0.852731781503088,
+   "second": 0.7802765780665155
+  },
+  {
+   "id": "s114",
+   "title": "How to build a three-fund portfolio",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Fitness \u203a Running",
+    "Open Models \u203a Ecosystem"
+   ],
+   "rank": 1,
+   "top": 0.8927802184921165,
+   "second": 0.8325690970065491
+  },
+  {
+   "id": "s115",
+   "title": "Dollar-cost averaging: does it work?",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8651983432977479,
+   "second": 0.8535875095660577
+  },
+  {
+   "id": "s116",
+   "title": "Understanding P/E ratios",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8466884900289873,
+   "second": 0.83854508122107
+  },
+  {
+   "id": "s117",
+   "title": "Roth IRA vs traditional IRA",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Machine Learning \u203a Math",
+    "Fitness \u203a Running"
+   ],
+   "rank": 1,
+   "top": 0.7587927227850041,
+   "second": 0.7113475361960302
+  },
+  {
+   "id": "s118",
+   "title": "Bond ladders for beginners",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Fitness \u203a Running",
+    "Robotics \u203a ROS & Simulation"
+   ],
+   "rank": 1,
+   "top": 0.8216336813411578,
+   "second": 0.79283411296679
+  },
+  {
+   "id": "s119",
+   "title": "Warren Buffett's shareholder letters summary",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.815972748367489,
+   "second": 0.7715409904557426
+  },
+  {
+   "id": "s120",
+   "title": "Rebalancing your portfolio once a year",
+   "folder": "Finance \u203a Investing",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Machine Learning \u203a Math",
+    "Open Models \u203a Ecosystem"
+   ],
+   "rank": 1,
+   "top": 0.8820252490381315,
+   "second": 0.8245108402124233
+  },
+  {
+   "id": "s121",
+   "title": "Zone 2 training for runners",
+   "folder": "Fitness \u203a Running",
+   "pick": "Fitness \u203a Running",
+   "top3": [
+    "Fitness \u203a Running",
+    "Open Models \u203a Releases",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 1,
+   "top": 0.9152628859859087,
+   "second": 0.7997797891779446
+  },
+  {
+   "id": "s122",
+   "title": "How to choose running shoes",
+   "folder": "Fitness \u203a Running",
+   "pick": "Fitness \u203a Running",
+   "top3": [
+    "Fitness \u203a Running",
+    "Open Models \u203a Releases",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.9009172040790568,
+   "second": 0.8000593948928993
+  },
+  {
+   "id": "s123",
+   "title": "Marathon fueling strategy",
+   "folder": "Fitness \u203a Running",
+   "pick": "Fitness \u203a Running",
+   "top3": [
+    "Fitness \u203a Running",
+    "Finance \u203a Investing",
+    "Cooking \u203a Pizza"
+   ],
+   "rank": 1,
+   "top": 0.8409850383535395,
+   "second": 0.782107869902518
+  },
+  {
+   "id": "s124",
+   "title": "Running form drills",
+   "folder": "Fitness \u203a Running",
+   "pick": "Fitness \u203a Running",
+   "top3": [
+    "Fitness \u203a Running",
+    "Machine Learning \u203a Math",
+    "Open Models \u203a Releases"
+   ],
+   "rank": 1,
+   "top": 0.8824618715604164,
+   "second": 0.8200078187678606
+  },
+  {
+   "id": "s125",
+   "title": "Interval training: 400m repeats",
+   "folder": "Fitness \u203a Running",
+   "pick": "Fitness \u203a Running",
+   "top3": [
+    "Fitness \u203a Running",
+    "Machine Learning \u203a Math",
+    "Machine Learning \u203a LLMs"
+   ],
+   "rank": 1,
+   "top": 0.8273653463691277,
+   "second": 0.7971368573313397
+  },
+  {
+   "id": "s126",
+   "title": "Preventing shin splints",
+   "folder": "Fitness \u203a Running",
+   "pick": "Programming \u203a TypeScript",
+   "top3": [
+    "Programming \u203a TypeScript",
+    "Fitness \u203a Running",
+    "Finance \u203a Investing"
+   ],
+   "rank": 2,
+   "top": 0.7891279895237256,
+   "second": 0.7853345311394434
+  },
+  {
+   "id": "s127",
+   "title": "Strength training for runners",
+   "folder": "Fitness \u203a Running",
+   "pick": "Fitness \u203a Running",
+   "top3": [
+    "Fitness \u203a Running",
+    "Finance \u203a Investing",
+    "Machine Learning \u203a Courses"
+   ],
+   "rank": 1,
+   "top": 0.9010403510195202,
+   "second": 0.7827459133924454
+  },
+  {
+   "id": "s128",
+   "title": "Couch to 5K: week 1 plan",
+   "folder": "Fitness \u203a Running",
+   "pick": "Fitness \u203a Running",
+   "top3": [
+    "Fitness \u203a Running",
+    "Finance \u203a Investing",
+    "Machine Learning \u203a Math"
+   ],
+   "rank": 1,
+   "top": 0.858671461801332,
+   "second": 0.8020510071555268
+  },
+  {
+   "id": "s129",
+   "title": "Two weeks in Japan itinerary",
+   "folder": "Travel \u203a Japan",
+   "pick": "Travel \u203a Japan",
+   "top3": [
+    "Travel \u203a Japan",
+    "Cooking \u203a Japanese Food",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8857346949285468,
+   "second": 0.7908024062144603
+  },
+  {
+   "id": "s130",
+   "title": "JR Pass: is it still worth it?",
+   "folder": "Travel \u203a Japan",
+   "pick": "Finance \u203a Investing",
+   "top3": [
+    "Finance \u203a Investing",
+    "Fitness \u203a Running",
+    "Travel \u203a Japan"
+   ],
+   "rank": 3,
+   "top": 0.839456874027317,
+   "second": 0.8217169254084971
+  },
+  {
+   "id": "s131",
+   "title": "Best ramen shops in Tokyo",
+   "folder": "Travel \u203a Japan",
+   "pick": "Travel \u203a Japan",
+   "top3": [
+    "Travel \u203a Japan",
+    "Cooking \u203a Japanese Food",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8152413554438841,
+   "second": 0.8002164013524646
+  },
+  {
+   "id": "s132",
+   "title": "Kyoto temples guide",
+   "folder": "Travel \u203a Japan",
+   "pick": "Travel \u203a Japan",
+   "top3": [
+    "Travel \u203a Japan",
+    "Cooking \u203a Japanese Food",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.829080651364867,
+   "second": 0.7919989810979072
+  },
+  {
+   "id": "s133",
+   "title": "Hiking the Kumano Kodo",
+   "folder": "Travel \u203a Japan",
+   "pick": "Travel \u203a Japan",
+   "top3": [
+    "Travel \u203a Japan",
+    "Fitness \u203a Running",
+    "Cooking \u203a Japanese Food"
+   ],
+   "rank": 1,
+   "top": 0.8197562684533843,
+   "second": 0.7953372511697969
+  },
+  {
+   "id": "s134",
+   "title": "Japan travel tips for first-timers",
+   "folder": "Travel \u203a Japan",
+   "pick": "Travel \u203a Japan",
+   "top3": [
+    "Travel \u203a Japan",
+    "Cooking \u203a Japanese Food",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.9209303353840451,
+   "second": 0.8569416188897573
+  },
+  {
+   "id": "s135",
+   "title": "Hakone onsen ryokan recommendations",
+   "folder": "Travel \u203a Japan",
+   "pick": "Travel \u203a Japan",
+   "top3": [
+    "Travel \u203a Japan",
+    "Cooking \u203a Japanese Food",
+    "Finance \u203a Investing"
+   ],
+   "rank": 1,
+   "top": 0.8172063832096612,
+   "second": 0.8074150826901507
+  },
+  {
+   "id": "s136",
+   "title": "Osaka street food guide",
+   "folder": "Travel \u203a Japan",
+   "pick": "Cooking \u203a Japanese Food",
+   "top3": [
+    "Cooking \u203a Japanese Food",
+    "Travel \u203a Japan",
+    "Cooking \u203a Pizza"
+   ],
+   "rank": 2,
+   "top": 0.8348049523480432,
+   "second": 0.8040833990830282
+  }
+ ],
+ "strategyTop1": {
+  "max": 0.7794117647058824,
+  "centroid": 0.8161764705882353,
+  "hybrid": 0.8161764705882353
+ },
+ "novel": [
+  {
+   "id": "s1",
+   "title": "RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.8114713377516447,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s2",
+   "title": "OpenVLA: An Open-Source Vision-Language-Action Model",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.8229341868832514,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s3",
+   "title": "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.8139478603802534,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s4",
+   "title": "\u03c00: A Vision-Language-Action Flow Model for General Robot Control",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.8362902937009842,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s5",
+   "title": "Dex-Net 2.0: Deep Learning to Plan Robust Grasps",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.8378651612933523,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s6",
+   "title": "Open X-Embodiment: Robotic Learning Datasets and RT-X Models",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.8337416938769376,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s7",
+   "title": "Observing and Controlling Features in Vision-Language-Action Models",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.858503718311435,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s8",
+   "title": "ALOHA: Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+   "folder": "Robotics \u203a Papers",
+   "top": 0.8178421826672155,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s9",
+   "title": "Imitation learning explained: behavior cloning vs DAgger",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.8157150635366244,
+   "pick": "Machine Learning \u203a LLMs",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s10",
+   "title": "Sim-to-real transfer: domain randomization tutorial",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.8387024730618211,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s11",
+   "title": "Reinforcement learning for legged locomotion",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.7869366841254499,
+   "pick": "Fitness \u203a Running",
+   "predParent": "Fitness",
+   "parentKnown": true
+  },
+  {
+   "id": "s12",
+   "title": "Teleoperation data collection best practices",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.8471110124229948,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s13",
+   "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.8982306515911982,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s14",
+   "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.8333858320437182,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s15",
+   "title": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.8481058277094992,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s16",
+   "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+   "folder": "Robotics \u203a Robot Learning",
+   "top": 0.8467445655717947,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s17",
+   "title": "Choosing servo motors for a robot arm",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.8376453640936024,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s18",
+   "title": "Building a low-cost 6-DoF arm with 3D printed parts",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.7020191958055426,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": true
+  },
+  {
+   "id": "s19",
+   "title": "SO-100 arm assembly guide",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.7896907224175655,
+   "pick": "Robotics \u203a ROS & Simulation",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s20",
+   "title": "Soft robotic grippers: design and fabrication",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.7858525686794109,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s21",
+   "title": "Brushless motor control with FOC explained",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.8106917738481245,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s22",
+   "title": "Intel RealSense vs ZED depth cameras for robots",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.8234936869072635,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s23",
+   "title": "Harmonic drives vs cycloidal reducers",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.7923605352838222,
+   "pick": "Robotics \u203a ROS & Simulation",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s24",
+   "title": "Wiring and power distribution for mobile robots",
+   "folder": "Robotics \u203a Hardware",
+   "top": 0.8491394075911911,
+   "pick": "Robotics \u203a ROS & Simulation",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s25",
+   "title": "ROS 2 Humble tutorial: publishers and subscribers",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.8384157247457178,
+   "pick": "Programming \u203a Rust",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s26",
+   "title": "MuJoCo getting started",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.8624289788040359,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s27",
+   "title": "NVIDIA Isaac Sim: importing a URDF",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.7887723738679138,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s28",
+   "title": "Gazebo vs Isaac Sim vs MuJoCo",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.7596592353961524,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s29",
+   "title": "MoveIt 2 motion planning basics",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.7928909620050456,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s30",
+   "title": "Nav2 navigation stack walkthrough",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.8292671856668765,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s31",
+   "title": "Writing URDF and Xacro files",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.871183629773757,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s32",
+   "title": "ros2_control hardware interfaces explained",
+   "folder": "Robotics \u203a ROS & Simulation",
+   "top": 0.8349099780355786,
+   "pick": "Robotics \u203a Hardware",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s33",
+   "title": "LoRA: Low-Rank Adaptation of Large Language Models",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8329865194778292,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s34",
+   "title": "Prompt engineering guide",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8555573802901845,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s35",
+   "title": "How RLHF works",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8439339513113031,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s36",
+   "title": "Retrieval-augmented generation from scratch",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8429554882508086,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s37",
+   "title": "Speculative decoding explained",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8447866394938692,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s38",
+   "title": "Scaling laws for neural language models",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8606478470859866,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s39",
+   "title": "KV cache and paged attention in vLLM",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8194340888935578,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s40",
+   "title": "DPO: Direct Preference Optimization",
+   "folder": "Machine Learning \u203a LLMs",
+   "top": 0.8136722535359054,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s41",
+   "title": "YOLO object detection explained",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.8131067916959765,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s42",
+   "title": "Vision Transformers (ViT): An Image is Worth 16x16 Words",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.7456799950619146,
+   "pick": "Robotics \u203a Papers",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s43",
+   "title": "Segment Anything Model (SAM) paper",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.8268904075635981,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s44",
+   "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.8689015988013864,
+   "pick": "Machine Learning \u203a LLMs",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s45",
+   "title": "Data augmentation for image classification",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.8484935126796979,
+   "pick": "Machine Learning \u203a LLMs",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s46",
+   "title": "Depth estimation with monocular cameras",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.8466112723462079,
+   "pick": "Robotics \u203a Hardware",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s47",
+   "title": "ResNet: Deep Residual Learning for Image Recognition",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.8519168901643523,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s48",
+   "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+   "folder": "Machine Learning \u203a Computer Vision",
+   "top": 0.8903060184033398,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s49",
+   "title": "Andrew Ng Machine Learning Specialization \u2014 Course 1",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.8374684527641694,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s50",
+   "title": "fast.ai Practical Deep Learning for Coders \u2014 Lesson 1",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.8631500614019296,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s51",
+   "title": "Dive into Deep Learning (d2l.ai)",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.8589822285262867,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s52",
+   "title": "Full Stack Deep Learning \u2014 course page",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.8863671201355101,
+   "pick": "Machine Learning \u203a LLMs",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s53",
+   "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.8805938147000142,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s54",
+   "title": "Google Machine Learning Crash Course",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.8363416753256195,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s55",
+   "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.8704872751491155,
+   "pick": "Robotics \u203a Robot Learning",
+   "predParent": "Robotics",
+   "parentKnown": true
+  },
+  {
+   "id": "s56",
+   "title": "Andrej Karpathy: Neural Networks Zero to Hero \u2014 micrograd",
+   "folder": "Machine Learning \u203a Courses",
+   "top": 0.831018589535383,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s57",
+   "title": "3Blue1Brown: Essence of Linear Algebra",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.8171744574781061,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s58",
+   "title": "Probability for machine learning \u2014 cheat sheet",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.9165869398456836,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s59",
+   "title": "Matrix calculus for deep learning",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.8539764804087078,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s60",
+   "title": "Information theory basics: entropy and KL divergence",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.8140505496463301,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s61",
+   "title": "Convex optimization (Boyd) lecture videos",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.868981609100923,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s62",
+   "title": "Bayes' theorem explained visually",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.8244585430550158,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s63",
+   "title": "Gradient descent and its variants: SGD, momentum, Adam",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.844783370159168,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s64",
+   "title": "Singular value decomposition intuition",
+   "folder": "Machine Learning \u203a Math",
+   "top": 0.807757083591095,
+   "pick": "Machine Learning \u203a LLMs",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s65",
+   "title": "Llama 4 release notes",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.8800508346140259,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s66",
+   "title": "Qwen3 technical report",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.7837335100293363,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s67",
+   "title": "Mistral Small 3.1 announcement",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.8557865196885232,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s68",
+   "title": "OLMo 2: fully open language models",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.815655771914773,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s69",
+   "title": "Gemma 3 open models from Google",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.8423239321690604,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s70",
+   "title": "DeepSeek-V3 technical report",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.8692869980351203,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s71",
+   "title": "SmolLM2: small language models by Hugging Face",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.8334874959032235,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s72",
+   "title": "Phi-4 model card",
+   "folder": "Open Models \u203a Releases",
+   "top": 0.7976500834609631,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s73",
+   "title": "Open models lecture: ecosystem, debates, and future access",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.8147660657069238,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s74",
+   "title": "An Introduction to Open Source AI",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.9047054398505927,
+   "pick": "Machine Learning \u203a Courses",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s75",
+   "title": "What counts as open source AI? The OSI definition",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.8034148483832231,
+   "pick": "Machine Learning \u203a Computer Vision",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s76",
+   "title": "Open-weight model licenses compared",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.8205786692641346,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s77",
+   "title": "The state of open models \u2014 Interconnects",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.8597206971559703,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s78",
+   "title": "Policy debate: should frontier model weights be released?",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.8345728319579312,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s79",
+   "title": "Hugging Face Open LLM Leaderboard explained",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.8470479551761815,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s80",
+   "title": "Distillation and the open model ecosystem",
+   "folder": "Open Models \u203a Ecosystem",
+   "top": 0.8653192589938505,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s81",
+   "title": "The Rust Book: ownership chapter",
+   "folder": "Programming \u203a Rust",
+   "top": 0.816921822724977,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": true
+  },
+  {
+   "id": "s82",
+   "title": "Async Rust with Tokio tutorial",
+   "folder": "Programming \u203a Rust",
+   "top": 0.7833617867642558,
+   "pick": "Programming \u203a TypeScript",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s83",
+   "title": "Error handling in Rust: anyhow vs thiserror",
+   "folder": "Programming \u203a Rust",
+   "top": 0.8071194371831425,
+   "pick": "Programming \u203a TypeScript",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s84",
+   "title": "Writing a CLI in Rust with clap",
+   "folder": "Programming \u203a Rust",
+   "top": 0.7913154066593978,
+   "pick": "Programming \u203a TypeScript",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s85",
+   "title": "Rust lifetimes explained",
+   "folder": "Programming \u203a Rust",
+   "top": 0.793531851682307,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": true
+  },
+  {
+   "id": "s86",
+   "title": "Zero-cost abstractions in Rust",
+   "folder": "Programming \u203a Rust",
+   "top": 0.8168914329371983,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": true
+  },
+  {
+   "id": "s87",
+   "title": "Rust for Python developers",
+   "folder": "Programming \u203a Rust",
+   "top": 0.8220370478460142,
+   "pick": "Programming \u203a TypeScript",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s88",
+   "title": "Rustlings exercises walkthrough \u2014 part 1",
+   "folder": "Programming \u203a Rust",
+   "top": 0.8434455747312926,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s89",
+   "title": "TypeScript generics deep dive",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.7732836128261106,
+   "pick": "Programming \u203a Rust",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s90",
+   "title": "Type narrowing and discriminated unions",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.8124536604580843,
+   "pick": "Machine Learning \u203a LLMs",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s91",
+   "title": "Zod schema validation in TypeScript",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.7655404013301075,
+   "pick": "Programming \u203a Rust",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s92",
+   "title": "React 19 with TypeScript: typing hooks",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.7468269326756547,
+   "pick": "Programming \u203a Rust",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s93",
+   "title": "tsconfig options explained",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.8399848027890544,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": true
+  },
+  {
+   "id": "s94",
+   "title": "Effect-TS introduction",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.8537128581039762,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": true
+  },
+  {
+   "id": "s95",
+   "title": "Vite + TypeScript project setup",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.7963561621419069,
+   "pick": "Programming \u203a Rust",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s96",
+   "title": "Type-level programming with template literal types",
+   "folder": "Programming \u203a TypeScript",
+   "top": 0.8474760355503388,
+   "pick": "Programming \u203a Rust",
+   "predParent": "Programming",
+   "parentKnown": true
+  },
+  {
+   "id": "s97",
+   "title": "Neapolitan pizza at home in a regular oven",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.7943379265014945,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s98",
+   "title": "New York style pizza dough recipe",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.781066134655364,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s99",
+   "title": "Detroit-style pizza in a cast iron pan",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.8068343208916978,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s100",
+   "title": "Best flour for pizza: 00 vs bread flour",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.7404174027032135,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s101",
+   "title": "Pizza sauce: San Marzano tomatoes, no cooking",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.807032368907556,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s102",
+   "title": "Ooni Koda 16 review",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.7208334827869348,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s103",
+   "title": "Cold fermentation for pizza dough",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.6816432929205123,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s104",
+   "title": "Sourdough pizza series ep. 1: making the starter",
+   "folder": "Cooking \u203a Pizza",
+   "top": 0.7497307203925603,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s105",
+   "title": "How to make tonkotsu ramen broth",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.7723657320116221,
+   "pick": "Travel \u203a Japan",
+   "predParent": "Travel",
+   "parentKnown": true
+  },
+  {
+   "id": "s106",
+   "title": "Homemade sushi rice",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.8030432265723554,
+   "pick": "Cooking \u203a Pizza",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s107",
+   "title": "Miso soup with dashi from scratch",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.7749544835473043,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": true
+  },
+  {
+   "id": "s108",
+   "title": "Gyoza folding technique",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.7889199326599705,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": true
+  },
+  {
+   "id": "s109",
+   "title": "Japanese curry roux from scratch",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.8037668190767674,
+   "pick": "Travel \u203a Japan",
+   "predParent": "Travel",
+   "parentKnown": true
+  },
+  {
+   "id": "s110",
+   "title": "Okonomiyaki recipe",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.7990351040591654,
+   "pick": "Cooking \u203a Pizza",
+   "predParent": "Cooking",
+   "parentKnown": true
+  },
+  {
+   "id": "s111",
+   "title": "Teriyaki chicken, the authentic way",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.8030027915879083,
+   "pick": "Travel \u203a Japan",
+   "predParent": "Travel",
+   "parentKnown": true
+  },
+  {
+   "id": "s112",
+   "title": "Onigiri filling ideas",
+   "folder": "Cooking \u203a Japanese Food",
+   "top": 0.794474215212555,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": true
+  },
+  {
+   "id": "s113",
+   "title": "Index funds vs ETFs explained",
+   "folder": "Finance \u203a Investing",
+   "top": 0.7802765780665155,
+   "pick": "Open Models \u203a Ecosystem",
+   "predParent": "Open Models",
+   "parentKnown": false
+  },
+  {
+   "id": "s114",
+   "title": "How to build a three-fund portfolio",
+   "folder": "Finance \u203a Investing",
+   "top": 0.8325690970065491,
+   "pick": "Fitness \u203a Running",
+   "predParent": "Fitness",
+   "parentKnown": false
+  },
+  {
+   "id": "s115",
+   "title": "Dollar-cost averaging: does it work?",
+   "folder": "Finance \u203a Investing",
+   "top": 0.8535875095660577,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": false
+  },
+  {
+   "id": "s116",
+   "title": "Understanding P/E ratios",
+   "folder": "Finance \u203a Investing",
+   "top": 0.83854508122107,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": false
+  },
+  {
+   "id": "s117",
+   "title": "Roth IRA vs traditional IRA",
+   "folder": "Finance \u203a Investing",
+   "top": 0.7113475361960302,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": false
+  },
+  {
+   "id": "s118",
+   "title": "Bond ladders for beginners",
+   "folder": "Finance \u203a Investing",
+   "top": 0.79283411296679,
+   "pick": "Fitness \u203a Running",
+   "predParent": "Fitness",
+   "parentKnown": false
+  },
+  {
+   "id": "s119",
+   "title": "Warren Buffett's shareholder letters summary",
+   "folder": "Finance \u203a Investing",
+   "top": 0.7715409904557426,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": false
+  },
+  {
+   "id": "s120",
+   "title": "Rebalancing your portfolio once a year",
+   "folder": "Finance \u203a Investing",
+   "top": 0.8245108402124233,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": false
+  },
+  {
+   "id": "s121",
+   "title": "Zone 2 training for runners",
+   "folder": "Fitness \u203a Running",
+   "top": 0.7997797891779446,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": false
+  },
+  {
+   "id": "s122",
+   "title": "How to choose running shoes",
+   "folder": "Fitness \u203a Running",
+   "top": 0.8000593948928993,
+   "pick": "Open Models \u203a Releases",
+   "predParent": "Open Models",
+   "parentKnown": false
+  },
+  {
+   "id": "s123",
+   "title": "Marathon fueling strategy",
+   "folder": "Fitness \u203a Running",
+   "top": 0.782107869902518,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": false
+  },
+  {
+   "id": "s124",
+   "title": "Running form drills",
+   "folder": "Fitness \u203a Running",
+   "top": 0.8200078187678606,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": false
+  },
+  {
+   "id": "s125",
+   "title": "Interval training: 400m repeats",
+   "folder": "Fitness \u203a Running",
+   "top": 0.7971368573313397,
+   "pick": "Machine Learning \u203a Math",
+   "predParent": "Machine Learning",
+   "parentKnown": false
+  },
+  {
+   "id": "s126",
+   "title": "Preventing shin splints",
+   "folder": "Fitness \u203a Running",
+   "top": 0.7891279895237256,
+   "pick": "Programming \u203a TypeScript",
+   "predParent": "Programming",
+   "parentKnown": false
+  },
+  {
+   "id": "s127",
+   "title": "Strength training for runners",
+   "folder": "Fitness \u203a Running",
+   "top": 0.7827459133924454,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": false
+  },
+  {
+   "id": "s128",
+   "title": "Couch to 5K: week 1 plan",
+   "folder": "Fitness \u203a Running",
+   "top": 0.8020510071555268,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": false
+  },
+  {
+   "id": "s129",
+   "title": "Two weeks in Japan itinerary",
+   "folder": "Travel \u203a Japan",
+   "top": 0.7908024062144603,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": false
+  },
+  {
+   "id": "s130",
+   "title": "JR Pass: is it still worth it?",
+   "folder": "Travel \u203a Japan",
+   "top": 0.839456874027317,
+   "pick": "Finance \u203a Investing",
+   "predParent": "Finance",
+   "parentKnown": false
+  },
+  {
+   "id": "s131",
+   "title": "Best ramen shops in Tokyo",
+   "folder": "Travel \u203a Japan",
+   "top": 0.8002164013524646,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": false
+  },
+  {
+   "id": "s132",
+   "title": "Kyoto temples guide",
+   "folder": "Travel \u203a Japan",
+   "top": 0.7919989810979072,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": false
+  },
+  {
+   "id": "s133",
+   "title": "Hiking the Kumano Kodo",
+   "folder": "Travel \u203a Japan",
+   "top": 0.7953372511697969,
+   "pick": "Fitness \u203a Running",
+   "predParent": "Fitness",
+   "parentKnown": false
+  },
+  {
+   "id": "s134",
+   "title": "Japan travel tips for first-timers",
+   "folder": "Travel \u203a Japan",
+   "top": 0.8569416188897573,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": false
+  },
+  {
+   "id": "s135",
+   "title": "Hakone onsen ryokan recommendations",
+   "folder": "Travel \u203a Japan",
+   "top": 0.8074150826901507,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": false
+  },
+  {
+   "id": "s136",
+   "title": "Osaka street food guide",
+   "folder": "Travel \u203a Japan",
+   "top": 0.8348049523480432,
+   "pick": "Cooking \u203a Japanese Food",
+   "predParent": "Cooking",
+   "parentKnown": false
+  }
+ ],
+ "joins": [
+  {
+   "title": "CS231n Lecture 5: Convolutional Neural Networks",
+   "join": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+   "candidates": [
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.901204593666592
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.8870149258602575
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.868454953325523
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.8644592781729513
+    },
+    {
+     "title": "Convex optimization (Boyd) lecture videos",
+     "sim": 0.827880883241247
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.8273027925763
+    },
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.8139292665554257
+    },
+    {
+     "title": "Scaling laws for neural language models",
+     "sim": 0.812874463224076
+    },
+    {
+     "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+     "sim": 0.8001205092005439
+    },
+    {
+     "title": "Google Machine Learning Crash Course",
+     "sim": 0.7940485204114214
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Lecture 5 - Diffusion Policy | Modern Robot Learning from Scratch",
+   "join": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+   "candidates": [
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.878225165807152
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.8212838169882809
+    },
+    {
+     "title": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+     "sim": 0.8076842961070584
+    },
+    {
+     "title": "Teleoperation data collection best practices",
+     "sim": 0.7982618393270371
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.7926408895559391
+    },
+    {
+     "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+     "sim": 0.7887445197521927
+    },
+    {
+     "title": "Data augmentation for image classification",
+     "sim": 0.7859899457812886
+    },
+    {
+     "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+     "sim": 0.7854936386800353
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7854373534748083
+    },
+    {
+     "title": "Writing URDF and Xacro files",
+     "sim": 0.783369049993312
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "MIT 6.S191 (2026) Lecture 2: Recurrent Neural Networks and Transformers",
+   "join": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+   "candidates": [
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.8756176201734486
+    },
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.8471597009099922
+    },
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.8304063223231789
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.8303304442013647
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.8264641113066753
+    },
+    {
+     "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+     "sim": 0.8085004011092474
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.8079589358312241
+    },
+    {
+     "title": "ResNet: Deep Residual Learning for Image Recognition",
+     "sim": 0.8071160458758
+    },
+    {
+     "title": "Andrej Karpathy: Neural Networks Zero to Hero \u2014 micrograd",
+     "sim": 0.7985687002407571
+    },
+    {
+     "title": "Scaling laws for neural language models",
+     "sim": 0.7942225301188763
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Hugging Face Robotics Course \u2014 Unit 2: Imitation learning with LeRobot",
+   "join": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+   "candidates": [
+    {
+     "title": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+     "sim": 0.9176295814898541
+    },
+    {
+     "title": "SmolLM2: small language models by Hugging Face",
+     "sim": 0.8333056142944437
+    },
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.8151157237185074
+    },
+    {
+     "title": "Hugging Face Open LLM Leaderboard explained",
+     "sim": 0.8063799576467843
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.7957124002262601
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7944098286162758
+    },
+    {
+     "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+     "sim": 0.7902420555225084
+    },
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.7818351207638825
+    },
+    {
+     "title": "Andrej Karpathy: Neural Networks Zero to Hero \u2014 micrograd",
+     "sim": 0.774332866412925
+    },
+    {
+     "title": "Gradient descent and its variants: SGD, momentum, Adam",
+     "sim": 0.7726746297287901
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Rustlings walkthrough part 2: ownership and borrowing",
+   "join": "Rustlings exercises walkthrough \u2014 part 1",
+   "candidates": [
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.898503414229421
+    },
+    {
+     "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+     "sim": 0.8255986538335738
+    },
+    {
+     "title": "Retrieval-augmented generation from scratch",
+     "sim": 0.8202907868917528
+    },
+    {
+     "title": "Zero-cost abstractions in Rust",
+     "sim": 0.8166965199435142
+    },
+    {
+     "title": "Rust lifetimes explained",
+     "sim": 0.8041096817667994
+    },
+    {
+     "title": "Depth estimation with monocular cameras",
+     "sim": 0.8029572760705952
+    },
+    {
+     "title": "Effect-TS introduction",
+     "sim": 0.8025458054001201
+    },
+    {
+     "title": "Bond ladders for beginners",
+     "sim": 0.7972620323930331
+    },
+    {
+     "title": "Rebalancing your portfolio once a year",
+     "sim": 0.7968806130595136
+    },
+    {
+     "title": "Nav2 navigation stack walkthrough",
+     "sim": 0.7925248028265335
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Let's build GPT: from scratch, in code, spelled out",
+   "join": "Andrej Karpathy: Neural Networks Zero to Hero \u2014 micrograd",
+   "candidates": [
+    {
+     "title": "Andrej Karpathy: Neural Networks Zero to Hero \u2014 micrograd",
+     "sim": 0.9129360668243511
+    },
+    {
+     "title": "Scaling laws for neural language models",
+     "sim": 0.8205904794804016
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.8195741942941078
+    },
+    {
+     "title": "OLMo 2: fully open language models",
+     "sim": 0.8012469741014512
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.8004956143569134
+    },
+    {
+     "title": "Retrieval-augmented generation from scratch",
+     "sim": 0.7996008893841525
+    },
+    {
+     "title": "Gradient descent and its variants: SGD, momentum, Adam",
+     "sim": 0.7961105430707894
+    },
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.79232923673412
+    },
+    {
+     "title": "DPO: Direct Preference Optimization",
+     "sim": 0.7906118209327955
+    },
+    {
+     "title": "Dex-Net 2.0: Deep Learning to Plan Robust Grasps",
+     "sim": 0.7900270887970087
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Sourdough pizza series ep. 2: shaping and baking",
+   "join": "Sourdough pizza series ep. 1: making the starter",
+   "candidates": [
+    {
+     "title": "Sourdough pizza series ep. 1: making the starter",
+     "sim": 0.9146578889142026
+    },
+    {
+     "title": "Best flour for pizza: 00 vs bread flour",
+     "sim": 0.7629646058732829
+    },
+    {
+     "title": "Pizza sauce: San Marzano tomatoes, no cooking",
+     "sim": 0.7581866282743732
+    },
+    {
+     "title": "Onigiri filling ideas",
+     "sim": 0.7363409833242798
+    },
+    {
+     "title": "Cold fermentation for pizza dough",
+     "sim": 0.7233848618942684
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7215503988678106
+    },
+    {
+     "title": "Convex optimization (Boyd) lecture videos",
+     "sim": 0.7199417378092225
+    },
+    {
+     "title": "Type-level programming with template literal types",
+     "sim": 0.7090345414944068
+    },
+    {
+     "title": "Okonomiyaki recipe",
+     "sim": 0.7058699938170734
+    },
+    {
+     "title": "Distillation and the open model ecosystem",
+     "sim": 0.7055752583436679
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Couch to 5K: week 4 guide",
+   "join": "Couch to 5K: week 1 plan",
+   "candidates": [
+    {
+     "title": "Couch to 5K: week 1 plan",
+     "sim": 0.9396416929511789
+    },
+    {
+     "title": "Strength training for runners",
+     "sim": 0.8198896301528364
+    },
+    {
+     "title": "Running form drills",
+     "sim": 0.807620755475853
+    },
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.8043602279520434
+    },
+    {
+     "title": "Interval training: 400m repeats",
+     "sim": 0.8024916614186108
+    },
+    {
+     "title": "Hiking the Kumano Kodo",
+     "sim": 0.7781317093853419
+    },
+    {
+     "title": "Gradient descent and its variants: SGD, momentum, Adam",
+     "sim": 0.7709338358483072
+    },
+    {
+     "title": "Rebalancing your portfolio once a year",
+     "sim": 0.7684151027053623
+    },
+    {
+     "title": "Understanding P/E ratios",
+     "sim": 0.7675140057646173
+    },
+    {
+     "title": "Nav2 navigation stack walkthrough",
+     "sim": 0.7661472109479777
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Underactuated Robotics \u2014 Lecture 2: The Simple Pendulum",
+   "join": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+   "candidates": [
+    {
+     "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+     "sim": 0.932291548795767
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.804915926253063
+    },
+    {
+     "title": "Writing URDF and Xacro files",
+     "sim": 0.7978871448479261
+    },
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.7928161908269975
+    },
+    {
+     "title": "Wiring and power distribution for mobile robots",
+     "sim": 0.7818532581938944
+    },
+    {
+     "title": "\u03c00: A Vision-Language-Action Flow Model for General Robot Control",
+     "sim": 0.7799558257358299
+    },
+    {
+     "title": "Convex optimization (Boyd) lecture videos",
+     "sim": 0.7751322961340616
+    },
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.7720728115835304
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.7677178881461258
+    },
+    {
+     "title": "Teleoperation data collection best practices",
+     "sim": 0.7662552509327947
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "CS285 Deep RL Lecture 5: Policy Gradients",
+   "join": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+   "candidates": [
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.8989120418699867
+    },
+    {
+     "title": "Convex optimization (Boyd) lecture videos",
+     "sim": 0.8283164078113213
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.8155734766078567
+    },
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.8083113951757183
+    },
+    {
+     "title": "Effect-TS introduction",
+     "sim": 0.8000741234900255
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7974759258447789
+    },
+    {
+     "title": "Scaling laws for neural language models",
+     "sim": 0.7944056839378819
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.7815887201187393
+    },
+    {
+     "title": "Gradient descent and its variants: SGD, momentum, Adam",
+     "sim": 0.780122944784376
+    },
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.7796564916077877
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Stanford CS234 Reinforcement Learning \u2014 Lecture 3",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.9212008191357243
+    },
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.8836021913327193
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.8523743310467723
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.836065855173081
+    },
+    {
+     "title": "Convex optimization (Boyd) lecture videos",
+     "sim": 0.8352548419595222
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.8331609369873865
+    },
+    {
+     "title": "Scaling laws for neural language models",
+     "sim": 0.8227705921967601
+    },
+    {
+     "title": "Andrej Karpathy: Neural Networks Zero to Hero \u2014 micrograd",
+     "sim": 0.8171566773711281
+    },
+    {
+     "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+     "sim": 0.8156418299874889
+    },
+    {
+     "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+     "sim": 0.8088266054223776
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Stanford CS224n NLP with Deep Learning \u2014 Lecture 4: Dependency Parsing",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.8652021299221807
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.8514157734988774
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.8438962852105035
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.8429648526937868
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.8394338655459717
+    },
+    {
+     "title": "CLIP: Learning Transferable Visual Models From Natural Language Supervision",
+     "sim": 0.8114797413533009
+    },
+    {
+     "title": "Scaling laws for neural language models",
+     "sim": 0.7990908370555649
+    },
+    {
+     "title": "Convex optimization (Boyd) lecture videos",
+     "sim": 0.7901988080484033
+    },
+    {
+     "title": "Speculative decoding explained",
+     "sim": 0.7899324611184285
+    },
+    {
+     "title": "ResNet: Deep Residual Learning for Image Recognition",
+     "sim": 0.7887595461374548
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "DeepLearning.AI: Neural Networks and Deep Learning \u2014 Week 2",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.8781780679752329
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.8659811137193212
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.8525152902195624
+    },
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.8519019578746452
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.847793606707254
+    },
+    {
+     "title": "Google Machine Learning Crash Course",
+     "sim": 0.839597534794903
+    },
+    {
+     "title": "Scaling laws for neural language models",
+     "sim": 0.8366671093786403
+    },
+    {
+     "title": "ResNet: Deep Residual Learning for Image Recognition",
+     "sim": 0.83195945894878
+    },
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.8234723581705745
+    },
+    {
+     "title": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+     "sim": 0.8120728419614689
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Neapolitan pizza dough masterclass",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Sourdough pizza series ep. 1: making the starter",
+     "sim": 0.7692329585963353
+    },
+    {
+     "title": "Cold fermentation for pizza dough",
+     "sim": 0.7377316752529421
+    },
+    {
+     "title": "Best flour for pizza: 00 vs bread flour",
+     "sim": 0.7269838385122261
+    },
+    {
+     "title": "Onigiri filling ideas",
+     "sim": 0.6993522485718618
+    },
+    {
+     "title": "Pizza sauce: San Marzano tomatoes, no cooking",
+     "sim": 0.6918507593280084
+    },
+    {
+     "title": "Couch to 5K: week 1 plan",
+     "sim": 0.6795780052360243
+    },
+    {
+     "title": "Interval training: 400m repeats",
+     "sim": 0.6771270011455481
+    },
+    {
+     "title": "Gradient descent and its variants: SGD, momentum, Adam",
+     "sim": 0.6769377750577527
+    },
+    {
+     "title": "DeepSeek-V3 technical report",
+     "sim": 0.6765081368930644
+    },
+    {
+     "title": "Effect-TS introduction",
+     "sim": 0.6761114800698687
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Rust by Example: traits chapter",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Rust lifetimes explained",
+     "sim": 0.8359736009794394
+    },
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.8297257679179098
+    },
+    {
+     "title": "Rust for Python developers",
+     "sim": 0.810093232947946
+    },
+    {
+     "title": "Zero-cost abstractions in Rust",
+     "sim": 0.8089281663093092
+    },
+    {
+     "title": "Writing a CLI in Rust with clap",
+     "sim": 0.7928748379490922
+    },
+    {
+     "title": "Type-level programming with template literal types",
+     "sim": 0.7830802883626022
+    },
+    {
+     "title": "Effect-TS introduction",
+     "sim": 0.7767935125170389
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7640893763483789
+    },
+    {
+     "title": "Bayes' theorem explained visually",
+     "sim": 0.7524899059643128
+    },
+    {
+     "title": "Retrieval-augmented generation from scratch",
+     "sim": 0.7452808530924402
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Half marathon training plan \u2014 week 1",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Strength training for runners",
+     "sim": 0.8830257905064226
+    },
+    {
+     "title": "Couch to 5K: week 1 plan",
+     "sim": 0.868626799815551
+    },
+    {
+     "title": "Running form drills",
+     "sim": 0.8336473734652565
+    },
+    {
+     "title": "Interval training: 400m repeats",
+     "sim": 0.8151790833660345
+    },
+    {
+     "title": "Gradient descent and its variants: SGD, momentum, Adam",
+     "sim": 0.7613768342211896
+    },
+    {
+     "title": "Japan travel tips for first-timers",
+     "sim": 0.7566690584823061
+    },
+    {
+     "title": "Bond ladders for beginners",
+     "sim": 0.7505221759774812
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7479250336963525
+    },
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.7478192699935948
+    },
+    {
+     "title": "Hiking the Kumano Kodo",
+     "sim": 0.7430869351437093
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Stanford CS223A Introduction to Robotics \u2014 Lecture 2",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Stanford CS229 Machine Learning \u2014 lecture notes",
+     "sim": 0.8589914774994692
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.8512517934810968
+    },
+    {
+     "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+     "sim": 0.8425368025450506
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.835597659147789
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.8320483595541885
+    },
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.8234441247318055
+    },
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.8113235247633777
+    },
+    {
+     "title": "Writing URDF and Xacro files",
+     "sim": 0.8104356780804189
+    },
+    {
+     "title": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+     "sim": 0.8015554303770059
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7991857807720898
+    }
+   ],
+   "targetShown": true
+  },
+  {
+   "title": "Coursera Modern Robotics Specialization \u2014 Course 1: Foundations of Robot Motion",
+   "join": null,
+   "candidates": [
+    {
+     "title": "Russ Tedrake: Underactuated Robotics \u2014 Lecture 1",
+     "sim": 0.8349758206814046
+    },
+    {
+     "title": "Vizuara: Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+     "sim": 0.8184133072003237
+    },
+    {
+     "title": "Writing URDF and Xacro files",
+     "sim": 0.8059615101164367
+    },
+    {
+     "title": "MIT 6.S191 Introduction to Deep Learning \u2014 Lecture 1",
+     "sim": 0.8033532538868393
+    },
+    {
+     "title": "Berkeley CS285 Deep Reinforcement Learning \u2014 Lecture 1",
+     "sim": 0.7960659882559453
+    },
+    {
+     "title": "Hugging Face Robotics Course \u2014 Unit 1: Introduction to LeRobot",
+     "sim": 0.7920816895192306
+    },
+    {
+     "title": "Stanford CS231n: Deep Learning for Computer Vision \u2014 Lectures 1\u20132",
+     "sim": 0.7891597009104182
+    },
+    {
+     "title": "\u03c00: A Vision-Language-Action Flow Model for General Robot Control",
+     "sim": 0.7816134870580664
+    },
+    {
+     "title": "Full Stack Deep Learning \u2014 course page",
+     "sim": 0.7781831867970541
+    },
+    {
+     "title": "Rustlings exercises walkthrough \u2014 part 1",
+     "sim": 0.7732055559827152
+    }
+   ],
+   "targetShown": true
+  }
+ ],
+ "real": [
+  {
+   "title": "Agentic World Action Models",
+   "folder": "Robotics \u203a Papers",
+   "ranking": [
+    [
+     "Open Models",
+     0.839
+    ],
+    [
+     "Robotics \u203a Papers",
+     0.812
+    ],
+    [
+     "Robotics \u203a Robot Learning",
+     0.794
+    ]
+   ]
+  },
+  {
+   "title": "Modern Robot Learning from Scratch \u2014 Lectures 3\u20134",
+   "folder": "Robotics \u203a Robot Learning",
+   "ranking": [
+    [
+     "Robotics \u203a Robot Learning",
+     0.854
+    ],
+    [
+     "Robotics \u203a Papers",
+     0.813
+    ],
+    [
+     "Open Models",
+     0.788
+    ]
+   ]
+  },
+  {
+   "title": "Observing and Controlling Features in Vision-Language-Action Models",
+   "folder": "Robotics \u203a Papers",
+   "ranking": [
+    [
+     "Robotics \u203a Robot Learning",
+     0.768
+    ],
+    [
+     "Open Models",
+     0.725
+    ],
+    [
+     "Robotics \u203a Papers",
+     0.713
+    ]
+   ]
+  },
+  {
+   "title": "Open models lecture: ecosystem, debates, and future access",
+   "folder": "Open Models",
+   "ranking": [
+    [
+     "Open Models",
+     0.865
+    ],
+    [
+     "Robotics \u203a Papers",
+     0.803
+    ],
+    [
+     "Robotics \u203a Robot Learning",
+     0.797
+    ]
+   ]
+  },
+  {
+   "title": "An Introduction to Open Source AI",
+   "folder": "Open Models",
+   "ranking": [
+    [
+     "Open Models",
+     0.871
+    ],
+    [
+     "Robotics \u203a Robot Learning",
+     0.853
+    ],
+    [
+     "Robotics \u203a Papers",
+     0.846
+    ]
+   ]
+  }
+ ],
+ "pasteMs": 28.65499997138977,
+ "pasteWords": 49,
+ "peakRssMb": 779,
+ "wallS": 4.3,
+ "warm": {
+  "loadMs": 2596.4500000476837,
+  "wallS": 3.4,
+  "peakRssMb": 726,
+  "error": null
+ }
+}

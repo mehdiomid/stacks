@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { Item, Setting, Topic, UsageDay } from './types';
+import type { Item, ItemVector, Setting, Topic, UsageDay } from './types';
 
 /** Everything lives in this IndexedDB database, in the browser. Nothing is sent to the Stacks server. */
 export const db = new Dexie('stacks') as Dexie & {
@@ -7,6 +7,8 @@ export const db = new Dexie('stacks') as Dexie & {
   items: EntityTable<Item, 'id'>;
   settings: EntityTable<Setting, 'key'>;
   usage: EntityTable<UsageDay, 'date'>;
+  /** Local mode: one embedding per item. Rebuilt from items when needed, so never backed up. */
+  vectors: EntityTable<ItemVector, 'itemId'>;
 };
 
 db.version(1).stores({
@@ -15,6 +17,7 @@ db.version(1).stores({
   settings: 'key',
   usage: 'date',
 });
+db.version(2).stores({ vectors: 'itemId' });
 
 export async function getSetting<T>(key: string, fallback: T): Promise<T> {
   const row = await db.settings.get(key);

@@ -5,6 +5,7 @@ import { isLinkLabel, LIMITS, parseLines, takeWithinLimit, uniqueUrls, type Pars
 import { fetchPreview, mapLimit } from './lib/preview';
 import { domainOf, isGenericTitle, isIconImage, isVideoUrl, normalizeUrl, titleFromUrl } from './lib/url';
 import { addItems, ensureTopicPath, mergeIntoItem, updateItem } from './store';
+import { getAISettings } from './settings';
 import { findByName, flattenTree, indexTree, MAX_DEPTH, nameKey, PATH_SEP, pathOf, resolvePath, splitPathName, typedPath, type TreeIndex } from './lib/tree';
 import type { Item, ItemKind, ItemLink, Preview, Topic } from './types';
 
@@ -42,6 +43,11 @@ export interface Draft {
   joinTo?: { id: string; title: string; topicId: string };
   /** Add to joinTo instead of saving a new item. */
   join?: boolean;
+  /**
+   * Local mode: where "+ New folder" would go (inside `parent`, or a new area when null), whether to
+   * offer it first because no folder fits well, and the text the naming model describes.
+   */
+  newFolder?: { parent: string[] | null; preselect: boolean; text: string; areas: string[] };
 }
 
 /** Everything known about one pasted link after its preview. */
@@ -331,6 +337,8 @@ export async function prepareOne(input: string, onStatus: (s: string) => void): 
     return { drafts, leftover: '', aiCount: 0, model: '' };
   }
 
+  if ((await getAISettings()).engine === 'local') return placeOneLocally(lines, links, topics, items, folder?.[0] ?? null, heading, onStatus);
+
   onStatus('Finding the right folder…');
   const { folders, itemOf } = foldersForAI(topics, items, tree);
   const { placement: p, model } = await placeItem(folders, lines, info, refOf);
@@ -350,6 +358,31 @@ export async function prepareOne(input: string, onStatus: (s: string) => void): 
     d.join = true;
   }
   return { drafts: [d], leftover: '', aiCount: lines.length, model };
+}
+
+/** Local mode: the same one-item draft, placed by the embedding model in this browser. */
+async function placeOneLocally(
+  lines: ParsedLine[],
+  links: Map<string, LinkData>,
+  topics: Topic[],
+  items: Item[],
+  typed: string | null,
+  heading: string,
+  onStatus: (s: string) => void,
+): Promise<Prepared> {
+  const [d] = buildDrafts(lines, [{ lines: lines.map((l) => l.n), title: heading, mainLink: null, topic: INBOX, isNew: false }], links, topics, items, { single: true });
+  const { placeLocal } = await import('./local/place');
+  onStatus('Preparing your saved items…');
+  const p = await placeLocal(d.title, d.notes || d.description, topics, items, typed, onStatus);
+  // A duplicate stays where it is, and "you always file this site there" still wins.
+  if (p.best && (d.source === 'ai' || d.source === 'path')) d.choice = p.best;
+  d.alternatives = p.alternatives.filter((c) => c !== d.choice);
+  if (p.joinTo && d.source !== 'duplicate') {
+    d.joinTo = { id: p.joinTo.id, title: p.joinTo.title, topicId: p.joinTo.topicId };
+    d.join = true;
+  }
+  d.newFolder = { parent: p.newParent, preselect: p.weak && !d.join && (d.source === 'ai' || d.source === 'path'), text: p.text, areas: p.areas };
+  return { drafts: [d], leftover: '', aiCount: 1, model: 'the local model' };
 }
 
 export async function prepareDrafts(input: string, onStatus: (s: string) => void): Promise<Prepared> {

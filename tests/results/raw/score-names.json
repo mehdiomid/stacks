@@ -1,0 +1,1134 @@
+{
+ "meta": {
+  "cores": 4,
+  "isolated": true,
+  "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/157.0.0.0 Safari/537.36"
+ },
+ "scored": {
+  "smollm2-360m-v1": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robotics",
+    "sim": 0.5643231502519256
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.8371789426876027
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Grippers",
+    "sim": 0.5849967618050266
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Grippers",
+    "sim": 0.5096586748356207
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Machine Learning",
+    "sim": 0.587822732895796
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Machine Learning",
+    "sim": 0.7141244245136036
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "LLM",
+    "sim": 0.6003004459090059
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Machine Learning",
+    "sim": 0.5909596803973121
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Open Models",
+    "sim": 0.5885303521805109
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Open Models",
+    "sim": 0.6189106032390005
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Programming",
+    "sim": 0.584097941409483
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Folder Name 1",
+    "sim": 0.5379110689465096
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Cooking",
+    "sim": 0.7141528604537074
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Cooking",
+    "sim": 0.6837777274427828
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Index Funds Vs.ETFs. \u203a Area. 2 Level",
+    "sim": 0.5464000244508578
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Zone 2 Training. \u203a Zone 2 Training.",
+    "sim": 0.6113897578675624
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Area \u203a Subject",
+    "sim": 0.6103081971019977
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robotics",
+    "sim": 0.5663472927250414
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Open Models Lecture. \u203a Ecosystem. Debates. Future.",
+    "sim": 0.603551653214767
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.8446398932388366
+   }
+  ],
+  "smollm2-360m-v2": [],
+  "smollm2-360m-v3": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Computer Vision",
+    "sim": 0.5583035650260708
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Behaviorism",
+    "sim": 0.5244887002178266
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robotics",
+    "sim": 0.6890796415011585
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Python",
+    "sim": 0.6251668380366768
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Computer Vision",
+    "sim": 0.527252873034052
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Computer Vision",
+    "sim": 0.9959047521356876
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Machine Learning",
+    "sim": 0.6187714986101104
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Mathematics",
+    "sim": 0.9403536769619318
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Llama 4",
+    "sim": 0.5355025300074074
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Science",
+    "sim": 0.70281593406982
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Business",
+    "sim": 0.5432268094920855
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Programming Language",
+    "sim": 0.6901380360675888
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Pizza",
+    "sim": 0.9968924336630739
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Soup",
+    "sim": 0.6579871812624469
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Investments \u203a Index Funds Vs.ETFs",
+    "sim": 0.7320863242482448
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Training \u203a Running Training",
+    "sim": 0.8311026993871788
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Travel \u203a Japan",
+    "sim": 0.9965569262559023
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Game Design",
+    "sim": 0.5456141922773163
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Science \u203a Ecology",
+    "sim": 0.5897019098944407
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Deep Learning",
+    "sim": 0.7955631026703739
+   }
+  ],
+  "gemma3-270m-v1": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.43173657028230905
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Paper",
+    "sim": 0.5722319368302902
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.4884286558750995
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.45412677650423594
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.47247031291471264
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "LLMs",
+    "sim": 0.5279236637843202
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.4822730370208035
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.44267460256642444
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.5085074043563379
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.4247558815788136
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Programming",
+    "sim": 0.5782045760397855
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Rust",
+    "sim": 0.6411428407423853
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.4673993514749394
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Pizza",
+    "sim": 0.6647576603076167
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Okay. I'm Ready. \u203a 2 Levels 1",
+    "sim": 0.5457385610271208
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Okay. I'm Ready. \u203a 2 Levels 1",
+    "sim": 0.5539161329925024
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Okay. I'm Ready. \u203a 2 Weeks InJapan",
+    "sim": 0.5804475051031168
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.4281790375474126
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Okay. I'm Ready. \u203a 2 Levels 1",
+    "sim": 0.580572269039709
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Okay. I'm Ready.",
+    "sim": 0.4489898062130102
+   }
+  ],
+  "gemma3-270m-v2": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "AI",
+    "sim": 0.5339836715486036
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Simulation",
+    "sim": 0.6508388461782297
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robot",
+    "sim": 0.6964272934068529
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "ROS",
+    "sim": 0.855242477894902
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "AI",
+    "sim": 0.5284596751038926
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "AI",
+    "sim": 0.6688344423210094
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Machine Learning",
+    "sim": 0.6166776507821777
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Physics",
+    "sim": 0.7491614174932586
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Model",
+    "sim": 0.5289852104197346
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Environmental Science",
+    "sim": 0.7187378093556952
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Rust",
+    "sim": 0.995816599008638
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "TypeScript",
+    "sim": 0.9951836715586855
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Pizza",
+    "sim": 0.9955003627697921
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Pasta",
+    "sim": 0.6624141070801104
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Investing \u203a Finance",
+    "sim": 0.7470479582182121
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Languages \u203a Programming",
+    "sim": 0.5924174527971515
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Japan \u203a Culture",
+    "sim": 0.6227805675473705
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Agentic World ActionModels",
+    "sim": 0.5268635670606058
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Languages \u203a Robotics",
+    "sim": 0.6232590235743303
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "AI",
+    "sim": 0.7524588360727085
+   }
+  ],
+  "gemma3-270m-v3": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Visualizing AI-driven Robotic-Control.",
+    "sim": 0.48562774871794157
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "I'm Interested.",
+    "sim": 0.5367709440036017
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robot Arm",
+    "sim": 0.6807308568392306
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Art",
+    "sim": 0.5103013004683669
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "AI",
+    "sim": 0.5324823313264074
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Object Detection",
+    "sim": 0.8106344141416549
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Machine Learning",
+    "sim": 0.6158273426488956
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Visualizing Vectors",
+    "sim": 0.6458411358759039
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Llama 4 ReleaseNotes-Meta's'",
+    "sim": 0.6707787903207495
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Open Models",
+    "sim": 0.6225657912208618
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Painting",
+    "sim": 0.6165266587260643
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Art",
+    "sim": 0.5088919972838063
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Pizza",
+    "sim": 0.9954983167853559
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Recipe",
+    "sim": 0.6859160413462704
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Indexes \u203a Stocks",
+    "sim": 0.672932456960449
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Training \u203a Training",
+    "sim": 0.6684517393715789
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Japan \u203a Travel",
+    "sim": 0.6152691625282903
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Action Models",
+    "sim": 0.5694778795076695
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Language \u203a Spanish",
+    "sim": 0.5623899798133792
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Here's 3-4-5-10-10-",
+    "sim": 0.5144066492709243
+   }
+  ],
+  "qwen25-05b-v1": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robotics",
+    "sim": 0.5665597031276457
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.8418804304592812
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robotics Subjects",
+    "sim": 0.6318091724796167
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Robotics",
+    "sim": 0.6339680517239501
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Machine Learning Subjects",
+    "sim": 0.6097268928466634
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Object Detection",
+    "sim": 0.8130341470991692
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Machine Learning Specialization",
+    "sim": 0.6738144272787248
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Linear Algebra",
+    "sim": 0.7274998356229851
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Models",
+    "sim": 0.5702481509075437
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Open Models",
+    "sim": 0.6236116338712822
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Projects",
+    "sim": 0.562257444531602
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "TypeScript Documentation",
+    "sim": 0.8831364546085461
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Cooking",
+    "sim": 0.7169656178917176
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Baking",
+    "sim": 0.6375964314088975
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Area \u203a Financial Instruments",
+    "sim": 0.6709376288891018
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Area \u203a Zone 2 Training",
+    "sim": 0.5988171383722616
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Area \u203a Japan",
+    "sim": 0.9973896399760901
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robotics",
+    "sim": 0.5701571497879481
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Area \u203a Subject Open Models.",
+    "sim": 0.8965856590360676
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.8445588699524095
+   }
+  ],
+  "qwen25-05b-v2": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robotics",
+    "sim": 0.5699024001891692
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.8381573116463086
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robotics",
+    "sim": 0.6865789115759905
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Robotics",
+    "sim": 0.6329217651092222
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Machine Learning",
+    "sim": 0.5823275438156481
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Machine Learning",
+    "sim": 0.7191590312950826
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Machine Learning",
+    "sim": 0.6158662652158338
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Linear Algebra",
+    "sim": 0.7301358132823195
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Open Models",
+    "sim": 0.5871845498093289
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Open Models",
+    "sim": 0.6224650650637125
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Programming",
+    "sim": 0.5826905312225507
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Programming",
+    "sim": 0.6712931193759629
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Italian Cuisine",
+    "sim": 0.7248538010741128
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Dishes",
+    "sim": 0.6781715292998254
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Index Funds \u203a ETFs",
+    "sim": 0.7281071798073365
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Training \u203a Running",
+    "sim": 0.9971308068451503
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Itinerary \u203a Japan",
+    "sim": 0.9972085870971826
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robotics",
+    "sim": 0.5682093020851466
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Robotics \u203a Open Models Lecture",
+    "sim": 0.8852417205703429
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.844878841710752
+   }
+  ],
+  "qwen25-05b-v3": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robotics",
+    "sim": 0.5737373543234895
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Behaviorism",
+    "sim": 0.5232072747807349
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robotics",
+    "sim": 0.6914478785730728
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Robotics",
+    "sim": 0.639061677655544
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Machine Learning",
+    "sim": 0.587586190191578
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Computer Vision",
+    "sim": 0.9958488826120839
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Machine Learning",
+    "sim": 0.6212906247491101
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Mathematics",
+    "sim": 0.9416729360190358
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Sports",
+    "sim": 0.5398457683163516
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Ecology",
+    "sim": 0.8602842880793325
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Books",
+    "sim": 0.4861791958917341
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Programming",
+    "sim": 0.6648264692355655
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Cooking",
+    "sim": 0.7241452248953373
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Japanese Cuisine",
+    "sim": 0.9571048797115808
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Finance \u203a Investing",
+    "sim": 0.9970143197640974
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Running \u203a Training Methods",
+    "sim": 0.612889037586002
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Travel \u203a Japan",
+    "sim": 0.9960308960951201
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Modeling",
+    "sim": 0.5732646430158328
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Ecology \u203a Ecology",
+    "sim": 0.5869381927438253
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.8398492973029038
+   }
+  ],
+  "qwen3-06b-v1": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Learning",
+    "sim": 0.5728378154791399
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Hwim",
+    "sim": 0.5681434424883717
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Learning",
+    "sim": 0.6150469765679498
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Learning",
+    "sim": 0.619686737579282
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Math",
+    "sim": 0.5808508563704967
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Math",
+    "sim": 0.6086486328132075
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Math",
+    "sim": 0.6526219139100333
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Machine Learning",
+    "sim": 0.5880347124997822
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Ecosystem",
+    "sim": 0.5621953513302326
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Ecosystem",
+    "sim": 0.9965886377427847
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Programming",
+    "sim": 0.5823313735607825
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Rust",
+    "sim": 0.6394208948898313
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Japanese Food",
+    "sim": 0.669891360565059
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Broth",
+    "sim": 0.6022315340983255
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Index Funds \u203a Index Funds",
+    "sim": 0.7866356472052508
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Area \u203a Training",
+    "sim": 0.6709122174442838
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Robotics \u203a Grippers",
+    "sim": 0.4800019388496837
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Learning",
+    "sim": 0.575512446066589
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Open Models Folder.obox.boxes.1. \u203a Area 1",
+    "sim": 0.5846960694804912
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Lectures",
+    "sim": 0.6205057548518295
+   }
+  ],
+  "qwen3-06b-v2": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Vision-Language-Act",
+    "sim": 0.5511549680756964
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Behavior",
+    "sim": 0.6203423490336605
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robotics",
+    "sim": 0.6838462819700339
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "ROS",
+    "sim": 0.8474776270653923
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Parameter",
+    "sim": 0.5621532639559647
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Object Detection",
+    "sim": 0.8108864310794326
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Supervised",
+    "sim": 0.6486105474150619
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Mathematics",
+    "sim": 0.9384490676148214
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Llama",
+    "sim": 0.5059475779568317
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Ecosystem",
+    "sim": 0.9976754587807254
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Ownership",
+    "sim": 0.577571822924877
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Language",
+    "sim": 0.6194624974826238
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Oven",
+    "sim": 0.7702728607847331
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Ramen",
+    "sim": 0.7162092947201779
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Index Funds \u203a ETFs",
+    "sim": 0.7176483871771488
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Training \u203a Zone 2",
+    "sim": 0.5383853484944228
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Technology \u203a Programming",
+    "sim": 0.5614221764881269
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Paper",
+    "sim": 0.841481404157543
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Technology \u203a Open Models",
+    "sim": 0.9962220266853906
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Learning",
+    "sim": 0.8410746947766325
+   }
+  ],
+  "qwen3-06b-v3": [
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Robot",
+    "sim": 0.5496287796773831
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Behavioral Robotics",
+    "sim": 0.7761717124444772
+   },
+   {
+    "truth": "Robotics \u203a Hardware",
+    "answer": "Robotics",
+    "sim": 0.6834973264951618
+   },
+   {
+    "truth": "Robotics \u203a ROS & Simulation",
+    "answer": "Writing",
+    "sim": 0.5496356519966705
+   },
+   {
+    "truth": "Machine Learning \u203a LLMs",
+    "answer": "Parameter-efficient",
+    "sim": 0.5674685536452583
+   },
+   {
+    "truth": "Machine Learning \u203a Computer Vision",
+    "answer": "Object Detection",
+    "sim": 0.8126644988245111
+   },
+   {
+    "truth": "Machine Learning \u203a Courses",
+    "answer": "Machine Learning",
+    "sim": 0.6137073211378758
+   },
+   {
+    "truth": "Machine Learning \u203a Math",
+    "answer": "Linear Algebra",
+    "sim": 0.7325503064046106
+   },
+   {
+    "truth": "Open Models \u203a Releases",
+    "answer": "Open-Weight Models",
+    "sim": 0.5377563759607122
+   },
+   {
+    "truth": "Open Models \u203a Ecosystem",
+    "answer": "Ecosystem",
+    "sim": 0.997074898634764
+   },
+   {
+    "truth": "Programming \u203a Rust",
+    "answer": "Painting",
+    "sim": 0.6113425034430426
+   },
+   {
+    "truth": "Programming \u203a TypeScript",
+    "answer": "Programming",
+    "sim": 0.6654334436741007
+   },
+   {
+    "truth": "Cooking \u203a Pizza",
+    "answer": "Pizza",
+    "sim": 0.995242937232303
+   },
+   {
+    "truth": "Cooking \u203a Japanese Food",
+    "answer": "Broth",
+    "sim": 0.6044636236353034
+   },
+   {
+    "truth": "Finance \u203a Investing",
+    "answer": "Index Funds &ETFs..getIndexFund. \u203a ETFs.",
+    "sim": 0.7544160398430991
+   },
+   {
+    "truth": "Fitness \u203a Running",
+    "answer": "Runners \u203a Training",
+    "sim": 0.6747147173891141
+   },
+   {
+    "truth": "Travel \u203a Japan",
+    "answer": "Itinerary \u203a Japan",
+    "sim": 0.9969745323410327
+   },
+   {
+    "truth": "Robotics \u203a Papers",
+    "answer": "Paper",
+    "sim": 0.8462794556246178
+   },
+   {
+    "truth": "Open Models",
+    "answer": "Ecosystems \u203a Open Model Lecture",
+    "sim": 0.8779078530804799
+   },
+   {
+    "truth": "Robotics \u203a Robot Learning",
+    "answer": "Robotics",
+    "sim": 0.8403499077607468
+   }
+  ]
+ },
+ "peakRssMb": 952,
+ "wallS": 5.2
+}
