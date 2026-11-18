@@ -34,7 +34,7 @@ Your lists stay on your device. The server stores nothing, even when Stacks is h
 
 ## Quick start
 
-You need Docker (Docker Desktop, Colima or similar). Node.js is not needed on your machine.
+In this version, you need Docker (Docker Desktop, Colima or similar). Node.js is not needed on your machine.
 
 ```bash
 cd stacks
