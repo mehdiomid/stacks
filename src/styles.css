@@ -357,3 +357,9 @@ a.ititle:hover { color: var(--accent); }
 
 .toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 10px; font-size: 14px; z-index: 40; max-width: calc(100vw - 32px); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Backup folder reminder */
+.backup-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 0 14px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--accent-soft); font-size: 14px; }
+.backup-bar.warn { border-color: var(--mark); background: var(--mark-soft); }
+.backup-bar > span:first-child { flex: 1 1 320px; }
+.backup-bar .actions { display: inline-flex; align-items: center; gap: 12px; }

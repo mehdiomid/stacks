@@ -89,7 +89,7 @@ Stop it with `docker compose down`. Your data is unaffected because it lives in 
 ┌──────────────────────── Your browser (your device) ────────────────────────┐
 │  React app                                                                  │
 │   ├─ IndexedDB (Dexie)  ← the source of truth: topics, items, settings      │
-│   ├─ Backup folder on disk (File System Access API, optional)               │
+│   ├─ Backup folder on disk (File System Access API, asked for on first use) │
 │   └─ AI adapter ── HTTPS, your key ──► api.anthropic.com / api.openai.com    │
 └───────────────┬────────────────────────────────────────────────────────────┘
                 │ GET /  (the app)      GET /api/preview?url=…  (link metadata)
@@ -118,7 +118,8 @@ It has no database and keeps no state between requests.
 Stacks takes these extra steps so the data is safe and portable:
 
 - **Persistent storage.** On start, Stacks calls `navigator.storage.persist()` so the browser doesn't evict its data when disk space runs low. The **AI usage today** part of Settings shows "this browser (protected)" when this was granted.
-- **Backup folder.** In Chrome, Edge and Brave you can choose a real folder on disk, such as `~/Documents/Stacks` or an iCloud, Dropbox or Syncthing folder. Stacks writes `stacks-backup.json` a few seconds after every change, plus one dated snapshot per day (`stacks-2026-10-19.json`). After a browser restart, the browser asks you to **Reconnect folder** once. Safari and Firefox don't offer this API, so use Export there.
+- **Backup folder.** In Chrome, Edge and Brave you can choose a real folder on disk, such as `~/Documents/Stacks` or an iCloud, Dropbox or Syncthing folder. Stacks writes `stacks-backup.json` a few seconds after every change, plus one dated snapshot per day (`stacks-2026-10-19.json`). Until a folder is chosen, the main page shows a **Keep a copy of your stacks on your disk** bar (**Later** hides it until the next reload). After a browser restart, the browser needs your OK again, so an amber **Backups are paused** bar with **Reconnect folder** appears; the full copy is written as soon as you click it. The same bar appears if the folder was moved or deleted. Browsers only allow picking or reconnecting a folder from a click, so this can't be fully automatic. Safari and Firefox don't offer this API; they show a one-time note to use Export instead.
+- **Persistent storage.** On startup Stacks asks the browser (`navigator.storage.persist()`) not to clear its storage when the disk runs low. Chrome decides on its own whether to grant this; Settings → Backup shows the result.
 - **Export and Import.** These move your lists between browsers or computers. Import can **add to** or **replace** your lists. API keys are never exported.
 
 Limits to know about:
@@ -570,7 +571,7 @@ These are the choices made while planning Stacks, and why.
 
 | Topic | Decision | Why |
 |---|---|---|
-| Storage | Browser IndexedDB as the source of truth, plus an optional backup folder and Export/Import | "Nothing in the cloud", even when the app is hosted in the cloud. |
+| Storage | Browser IndexedDB as the source of truth, plus a backup folder (asked for until chosen) and Export/Import | "Nothing in the cloud", even when the app is hosted in the cloud. |
 | Server role | Stateless: serve the app and fetch link previews | Browsers can't read other sites (CORS). Nothing to store means nothing to leak. |
 | Local mode | Default sorting runs in the browser; Claude and OpenAI stay as options | You wanted to avoid API calls. Measured in `tests/RESULTS.md`: small embedding models choose folders well, while splitting and instructions need a large model. |
 | Local model | snowflake-arctic-embed-xs (23 MB), folders scored by their average | As accurate as models 5 times its size on the test library, and about 30 ms per paste on a 2019 laptop CPU. |

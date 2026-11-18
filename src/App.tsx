@@ -13,6 +13,7 @@ import { SettingsModal } from './components/SettingsModal';
 import { AboutPage } from './components/AboutPage';
 import { Sky } from './components/Sky';
 import { Spark } from './components/Spark';
+import { BackupBar } from './components/BackupBar';
 
 export type Page = 'home' | 'about';
 
@@ -91,6 +92,7 @@ export default function App() {
 function Home({ topics, items }: { topics: Topic[]; items: Item[] }) {
   return (
     <>
+      <BackupBar />
       <Spark topics={topics} items={items} />
       <div className="grid">
         <main>

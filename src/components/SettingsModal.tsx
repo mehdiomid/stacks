@@ -28,6 +28,7 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
   const [importMode, setImportMode] = useState<'merge' | 'replace'>('merge');
   const [loaded, setLoaded] = useState(false);
   const [confirmWipe, setConfirmWipe] = useState(false);
+  const [kept, setKept] = useState<boolean | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const keyRef = useRef<HTMLInputElement>(null);
 
@@ -37,6 +38,7 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
       setKeys({ anthropic: await getKey('anthropic'), openai: await getKey('openai') });
       setNotify(await getSetting('notify', false));
       setFolder(await folderStatus());
+      setKept((await navigator.storage?.persisted?.().catch(() => null)) ?? null);
       setLoaded(true);
       keyRef.current?.focus();
     })();
@@ -222,6 +224,13 @@ export function SettingsModal({ notice, onClose }: { notice?: string; onClose: (
           </>
         ) : (
           <p>This browser can't write to a folder (Chrome, Edge and Brave can). Use Export to save a copy.</p>
+        )}
+        {kept !== null && (
+          <p className="hint">
+            {kept
+              ? 'This browser keeps Stacks’ storage permanently: it won’t clear it when the disk runs low. Clearing site data still removes it, so keep the folder copy.'
+              : 'This browser may clear Stacks’ storage if the disk runs very low (Chrome decides this itself; bookmarking or installing the site usually changes it). The folder copy protects you either way.'}
+          </p>
         )}
         <div className="row">
           <button className="btn ghost small" onClick={() => void downloadBackup()}>

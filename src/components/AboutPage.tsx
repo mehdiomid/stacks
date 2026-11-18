@@ -96,7 +96,7 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
         </p>
         <ul>
           <li>Stacks asks the browser to protect its storage so it isn't cleared when space runs low.</li>
-          <li>In Chrome, Edge or Brave you can choose a backup folder in Settings. Stacks writes a JSON copy there after every change, so your lists survive a cleared browser and you can sync or version them.</li>
+          <li>In Chrome, Edge or Brave, Stacks asks you to choose a backup folder (or change it in Settings). Stacks writes a JSON copy there after every change, so your lists survive a cleared browser and you can sync or version them.</li>
           <li>Export and Import move your lists between browsers or computers. API keys are never included.</li>
           <li>Your lists belong to one browser on one computer. Use Export/Import, or a synced backup folder, to move them.</li>
         </ul>
