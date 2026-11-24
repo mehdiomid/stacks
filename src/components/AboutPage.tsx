@@ -1,5 +1,6 @@
 import { WEIGHTS } from '../lib/scoring';
 import { LIMITS } from '../lib/parse';
+import { STATIC_HOSTING } from '../lib/hosting';
 
 function TryStacks({ onTry, label = 'Try Stacks' }: { onTry: () => void; label?: string }) {
   return (
@@ -29,9 +30,9 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
             <li>No account, no tracking, no analytics.</li>
             <li>Backups go to a folder on your own disk, or to a file you export.</li>
             <li>
-              By default, sorting runs on this device: a small model in your browser picks the folder, so nothing you paste is sent anywhere. A link's address goes to the Stacks server just long enough to
-              fetch its title and image. Only if you switch to Claude or OpenAI in Settings does the text you sort go to that provider, straight from your browser with your own key. The Stacks server keeps
-              nothing.
+              By default, sorting runs on this device: a small model in your browser picks the folder, so nothing you paste is sent anywhere.{' '}
+              {STATIC_HOSTING ? '' : "A link's address goes to the Stacks server just long enough to fetch its title and image. "}Only if you switch to Claude or OpenAI in Settings does the text you sort go to that provider, straight from your browser with your own key.{' '}
+              {STATIC_HOSTING ? 'The host keeps only standard request logs (which files were loaded).' : 'The Stacks server keeps nothing.'}
             </li>
           </ul>
         </div>
@@ -133,10 +134,17 @@ export function AboutPage({ onTry }: { onTry: () => void }) {
 
       <section>
         <h3>The server's job</h3>
-        <p>
-          The small server in the Docker container serves this page and fetches link previews (title, description, image), because browsers can't read other sites directly. It stores nothing, doesn't log the links
-          it previews, refuses to fetch addresses on private networks, and limits how many previews one visitor can request per minute.
-        </p>
+        {STATIC_HOSTING ? (
+          <p>
+            This copy of Stacks is plain files on a file host (Amazon S3 behind CloudFront), with no server running code. So link previews (title, description, image) aren't fetched here: a link is saved with
+            your title, the sorting title or its address. The host keeps standard request logs, meaning which files were loaded and from which address, never what you paste or save.
+          </p>
+        ) : (
+          <p>
+            The small server in the Docker container serves this page and fetches link previews (title, description, image), because browsers can't read other sites directly. It stores nothing, doesn't log the
+            links it previews, refuses to fetch addresses on private networks, and limits how many previews one visitor can request per minute.
+          </p>
+        )}
         <p>Thumbnails load straight from the sites they belong to, so those sites can see that an image was requested.</p>
       </section>
       <TryStacks onTry={onTry} label="Start adding links" />

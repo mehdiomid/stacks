@@ -22,13 +22,14 @@ Your lists stay on your device. The server stores nothing, even when Stacks is h
 10. [Backups, export and import](#backups-export-and-import)
 11. [Configuration](#configuration)
 12. [Hosting on a server](#hosting-on-a-server)
-13. [Security and privacy](#security-and-privacy)
-14. [Design](#design)
-15. [Development](#development)
-16. [Project structure](#project-structure)
-17. [Decision log](#decision-log)
-18. [Roadmap](#roadmap)
-19. [Troubleshooting](#troubleshooting)
+13. [Hosting on S3 + CloudFront (no server)](#hosting-on-s3--cloudfront-no-server)
+14. [Security and privacy](#security-and-privacy)
+15. [Design](#design)
+16. [Development](#development)
+17. [Project structure](#project-structure)
+18. [Decision log](#decision-log)
+19. [Roadmap](#roadmap)
+20. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -457,6 +458,96 @@ Each visitor uses their own API key and their own browser storage, so one deploy
 
 **Local mode on a server:** the models run in each visitor's browser, so the server needs no GPU and very little CPU or memory (the smallest VPS is plenty). It serves the model files once per browser: 23 MB plus the runtime, and 397 MB more for anyone who turns on name suggestions. HTTPS is required for local mode's threads and model storage.
 
+To host without any server, see the next section.
+
+---
+
+## Hosting on S3 + CloudFront (no server)
+
+Stacks can also run as plain files: a private S3 bucket behind CloudFront, with no EC2, container or Lambda. Everything stays in each visitor's browser as before, and the local models are served from the same place.
+
+**What's different from the Docker version:** link previews (title, description and image fetched when you paste a link) need a server, so this build skips them. A link is saved with the title you typed, the sorting title or its address, and the "Refresh preview" buttons are hidden. Everything else works, including local mode with fast threads (CloudFront adds the cross-origin isolation headers), the GPU, and the backup folder (CloudFront gives HTTPS).
+
+**What gets created** (`infra/stacks-static.yaml`, one CloudFormation stack in `us-east-1`):
+
+| Piece | Setting |
+|---|---|
+| Site bucket | Private, encrypted; only this CloudFront distribution can read it (Origin Access Control) |
+| CloudFront | HTTPS only (http redirects), HTTP/2 and 3, compression, North America and Europe edges (`PriceClass_100`) |
+| Response headers | The same as `server/index.ts`: CSP, COOP `same-origin`, COEP `credentialless`, nosniff, no-referrer, deny framing, Permissions-Policy, plus HSTS |
+| Logs bucket | CloudFront request logs under `cloudfront/`, deleted after 90 days (`LogRetentionDays`) |
+| Athena | Database `stacks_traffic`, table `requests`, a workgroup, and saved queries (below) |
+| Domain (optional) | With a Route 53 domain: the certificate (covering the domain and `www.`) and DNS records are created for you |
+| `www.` redirect (with a domain) | An S3 redirect bucket behind a second CloudFront distribution sends `www.<domain>` to `<domain>`, keeping the path. Settings only, no code |
+
+**1. Create it once** (needs the AWS CLI logged in to your account):
+
+```bash
+aws cloudformation deploy --region us-east-1 --stack-name stacks-static --template-file infra/stacks-static.yaml
+```
+
+It takes about 5–10 minutes, mostly CloudFront. The address is in the stack outputs (`SiteUrl`, an `https://xxxx.cloudfront.net` address).
+
+**2. Deploy** (again after every change):
+
+```bash
+scripts/deploy-static.sh
+```
+
+It builds in Docker (type check, tests, the app without previews, the pinned and checksummed models), uploads to S3 with the right file types and cache times, deletes files from older builds, and tells CloudFront to pick up the new files. The first run uploads about 460 MB; later runs upload only the changed app files (about 30 MB), not the models.
+
+| Files | Cache-Control | Why |
+|---|---|---|
+| `index.html` | `no-cache` | Re-checked on every visit, so a deploy shows up right away |
+| `assets/*` | 1 year, immutable | Every file name contains a hash of its contents |
+| `models/*` | 30 days | Same as the Stacks server; models are pinned in `scripts/fetch-models.mjs` |
+
+**3. Check it** once after the first deploy:
+
+```bash
+URL=$(aws cloudformation describe-stacks --region us-east-1 --stack-name stacks-static --query "Stacks[0].Outputs[?OutputKey=='SiteUrl'].OutputValue" --output text)
+curl -sI "$URL" | grep -i -E 'cross-origin|content-security|strict-transport'
+curl -sI "$URL/models/wllama/wllama.wasm" | grep -i content-type    # application/wasm
+```
+
+In the browser, the console should print `true` for `crossOriginIsolated`. With a domain, also check the redirect:
+
+```bash
+curl -sI https://www.readstacks.net/ | grep -i -E '^HTTP|^location'    # 301, location: https://readstacks.net/
+```
+
+**Your own domain.** Register it at Route 53 (Domains → Register; this also creates its hosted zone), then update the stack:
+
+```bash
+aws cloudformation deploy --region us-east-1 --stack-name stacks-static --template-file infra/stacks-static.yaml \
+  --parameter-overrides DomainName=readstacks.net HostedZoneId=Z0123456789ABC
+```
+
+The certificate is validated through DNS automatically, which can take a few more minutes. `www.readstacks.net` redirects to `readstacks.net` rather than serving a second copy: browser storage belongs to one exact address, so serving both would split people's lists between them. If the domain's DNS is somewhere else (Cloudflare, Namecheap…), request a certificate in ACM in `us-east-1` for both the domain and `www.` the domain, validate it with the DNS records ACM shows, pass `DomainName=… CertificateArn=…`, then point the domain at the `CloudFrontDomain` output (the provider's root-domain alias or CNAME flattening) and `www` at the `WwwCloudFrontDomain` output with a CNAME.
+
+**Traffic.** CloudFront → Reports & analytics shows requests per file, data sent and visitors' countries and browsers for the last 60 days, with no setup. For exact numbers, open Athena, choose the `stacks-static-traffic` workgroup, and run a saved query:
+
+| Saved query | Answers |
+|---|---|
+| Visitors per day | Distinct addresses that opened the app (approximate people: one office counts once) |
+| Model downloads per day | Distinct addresses that started downloading each model (roughly new browsers or devices, since browsers keep the models) |
+| Finished naming-model downloads per day | Addresses that received the whole 397 MB file |
+| Data sent per day | Gigabytes sent, which is what the bill depends on |
+
+Logs arrive a few minutes to an hour after the requests. They record which files were loaded, from which address and browser, never what anyone pastes or saves.
+
+**Cost.** CloudFront's free tier covers 1 TB and 10 million requests a month: about 2,000 first-time naming-model downloads. Beyond it, a new device costs about $0.04. S3 storage is about $0.01 a month, logs and Athena queries pennies. A Route 53 domain is a yearly fee plus $0.50 a month for its hosted zone.
+
+**Removing it.** Empty both buckets, then delete the stack:
+
+```bash
+for k in SiteBucket LogsBucket; do
+  b=$(aws cloudformation describe-stacks --region us-east-1 --stack-name stacks-static --query "Stacks[0].Outputs[?OutputKey=='$k'].OutputValue" --output text)
+  aws s3 rm "s3://$b" --recursive
+done
+aws cloudformation delete-stack --region us-east-1 --stack-name stacks-static
+```
+
 ---
 
 ## Security and privacy
@@ -536,6 +627,8 @@ stacks/
 ├─ Dockerfile, docker-compose.yml   two-stage build: compile + test, then a small runtime image
 ├─ index.html, vite.config.ts       Vite entry and config (dev proxy /api → :8787)
 ├─ scripts/fetch-models.mjs        downloads the local-mode models (pinned commit + SHA-256) into models/
+├─ scripts/deploy-static.sh        builds the static version (Docker target `static`) and uploads it to S3 + CloudFront
+├─ infra/stacks-static.yaml        CloudFormation: private S3 bucket, CloudFront with headers, logs, Athena queries
 ├─ models/                          local-mode model files, served at /models/ (built into the image; not in git)
 ├─ tests/                           local-model assessment: RESULTS.md, benchmark code, synthetic test library
 ├─ server/                          Fastify server (Node 22, ESM)
@@ -558,9 +651,9 @@ stacks/
    │  └─ actions.ts                 describe and apply instruction actions
    ├─ local/                        local mode: config, score (folder choice, joins; tested), embed.worker + embedder,
    │                                vectors (prepared items), place, namer (Qwen suggestions), storage
-   ├─ lib/                          parse (incl. \ paths), tree (folders), url, scoring, preview client, backup, usage, time, reminders
+   ├─ lib/                          parse (incl. \ paths), tree (folders), url, scoring, preview client, hosting (static build switch), backup, usage, time, reminders
    └─ components/                   Header, Composer, ReviewTray, InstructionTray, TopicList, TopicCard,
-                                    ItemRow, Thumb, UpNext, UsagePanel, SettingsModal, AboutPage, Sky, Spark
+                                    ItemRow, Thumb, UpNext, UsagePanel, SettingsModal, BackupBar, AboutPage, Sky, Spark
 ```
 
 ---
@@ -580,6 +673,8 @@ These are the choices made while planning Stacks, and why.
 | New folders locally | Qwen3-0.6B proposes the whole path (Area › Subfolder), on by default, downloaded on first use | You wanted a folder suggestion every time, not a separate name. Its proposals pre-fill the Folder box and stay editable. |
 | Tray layout | One pre-filled Folder box at the top; empty and gray while a new folder is being proposed | A weak "closest" match looked like a real suggestion; waiting for the model's proposal is clearer. |
 | Model hosting | Built into the Docker image and served by Stacks; cached in the browser | Nothing is fetched from third parties at runtime, and it works offline once cached. |
+| Serverless hosting | S3 + CloudFront, no Lambda; link previews skipped in that build | No compute to run or pay for. CloudFront's response headers policy provides the isolation headers local mode needs. Previews could come back later with one small Lambda. |
+| Traffic numbers | CloudFront reports and request logs with Athena, no analytics script | Counts visits and model downloads without sending anything about visitors to a third party. |
 | AI | Cloud API now. Local Ollama deferred | Ollama depends on each machine's compute. The adapter design leaves room for it. |
 | Who pays | Each user brings their own API key, stored in their browser | Nobody can run up the host's bill. No server-side quotas or accounts needed. |
 | Subscriptions | Not supported | Claude and ChatGPT subscriptions don't cover third-party apps; reusing their tokens breaks the providers' terms. |

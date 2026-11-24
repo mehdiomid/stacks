@@ -363,3 +363,13 @@ a.ititle:hover { color: var(--accent); }
 .backup-bar.warn { border-color: var(--mark); background: var(--mark-soft); }
 .backup-bar > span:first-child { flex: 1 1 320px; }
 .backup-bar .actions { display: inline-flex; align-items: center; gap: 12px; }
+
+/* Folder levels: each level is a lighter shade of its area's own color (--h, set per folder). */
+:root { --lv1: 65% 45%; --lv2: 55% 62%; --lv2-bg: 70% 97%; --lv3: 45% 78%; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) { --lv1: 60% 62%; --lv2: 45% 50%; --lv2-bg: 30% 15%; --lv3: 30% 38%; }
+}
+:root[data-theme='dark'] { --lv1: 60% 62%; --lv2: 45% 50%; --lv2-bg: 30% 15%; --lv3: 30% 38%; }
+.topic.d1 { border-left: 4px solid hsl(var(--h) var(--lv1)); }
+.topic.nested.d2 { border-left: 3px solid hsl(var(--h) var(--lv2)); background: hsl(var(--h) var(--lv2-bg)); }
+.topic.nested.d3 { border-left: 2px solid hsl(var(--h) var(--lv3)); }

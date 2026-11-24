@@ -1,0 +1,364 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >-
+  Stacks as static files: a private S3 bucket behind CloudFront (HTTPS, the same security and
+  cross-origin isolation headers the Stacks server sends), request logs, and Athena for traffic numbers.
+  Create it in us-east-1 (CloudFront certificates must live there). See README "Hosting on S3 + CloudFront".
+
+Parameters:
+  DomainName:
+    Type: String
+    Default: ''
+    Description: >-
+      Optional, such as readstacks.net. Leave empty to use the free xxxx.cloudfront.net address.
+      www.<DomainName> is set up too and redirects here, so every visitor uses one address (browser storage is per address).
+  HostedZoneId:
+    Type: String
+    Default: ''
+    Description: Optional Route 53 hosted zone for DomainName. With it, the certificate and DNS records are created for you.
+  CertificateArn:
+    Type: String
+    Default: ''
+    Description: Optional ACM certificate (us-east-1) covering DomainName and www.DomainName, when its DNS is not in Route 53.
+  LogRetentionDays:
+    Type: Number
+    Default: 90
+    MinValue: 1
+    Description: Days to keep CloudFront request logs.
+  PriceClass:
+    Type: String
+    Default: PriceClass_100
+    AllowedValues: [PriceClass_100, PriceClass_200, PriceClass_All]
+    Description: PriceClass_100 serves from North America and Europe edges (cheapest); others add more regions.
+
+Conditions:
+  HasDomain: !Not [!Equals [!Ref DomainName, '']]
+  HasZone: !And [!Condition HasDomain, !Not [!Equals [!Ref HostedZoneId, '']]]
+  MakeCert: !And [!Condition HasZone, !Equals [!Ref CertificateArn, '']]
+
+Resources:
+  # ---- Files ----
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration: { BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true }
+      OwnershipControls: { Rules: [{ ObjectOwnership: BucketOwnerEnforced }] }
+      BucketEncryption: { ServerSideEncryptionConfiguration: [{ ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 } }] }
+
+  SiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref SiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Sid: CloudFrontReadsFiles
+            Effect: Allow
+            Principal: { Service: cloudfront.amazonaws.com }
+            Action: s3:GetObject
+            Resource: !Sub '${SiteBucket.Arn}/*'
+            Condition: { StringEquals: { 'AWS:SourceArn': !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${Distribution}' } }
+
+  # CloudFront standard logs need ACLs on the bucket (it grants its log-delivery account write access).
+  LogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      PublicAccessBlockConfiguration: { BlockPublicAcls: true, BlockPublicPolicy: true, IgnorePublicAcls: true, RestrictPublicBuckets: true }
+      OwnershipControls: { Rules: [{ ObjectOwnership: BucketOwnerPreferred }] }
+      BucketEncryption: { ServerSideEncryptionConfiguration: [{ ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 } }] }
+      LifecycleConfiguration:
+        Rules:
+          - { Id: expire-request-logs, Status: Enabled, Prefix: cloudfront/, ExpirationInDays: !Ref LogRetentionDays }
+          - { Id: expire-query-results, Status: Enabled, Prefix: athena-results/, ExpirationInDays: 7 }
+
+  # ---- HTTPS address (only with a Route 53 domain) ----
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Condition: MakeCert
+    Properties:
+      DomainName: !Ref DomainName
+      SubjectAlternativeNames: [!Sub 'www.${DomainName}']
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - { DomainName: !Ref DomainName, HostedZoneId: !Ref HostedZoneId }
+        - { DomainName: !Sub 'www.${DomainName}', HostedZoneId: !Ref HostedZoneId }
+
+  # ---- CloudFront ----
+  OriginAccess:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub '${AWS::StackName}-oac'
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+  # The same headers server/index.ts sends. COOP + COEP turn on cross-origin isolation, which the
+  # local models need for multi-threaded WebAssembly.
+  Headers:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: !Sub '${AWS::StackName}-headers'
+        SecurityHeadersConfig:
+          ContentSecurityPolicy:
+            Override: true
+            ContentSecurityPolicy: >-
+              default-src 'self'; script-src 'self' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:;
+              style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https: http:;
+              connect-src 'self' https://api.anthropic.com https://api.openai.com; frame-ancestors 'none';
+              base-uri 'none'; form-action 'self'; object-src 'none'
+          ContentTypeOptions: { Override: true }
+          FrameOptions: { Override: true, FrameOption: DENY }
+          ReferrerPolicy: { Override: true, ReferrerPolicy: no-referrer }
+          StrictTransportSecurity: { Override: true, AccessControlMaxAgeSec: 63072000, IncludeSubdomains: true }
+        CustomHeadersConfig:
+          Items:
+            - { Header: Cross-Origin-Opener-Policy, Value: same-origin, Override: true }
+            - { Header: Cross-Origin-Embedder-Policy, Value: credentialless, Override: true }
+            - { Header: Permissions-Policy, Value: 'camera=(), microphone=(), geolocation=()', Override: true }
+
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: Stacks (static)
+        Enabled: true
+        DefaultRootObject: index.html
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: !Ref PriceClass
+        Aliases: !If [HasDomain, [!Ref DomainName], !Ref AWS::NoValue]
+        ViewerCertificate: !If
+          - HasDomain
+          - AcmCertificateArn: !If [MakeCert, !Ref Certificate, !Ref CertificateArn]
+            SslSupportMethod: sni-only
+            MinimumProtocolVersion: TLSv1.2_2021
+          - CloudFrontDefaultCertificate: true
+        Origins:
+          - Id: site
+            DomainName: !GetAtt SiteBucket.RegionalDomainName
+            OriginAccessControlId: !GetAtt OriginAccess.Id
+            S3OriginConfig: { OriginAccessIdentity: '' }
+        DefaultCacheBehavior:
+          TargetOriginId: site
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD]
+          Compress: true
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 # Managed-CachingOptimized: follows each file's Cache-Control
+          ResponseHeadersPolicyId: !Ref Headers
+        Logging:
+          Bucket: !GetAtt LogsBucket.DomainName
+          Prefix: cloudfront/
+          IncludeCookies: false
+
+  DnsA:
+    Type: AWS::Route53::RecordSet
+    Condition: HasZone
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref DomainName
+      Type: A
+      AliasTarget: { DNSName: !GetAtt Distribution.DomainName, HostedZoneId: Z2FDTNDATAQYW2 } # CloudFront's fixed zone
+  DnsAAAA:
+    Type: AWS::Route53::RecordSet
+    Condition: HasZone
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref DomainName
+      Type: AAAA
+      AliasTarget: { DNSName: !GetAtt Distribution.DomainName, HostedZoneId: Z2FDTNDATAQYW2 }
+
+  # ---- www.<domain>: redirects to <domain> (settings only, no code) ----
+  WwwRedirectBucket:
+    Type: AWS::S3::Bucket
+    Condition: HasDomain
+    Properties:
+      WebsiteConfiguration:
+        RedirectAllRequestsTo: { HostName: !Ref DomainName, Protocol: https }
+
+  WwwDistribution:
+    Type: AWS::CloudFront::Distribution
+    Condition: HasDomain
+    Properties:
+      DistributionConfig:
+        Comment: Stacks (www redirect)
+        Enabled: true
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: !Ref PriceClass
+        Aliases: [!Sub 'www.${DomainName}']
+        ViewerCertificate:
+          AcmCertificateArn: !If [MakeCert, !Ref Certificate, !Ref CertificateArn]
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+        Origins:
+          - Id: redirect
+            # The bucket's website endpoint (it answers every request with a redirect), without "http://".
+            DomainName: !Select [2, !Split ['/', !GetAtt WwwRedirectBucket.WebsiteURL]]
+            CustomOriginConfig: { OriginProtocolPolicy: http-only }
+        DefaultCacheBehavior:
+          TargetOriginId: redirect
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD]
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6 # Managed-CachingOptimized
+
+  WwwDnsA:
+    Type: AWS::Route53::RecordSet
+    Condition: HasZone
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Sub 'www.${DomainName}'
+      Type: A
+      AliasTarget: { DNSName: !GetAtt WwwDistribution.DomainName, HostedZoneId: Z2FDTNDATAQYW2 }
+  WwwDnsAAAA:
+    Type: AWS::Route53::RecordSet
+    Condition: HasZone
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Sub 'www.${DomainName}'
+      Type: AAAA
+      AliasTarget: { DNSName: !GetAtt WwwDistribution.DomainName, HostedZoneId: Z2FDTNDATAQYW2 }
+
+  # ---- Traffic numbers (Athena over the request logs) ----
+  LogsDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput: { Name: stacks_traffic, Description: CloudFront request logs for Stacks }
+
+  # Column order of CloudFront standard logs (tab-separated, two header lines per file).
+  LogsTable:
+    Type: AWS::Glue::Table
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseName: !Ref LogsDatabase
+      TableInput:
+        Name: requests
+        TableType: EXTERNAL_TABLE
+        Parameters: { skip.header.line.count: '2', EXTERNAL: 'TRUE' }
+        StorageDescriptor:
+          Location: !Sub 's3://${LogsBucket}/cloudfront/'
+          InputFormat: org.apache.hadoop.mapred.TextInputFormat
+          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
+          SerdeInfo:
+            SerializationLibrary: org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe
+            Parameters: { field.delim: "\t", serialization.format: "\t" }
+          Columns:
+            - { Name: log_date, Type: date }
+            - { Name: time, Type: string }
+            - { Name: x_edge_location, Type: string }
+            - { Name: sc_bytes, Type: bigint }
+            - { Name: c_ip, Type: string }
+            - { Name: cs_method, Type: string }
+            - { Name: cs_host, Type: string }
+            - { Name: cs_uri_stem, Type: string }
+            - { Name: sc_status, Type: int }
+            - { Name: cs_referrer, Type: string }
+            - { Name: cs_user_agent, Type: string }
+            - { Name: cs_uri_query, Type: string }
+            - { Name: cs_cookie, Type: string }
+            - { Name: x_edge_result_type, Type: string }
+            - { Name: x_edge_request_id, Type: string }
+            - { Name: x_host_header, Type: string }
+            - { Name: cs_protocol, Type: string }
+            - { Name: cs_bytes, Type: bigint }
+            - { Name: time_taken, Type: float }
+            - { Name: x_forwarded_for, Type: string }
+            - { Name: ssl_protocol, Type: string }
+            - { Name: ssl_cipher, Type: string }
+            - { Name: x_edge_response_result_type, Type: string }
+            - { Name: cs_protocol_version, Type: string }
+            - { Name: fle_status, Type: string }
+            - { Name: fle_encrypted_fields, Type: int }
+            - { Name: c_port, Type: int }
+            - { Name: time_to_first_byte, Type: float }
+            - { Name: x_edge_detailed_result_type, Type: string }
+            - { Name: sc_content_type, Type: string }
+            - { Name: sc_content_len, Type: bigint }
+            - { Name: sc_range_start, Type: bigint }
+            - { Name: sc_range_end, Type: bigint }
+
+  Workgroup:
+    Type: AWS::Athena::WorkGroup
+    Properties:
+      Name: !Sub '${AWS::StackName}-traffic'
+      RecursiveDeleteOption: true
+      WorkGroupConfiguration:
+        EnforceWorkGroupConfiguration: true
+        BytesScannedCutoffPerQuery: 1073741824 # 1 GB: a safety cap; real queries here scan a few MB
+        ResultConfiguration: { OutputLocation: !Sub 's3://${LogsBucket}/athena-results/' }
+
+  # Ready-made queries: Athena console → Saved queries (choose the workgroup above).
+  VisitorsPerDay:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Name: Visitors per day
+      Description: Distinct addresses that opened the app, per day (approximate people)
+      Database: !Ref LogsDatabase
+      WorkGroup: !Ref Workgroup
+      QueryString: |
+        SELECT log_date, count(DISTINCT c_ip) AS visitors, count(*) AS page_loads
+        FROM requests
+        WHERE cs_uri_stem IN ('/', '/index.html') AND sc_status IN (200, 304)
+        GROUP BY log_date ORDER BY log_date DESC
+  ModelDownloads:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Name: Model downloads per day
+      Description: Distinct addresses that started downloading each model, per day (roughly new browsers or devices)
+      Database: !Ref LogsDatabase
+      WorkGroup: !Ref Workgroup
+      QueryString: |
+        SELECT log_date,
+          count(DISTINCT IF(cs_uri_stem LIKE '%model_quantized.onnx', c_ip)) AS sorting_model,
+          count(DISTINCT IF(cs_uri_stem LIKE '%.gguf', c_ip)) AS naming_model
+        FROM requests
+        WHERE sc_status IN (200, 206)
+        GROUP BY log_date ORDER BY log_date DESC
+  FinishedDownloads:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Name: Finished naming-model downloads per day
+      Description: Addresses that received the whole naming model that day (bytes add up to the file size)
+      Database: !Ref LogsDatabase
+      WorkGroup: !Ref Workgroup
+      QueryString: |
+        SELECT log_date, count(*) AS finished
+        FROM (
+          SELECT log_date, c_ip, sum(sc_bytes) AS sent
+          FROM requests
+          WHERE cs_uri_stem LIKE '%.gguf' AND sc_status IN (200, 206)
+          GROUP BY log_date, c_ip
+        )
+        WHERE sent >= 396705472
+        GROUP BY log_date ORDER BY log_date DESC
+  DataPerDay:
+    Type: AWS::Athena::NamedQuery
+    Properties:
+      Name: Data sent per day
+      Description: Gigabytes CloudFront sent (what drives the bill beyond the free 1 TB a month)
+      Database: !Ref LogsDatabase
+      WorkGroup: !Ref Workgroup
+      QueryString: |
+        SELECT log_date, round(sum(sc_bytes) / 1e9, 2) AS gb, count(*) AS requests
+        FROM requests
+        GROUP BY log_date ORDER BY log_date DESC
+
+Outputs:
+  SiteUrl:
+    Value: !If [HasDomain, !Sub 'https://${DomainName}', !Sub 'https://${Distribution.DomainName}']
+  CloudFrontDomain:
+    Description: Point your domain here (CNAME or alias) when its DNS is outside Route 53
+    Value: !GetAtt Distribution.DomainName
+  WwwCloudFrontDomain:
+    Condition: HasDomain
+    Description: Point www.<domain> here (CNAME) when its DNS is outside Route 53
+    Value: !GetAtt WwwDistribution.DomainName
+  DistributionId:
+    Value: !Ref Distribution
+  SiteBucket:
+    Value: !Ref SiteBucket
+  LogsBucket:
+    Value: !Ref LogsBucket
+  AthenaWorkgroup:
+    Value: !Ref Workgroup

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../app-context';
 import { refreshPreviews } from '../ingest';
+import { STATIC_HOSTING } from '../lib/hosting';
 import { deleteItem, moveItem, restoreItem, setDone, snoozeItem, updateItem } from '../store';
 import { ago, formatDuration } from '../lib/time';
 import { domainOf } from '../lib/url';
@@ -131,7 +132,7 @@ export function ItemRow({ item, hue, folders }: { item: Item; hue: number; folde
             >
               Edit
             </button>
-            {item.url && (
+            {item.url && !STATIC_HOSTING && (
               <button className="mini" onClick={() => void refresh()} disabled={refreshing}>
                 {refreshing ? 'Refreshing…' : 'Refresh preview'}
               </button>

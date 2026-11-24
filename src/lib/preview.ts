@@ -1,7 +1,9 @@
 import type { Preview } from '../types';
+import { STATIC_HOSTING } from './hosting';
 
 /** Asks the Stacks server for a link's title, description and image. Returns null if it can't. */
 export async function fetchPreview(url: string): Promise<Preview | null> {
+  if (STATIC_HOSTING) return null;
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 12_000);
   try {
