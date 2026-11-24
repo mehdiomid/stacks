@@ -3,6 +3,7 @@ import { placeItem, type PlaceFolder } from './ai/place';
 import { db } from './db';
 import { isLinkLabel, LIMITS, parseLines, takeWithinLimit, uniqueUrls, type ParsedLine } from './lib/parse';
 import { fetchPreview, mapLimit } from './lib/preview';
+import { STATIC_HOSTING } from './lib/hosting';
 import { domainOf, isGenericTitle, isIconImage, isVideoUrl, normalizeUrl, titleFromUrl } from './lib/url';
 import { addItems, ensureTopicPath, mergeIntoItem, updateItem } from './store';
 import { getAISettings } from './settings';
@@ -269,11 +270,11 @@ export interface Prepared {
 
 /** Previews for each link, with L1, L2… refs. */
 async function fetchLinks(urls: string[], onStatus: (s: string) => void) {
-  if (urls.length) onStatus(`Fetching previews 0/${urls.length}…`);
+  if (urls.length && !STATIC_HOSTING) onStatus(`Fetching previews 0/${urls.length}…`);
   let fetched = 0;
   const previews = await mapLimit(urls, 4, async (u) => {
     const r = await fetchPreview(u);
-    onStatus(`Fetching previews ${++fetched}/${urls.length}…`);
+    if (!STATIC_HOSTING) onStatus(`Fetching previews ${++fetched}/${urls.length}…`);
     return r;
   });
   const refOf = new Map(urls.map((u, i) => [u, `L${i + 1}`]));

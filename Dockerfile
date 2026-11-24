@@ -11,6 +11,13 @@ RUN node scripts/fetch-models.mjs --namer
 COPY . .
 RUN npm run build && npm test
 
+# ---- Static files for S3 + CloudFront (scripts/deploy-static.sh): the app without link previews, plus the models ----
+FROM build AS static-build
+RUN VITE_STATIC_HOSTING=1 npx vite build --outDir dist/static
+FROM scratch AS static
+COPY --from=static-build /app/dist/static /
+COPY --from=static-build /app/models /models
+
 # ---- Run: only the server's production dependencies and the built files ----
 FROM node:22-alpine AS run
 ENV NODE_ENV=production \

@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
 import { createTopic, deleteTopic, renameTopic, setTopicOpen, setTopicParent, setTopicSort } from '../store';
 import { daysSince } from '../lib/time';
 import { MAX_DEPTH } from '../lib/tree';
@@ -6,6 +6,7 @@ import type { Item, Topic, TopicSort } from '../types';
 import { ItemRow } from './ItemRow';
 import { useApp } from '../app-context';
 import { refreshPreviews } from '../ingest';
+import { STATIC_HOSTING } from '../lib/hosting';
 
 /** A folder as a choice in a picker. */
 export interface FolderOption {
@@ -100,7 +101,8 @@ export function TopicCard(p: Props) {
 
   return (
     <section
-      className={`topic ${isNested ? 'nested' : ''} ${topic.open ? 'open' : ''} ${p.dragging ? 'dragging' : ''} ${p.dropTarget ? 'drop-target' : ''}`}
+      className={`topic d${depth} ${isNested ? 'nested' : ''} ${topic.open ? 'open' : ''} ${p.dragging ? 'dragging' : ''} ${p.dropTarget ? 'drop-target' : ''}`}
+      style={{ '--h': topic.hue } as CSSProperties}
       ref={p.cardRef}
       aria-label={p.path}
     >
@@ -245,7 +247,7 @@ export function TopicCard(p: Props) {
                   </select>
                 </label>
               )}
-              {items.some((i) => i.url) && (
+              {items.some((i) => i.url) && !STATIC_HOSTING && (
                 <button className="btn ghost small" onClick={() => void refreshAll()} disabled={refreshing !== null}>
                   {refreshing !== null ? `Refreshing ${refreshing}/${items.filter((i) => i.url).length}…` : 'Refresh previews'}
                 </button>
